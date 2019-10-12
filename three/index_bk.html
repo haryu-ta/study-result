@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+	<head>
+		<meta charset="UTF-8">
+		
+	</head>
+	<body onLoad="main()">
+		<script src="./three.min.js"></script>
+		<script>
+			var main = function(){
+
+				//alert('aaa');
+
+				// (1)レンダラの初期化
+				var renderer = new THREE.WebGLRenderer( { alpha: true, antialias: true } );
+				renderer.setSize(700, 700);
+				renderer.setClearColor("rgb(0,0,0)", 1);
+				document.getElementById("viewspot").appendChild(renderer.domElement);
+				//document.body.appendChild( renderer.domElement );
+
+				// (2)シーンの作成
+				var scene = new THREE.Scene();
+
+				// (3)カメラの作成
+
+				//第一引数 ： 画角は値を小さくすれば望遠レンズ、大きくすれば広角レンズの効果
+				//第二引数 ： アスペクト比は画面の横幅を高さで割った値です。
+				var camera = new THREE.PerspectiveCamera(20, 500 / 500,1,1000);  
+				//カメラ位置
+				//camera.position = new THREE.Vector3(0, 0, 8);
+				camera.position.set(0, 0, 8);
+				
+				//注視点
+				camera.lookAt( { x:0, y:0, z:0 });
+				scene.add(camera);
+
+				// (4)ライトの作成
+				var light = new THREE.DirectionalLight(0xcccccc);  //ライト色を指定
+				light.position.set(0, 0, 0)  // = new THREE.Vector3(0, 0.5, 0.5);  
+				scene.add(light);
+
+				var ambient = new THREE.AmbientLight(0xcccccc);
+				scene.add(ambient);
+
+				// (5)表示する物体の作成
+
+				var geometry = new THREE.SphereGeometry(1, 32, 16);
+				var material = new THREE.MeshPhongMaterial({
+					color: 0xffffff, ambient: 0xffffff,
+					specular: 0xcccccc, shininess:50, metal:true,
+				map: THREE.ImageUtils.loadTexture('./19.jpg') });
+				var mesh = new THREE.Mesh(geometry, material);
+				//mesh.scale.set(0.1,0.1,0.1);
+				scene.add(mesh);
+
+				//var geometry2 = new THREE.BoxGeometry(10, 10, 10);
+				//var mesh2 = new THREE.Mesh(geometry2, material);
+				//mesh2.position.set(3,0,0);
+				//mesh2.scale.set(0.1,0.1,0.1);
+				//scene.add(mesh2);
+
+ 
+				// (6)レンダリング
+				var baseTime = +new Date;
+				function render() {
+					requestAnimationFrame(render);
+					mesh.rotation.y = 0.5 * (+new Date - baseTime) / 1000;
+				renderer.render(scene, camera);
+				};
+				render();
+
+				//alert('bbb');
+
+			};
+		</script>
+
+		<div id="viewspot"></div>
+
+	</body>
+</html>

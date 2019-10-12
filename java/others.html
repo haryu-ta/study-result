@@ -1,0 +1,120 @@
+<html>
+    <head>
+        <link rel=stylesheet type="text/css" href="../css/common.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JAVA</title>
+    </head>
+    <body>
+        <h1>システム変数の取得</h1>
+        <pre>
+            //環境に応じた改行コードを取得
+            System.getProperty("line.separator");
+        </pre>
+        <h1>ファイル読み書き</h1>
+        <pre>
+            File f1 = new File([読込ファイルパス]);
+            FileReader f2 = new FileReader(f1);
+            BufferedReader f3 = new BufferedReader(f2);
+            while ( (line = f3.readLine()) != null){
+                System.out.println(line);
+            }
+            f3.close();
+
+            File of1 = new File([書込ファイルパス]);
+            FileWriter of2 = new FileWriter(of1);
+            BufferedWriter of3 = new BufferedWriter(of2);
+            of3.write(line);
+            of3.close();
+
+            ●文字コードの指定
+            BufferedReader infile = new BufferdeReader(new InputStreamReader(new FileInputStream([読込ファイルパス]),[文字コード]));
+            BufferedWriter outfile = new BufferedWriter(new OutputStreamWriter(new FileOutputStream([書込ファイルパス]),[文字コード]));
+        </pre>
+        <h1>日付フォーマット</h1>
+        <pre>
+            //文字列から日付型への変換
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
+            Date date = sdf.parse("2014/01/01 8:10:14.000");
+
+            //日付取得
+            Calendar cal = Calendar.getInstance(Locale.JAPAN);
+            cal.get(Calendar.YEAR));
+            cal.get(Calendar.MONTH));        //0～11表記のため+1が必要
+            cal.get(Calendar.DATE));
+            cal.get(Calendar.HOUR));         //12時間
+            cal.get(Calendar.HOUR_OF_DAY));  //24時間
+            cal.get(Calendar.MINUTE));
+            cal.get(Calendar.SECOND));
+            cal.get(Calendar.DAY_OF_WEEK));  //曜日
+        </pre>
+        <h1>コレクション</h1>
+        <pre>
+            ●Map
+            ①HashMap
+            キーの並び順を保持しない
+            高速
+
+            ②TreeMap
+            キーが自然順序、もしくはコンストラクタに指定されたComparatorに従って昇順にソート
+
+            ③LinkedHashMap
+            キーが挿入される挿入順
+
+            ●List
+            ①ArrayList
+            ランダムアクセスをサポート
+            要素の検索において高速に動作
+            要素の追加、削除においては追加、削除された要素以降の要素を再配置する必要があるため低速
+
+            ②LinkedList
+            要素の追加、削除を行う場合、リンク情報を変更することによって処理するため高速に動作
+            要素の検索においては、要素に順番にアクセスするため低速
+
+            ●Set
+            ①HashSet
+            保持する要素内において重複要素を持ちません
+            Setインタフェースを実装したクラス内では最も高速に動作します
+
+            ②TreeSet
+            保持する要素内において重複要素を持ちません
+            保持する要素は要素の自然順序、もしくはコンストラクタに指定されたComparatorに従って昇順にソートされます
+
+            ③LinkedHashSet
+            保持する要素内において重複要素を持ちません
+            要素の挿入される挿入順を保持します
+        </pre>
+        <h1>配列←→LIST</h1>
+        <pre>
+            ●配列をリストに変換
+            String arr[];
+            List list = Arrays.asList(arr);
+
+            ●リストを配列に変換
+            ArrayList<String> list = ArrayList<String>();
+            String[] arr = (String[]) list.toArray(new String[0]);
+
+            ★2次元変換
+            ArrayList<String> list1 = new ArryaList<String>();
+            ArrayList<String[]> list2 = new ArryaList<String[]>();
+
+            //Listを配列にしてコレクションに追加
+            list2.add(list1.toArrya(new String[0]));
+            String[][] arr = list2.toArrya(new String[0][0]);
+            
+        </pre>
+        <br>
+        <br>
+        <hr>
+        <a href="../java.html">javaへ</a><br>
+        <a href="index.html">TOP</a>
+    </body>
+</html>
+
+<!--
+
+        <h1>タイトル</h1>
+        <pre>
+            内容
+        </pre>
+
+-->

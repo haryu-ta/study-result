@@ -1,0 +1,47 @@
+<html>
+    <head>
+         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>openpyxl</title>
+    </head>
+    <body>
+        <h1>ノーマル</h1>
+        <pre>
+        from openpyxl import Workbook
+        
+        #新規ブックを開く
+        wb = Workbook()
+        
+        #シートをアクティブ
+        ws = wb.active
+        ws.title = 'シート名’
+        
+        ws.cell(row=1,column=1).value = '設定値'
+        
+        #保存
+        wb.save("C:\temp\list.xlsx")
+        </pre>
+        <h1>書式設定</h1>
+        <pre>
+            #セルへの書式設定
+            #︎ 文字サイズ18 / 太字 / 文字フォントゴシック
+            ws.cell(row=1,column=1).font = Font(size=18,bold=True,name='ゴシック')
+            #セル塗りつぶし
+            ws.cell(row = 1,column=1).fill = PatternFill(fill_type='solid',start_color='ffaa00',end_color='ffaa00')
+            #セルの中央揃え
+            ws.cell(row = 1,column=1).alignment = Alignment(horizontal='center')
+            #セル結合
+            ws.merge_cells(start_row=4,start_column=2,end_row=4,end_column=9)
+            #セル罫線
+            ws.cell(row=1,column=1).border = 
+                     Border(left=Side(border_style='thin',color='00000000'),
+                     right=Side(border_style='thin',color='00000000'),
+                     top=Side(border_style='thin',color='00000000'),
+                     bottom=Side(border_style='thin',color='00000000'))
+             #列幅調整
+             ws.column_dimensions['B'].width = 12
+        </pre>
+        <hr>
+        <a href="python.html">pythonへ戻る</a><br>
+        <a href="index.html"> TOP</a>
+    </body>
+</html>

@@ -1,0 +1,50 @@
+@charset "utf-8";
+
+.oracle-header {
+	color:red;
+}
+
+table {
+	width : 98%;
+}
+
+table th{
+	background-color : yellow;
+	padding          : 5px 10px 5px 10px;
+}
+
+table td{
+	padding          : 2px 2px 2px 2px;
+}
+
+table th:nth-of-type(1) {
+	width : 3%;
+}
+
+table th:nth-of-type(2),table th:nth-of-type(3),table th:nth-of-type(4) {
+	width : 15%;
+}
+
+.table-subtitle {
+	background-color : pink;
+	color            : #ffffff;
+	padding          : 3px 10px 3px 10px;
+	font-weight      : bold;
+}
+
+table tr td:first-child:not(.text-notright) {
+	text-align      :right;
+}
+
+.onmouse:hover {
+	font-weidht     : bold;
+	color           : green;
+}
+
+a:visited {
+	color           : blue;
+}
+
+.comment {
+	color           : green;
+}

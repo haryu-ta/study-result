@@ -1,0 +1,61 @@
+<html>
+    <head>
+        <link rel=stylesheet type="text/css" href="../css/common.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JAVA</title>
+    </head>
+    <body>
+        <h1>システム変数の取得</h1>
+        <pre>
+            //環境に応じた改行コードを取得
+            System.getProperty("line.separator");
+        </pre>
+        <h1>ファイル読み書き</h1>
+        <pre>
+            File f1 = new File([読込ファイルパス]);
+            FileReader f2 = new FileReader(f1);
+            BufferedReader f3 = new BufferedReader(f2);
+            while ( (line = f3.readLine()) != null){
+                System.out.println(line);
+            }
+            f3.close();
+
+            File of1 = new File([書込ファイルパス]);
+            FileWriter of2 = new FileWriter(of1);
+            BufferedWriter of3 = new BufferedWriter(of2);
+            of3.write(line);
+            of3.close();
+        </pre>
+        <h1>日付フォーマット</h1>
+        <pre>
+            //文字列から日付型への変換
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
+            Date date = sdf.parse("2014/01/01 8:10:14.000");
+
+            //日付取得
+            Calendar cal = Calendar.getInstance(Locale.JAPAN);
+            cal.get(Calendar.YEAR));
+            cal.get(Calendar.MONTH));        //0～11表記のため+1が必要
+            cal.get(Calendar.DATE));
+            cal.get(Calendar.HOUR));         //12時間
+            cal.get(Calendar.HOUR_OF_DAY));  //24時間
+            cal.get(Calendar.MINUTE));
+            cal.get(Calendar.SECOND));
+            cal.get(Calendar.DAY_OF_WEEK));  //曜日
+        </pre>
+        <br>
+        <br>
+        <hr>
+        <a href="../java.html">javaへ</a><br>
+        <a href="index.html">TOP</a>
+    </body>
+</html>
+
+<!--
+
+        <h1>タイトル</h1>
+        <pre>
+            内容
+        </pre>
+
+-->

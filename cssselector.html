@@ -1,0 +1,169 @@
+<html>
+    <head>
+        <link rel=stylesheet type="text/css" href="./css/common.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>CSS</title>
+    </head>
+    <body>
+        <h1>CSSセレクタ</h1>
+        <div>
+            <table border="1" cellspacing="0" cellpadding="0" >
+                <tr>
+                    <th>No</th>
+                    <th>選択内容</th>
+                    <th>指定方法</th>
+                    <th>例</th>
+                    <th>例の説明</th>
+                </tr>
+                <tr >
+                    <td class="table-subtitle text-notright" colspan="5" >基本</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>全ての要素</td>
+                    <td>*</td>
+                    <td>p *</td>
+                    <td>全ての&lt;p&gt;要素</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>クラス</td>
+                    <td>.class</td>
+                    <td>div.sample</td>
+                    <td>sampleクラスの付与された&lt;div&gt;要素&nbsp;&nbsp;&nbsp;&nbsp;&lt;div class="sample"&gt;</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>id</td>
+                    <td>#id</td>
+                    <td>#sample</td>
+                    <td>id属性がサンプルの要素&nbsp;&nbsp;&nbsp;&nbsp;&lt;div id="sample"&gt;</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>子孫要素</td>
+                    <td>E F</td>
+                    <td>div.sample span</td>
+                    <td>sampleクラスの付与された&lt;div&gt;要素の子孫の&lt;span&gt;要素</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>子要素</td>
+                    <td>E > F</td>
+                    <td>div.sample > span</td>
+                    <td>sampleクラスの付与された&lt;div&gt;要素の子の&lt;span&gt;要素&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red;">※子要素のみ対象</span></td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>隣接要素</td>
+                    <td>E + F</td>
+                    <td>div.sample + span</td>
+                    <td>sampleクラスの付与された&lt;div&gt;要素に隣接する&lt;span&gt;要素(兄弟関係)</span></td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>弟要素</td>
+                    <td>E ～ F</td>
+                    <td>div.sample ～ span</td>
+                    <td>sampleクラスの付与された&lt;div&gt;要素に隣接する&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red;">※弟要素のみ対象</span></td>
+                </tr>
+                <tr >
+                    <td class="table-subtitle text-notright" colspan="5" >疑似要素・疑似クラス</td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>最初に出現する文字</td>
+                    <td>:first-letter</td>
+                    <td>p:first-letter</td>
+                    <td>pタグの中の最初の文字</td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td>最初の行</td>
+                    <td>:first-line</td>
+                    <td>p:first-line</td>
+                    <td>pタグの中の最初の行</td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>最初に出現する子要素</td>
+                    <td>:first-child</td>
+                    <td>p:first-child</td>
+                    <td>最初に出現する&lt;p&gt;要素</td>
+                </tr>
+                <tr>
+                    <td>11</td>
+                    <td>最後に出現する子要素</td>
+                    <td>:last-child</td>
+                    <td>p:last-child</td>
+                    <td>最後に出現する&lt;p&gt;要素</td>
+                </tr>
+                <tr>
+                    <td>12</td>
+                    <td>n番目に出現する子要素</td>
+                    <td>:nth-of-type(n)</td>
+                    <td>p:nth-of-type(3)</td>
+                    <td>3番目に出現する&lt;p&gt;要素</td>
+                </tr>
+                <tr>
+                    <td>13</td>
+                    <td>最後からn番目に出現する子要素</td>
+                    <td>:nth-last-of-type(n)</td>
+                    <td>p:nth-last-of-type(3)</td>
+                    <td>最後から3番目に出現する&lt;p&gt;要素</td>
+                </tr>
+                <tr>
+                    <td>14</td>
+                    <td>オンマウス</td>
+                    <td>:hover</td>
+                    <td>.classA:hover</td>
+                    <td>classAクラスを持つ要素にオンマウス時&nbsp;&nbsp;<span class="onmouse">ここオンマウスしてみ</span></td>
+                </tr>
+                <tr>
+                    <td>15</td>
+                    <td>該当しない場合</td>
+                    <td>:not</td>
+                    <td>div:not(.classA)(</td>
+                    <td>classAクラス属性を持たない&lt;div&gt;要素</td>
+                </tr>
+                <tr>
+                    <td>16</td>
+                    <td>チェックされている要素</td>
+                    <td>:checked</td>
+                    <td>input[type=radio]:checked(</td>
+                    <td>チェックされているラジオボタン</td>
+                </tr>
+                <tr>
+                    <td>17</td>
+                    <td>未訪問リンク</td>
+                    <td>:link</td>
+                    <td>a:link(</td>
+                    <td>まだ選択されたことがないリンク</td>
+                </tr>
+                <tr>
+                    <td>18</td>
+                    <td>既訪問リンク</td>
+                    <td>:visited</td>
+                    <td>a:visited(</td>
+                    <td>すでに選択されたことがあるリンク</td>
+                </tr>
+                <tr >
+                    <td class="table-subtitle text-notright" colspan="5" >属性セレクタ</td>
+                </tr>
+            </table>
+        </div>
+        <hr>
+        <a href="css.html">CSSに戻る</a><br>
+        <br>
+        <a href="index.html">top</a>
+    </body>
+</html>
+
+<!--
+
+        <h1>タイトル</h1>
+        <pre>
+            内容
+        </pre>
+
+-->

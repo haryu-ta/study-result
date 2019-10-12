@@ -1,0 +1,61 @@
+<html>
+    <head>
+        <link rel=stylesheet type="text/css" href="../css/common.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JAVA</title>
+    </head>
+    <body>
+        <h1>独自例外</h1>
+        <pre>
+            try{
+
+                throw new originalException(1,"おりじなるエラーです","データなし");
+
+            catch ( originalException oe ){
+
+                System.out.println(oe.getErr_code + ":" + oe.getErr_cause());
+
+            }
+
+            ●独自例外定義
+            =============================================================================
+            originalException.java
+            
+            public class originalException extends Exception {
+
+                private int err_code;
+                private Sting err_cause;
+
+                public originalException ( int err_code,String message,String err_cause ) {
+                    super(message);
+                    this.err_code = err_code;
+                    this.err_cause = err_cause;
+                }
+
+                public int getErr_code(){
+                    return err_code;
+                }
+
+                public String getErr_cause(){
+                    return err_cause;
+                }
+
+            }
+            =============================================================================
+        </pre>
+        <br>
+        <br>
+        <hr>
+        <a href="../java.html">javaへ</a><br>
+        <a href="index.html">TOP</a>
+    </body>
+</html>
+
+<!--
+
+        <h1>タイトル</h1>
+        <pre>
+            内容
+        </pre>
+
+-->

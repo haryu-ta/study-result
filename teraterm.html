@@ -1,0 +1,22 @@
+<html>
+    <head>
+        <link rel=stylesheet type="text/css" href="css/common.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>tera termコマンド</title>
+    </head>
+    <body>
+        <h1>Macro</h1>
+        <pre>
+            connect '[IPアドレス]:[ポート番号] /ssh /auth=password /user=root /passwd=root'
+            
+            wait '#'
+            sendln 'whoami'
+            
+            ;設定ファイル読込
+            wait '#'
+            restoresetup 'C:\Program Files\teraterm-4.83\setting\TERATERM.INI'
+        </pre>
+        <hr>
+        <a href="index.html">TOP</a>
+    </body>
+</html>

@@ -1,0 +1,21 @@
+--デバックコード
+List<QuestionControlHeader__c> qhList = QuestionControlHeaderDao.getRecsByBaseDate(System.today());
+System.debug('■■■件数:' + qhList.size());
+for (QuestionControlHeader__c qh : qhList){
+	System.debug('■■■アンケート名:' + qh.Name + '(' + qh.Id + ')' );
+}
+
+List<QuestionDetail__c> qhList = QuestionControlHeaderDao.getRecs();
+System.debug('■■■件数:' + qhList.size());
+for (QuestionDetail__c qh : qhList){
+	System.debug('■■■' + qh.Values__c );
+}
+
+List<QuestionDetail__c> qhList = QuestionControlHeaderDao.getUnionRecs();
+System.debug('■■■件数:' + qhList.size());
+for (QuestionDetail__c qh : qhList){
+	System.debug('■■■' + qh.Values__c );
+}
+
+System.debug('★★★'+ qhList + '★★★');
+}

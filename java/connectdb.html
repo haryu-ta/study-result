@@ -1,0 +1,56 @@
+<html>
+    <head>
+        <link rel=stylesheet type="text/css" href="../css/common.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JAVA</title>
+    </head>
+    <body>
+        <h1>DB接続(JDBC)</h1>
+        <pre>
+            //JDBCドライバーをセット
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+
+            Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@[アドレス]:[ポート番号]:[SID]",
+                     [ORACLE_USER],[ORACLE_PASSWORD]);
+
+            //静的SQL
+            Statement stmt = conn.createStatement();
+            String sql = "SELECT * FROM table";
+            //SQL実行
+            ResultSet rs = stmt.executeQuery(sql);  //結果を返すSQL実行用
+
+            while (rs.next()){
+                rs.getString([カラム名]);
+            }
+
+            //動的SQL
+            String sql = "INSERT INTO tablea values (?,?);";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            //値の設定
+            pstmt.setInt(1,100);
+            pstmt.setString(2,'陽花ちゃん');
+            //SQL実行
+            int result = pstmt.executeUpdate();
+
+            //解放
+            rs.close();
+            stmt.close();
+            pstmt.close();
+
+        </pre>
+        <br>
+        <br>
+        <hr>
+        <a href="../java.html">javaへ</a><br>
+        <a href="index.html">TOP</a>
+    </body>
+</html>
+
+<!--
+
+        <h1>タイトル</h1>
+        <pre>
+            内容
+        </pre>
+
+-->

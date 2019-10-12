@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Spring Boot</title>
+</head>
+<body>
+<h1>バッチ関連</h1>
+<pre>
+	<!--SpringバッチのインメモリDB依存-->
+	<!-- pom.xml -->
+	&lt;dependency&gt;
+    		&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    		&lt;artifactId&gt;spring-boot-starter-jdbc&lt;/artifactId&gt;
+	&lt;/dependency&gt;
+	&lt;dependency&gt;
+    		&lt;groupId&gt;com.h2database&lt;/groupId&gt;
+      		&lt;artifactId&gt;h2&lt;/artifactId&gt;
+    	&lt;/dependency&gt;	
+
+	<!-- application.properties -->
+	# バッチ実行時にサーバーが起動しない設定をOFF
+	spring.batch.job.enabled=false
+
+	# インメモリ接続設定
+	batch.jdbc.driver=org.hsqldb.jdbcDriver
+	batch.jdbc.url=jdbc:hsqldb:mem:testdb;sql.enforce_strict_size=true
+	batch.jdbc.user=sa
+	batch.jdbc.password=
+	batch.schema=
+</pre>
+<br/>
+<h1>H2コンソール起動</h1>
+<pre>
+http://localhost:8080/h2-console
+</pre>
+
+</body>
+</html>

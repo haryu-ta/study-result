@@ -1,0 +1,237 @@
+<html>
+    <head>
+        <link rel=stylesheet type="text/css" href="css/common.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>python(3系)</title>
+    </head>
+    <body>
+        <a href="openpyxl.html">openpyxlはこちら</a>
+        <hr>
+        <h1>ヘッダー</h1>
+        <pre>
+            # -*- coding: utf-8 -*-
+
+            if __name__ == '__main__':
+                
+                #コマンドライン引数
+                for arg in sys.argv:
+                    print(arg)
+
+            ⇒ arg[0]  :  自分自身のモジュールファイルフルパス
+               arg[1]  :  第一引数
+               
+
+        </pre>
+        <h1>パッケージ</h1>
+        <pre>
+            import sys
+            print(sys.path)
+            
+            ⇒<font color="blue">["C\workspace\pythonpj\src"]</font>
+
+            ●フォルダ構成
+            src
+              ∟com
+                  ∟util.py
+
+            ⇒comパッケージ配下のutilクラス
+
+            ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+
+            ●配置図
+            src
+              ∟com               (パッケージ)
+                __init__.py       (空ファイル)
+                  ∟util.py       (pythonファイル)
+                    __init__.py   (空ファイル)
+
+            ●コマンド
+            <b>from src.com import util</b>   (パスが通っている所からパッケージ名までをfrom句)
+            util.XXXX
+
+        </pre>
+        <h1>DOSコマンドプロンプト</h1>
+        <pre>
+            #カレントディレクトリ移動
+            os.chdir(path)
+
+            #dos実行
+            cmd = "type aaa.txt" #コマンドを組み立て
+            import subprocess
+            subprocess.call(cmd, shell=True)
+            subprocess.check_call(cmd, shell=True)  #終了コードが0以外だと例外をスロー
+        </pre>
+        <h1>ファイル操作</h1>
+        <pre>
+            ○ファイルコピー
+            import shutil
+            shutil.copy(from , to)     #ファイルコピー
+            shutil.copytree(from , to) #ディレクトリコピー
+            shutil.move(from , to)     #ファイル移動
+
+            ○ディレクトリ検索
+            (相対パスバージョン)
+            files = os.listdir(path='C:\\temp')
+            for file in files:
+                print(file)
+
+            ⇒bk
+              tmp
+              iblok
+
+            (絶対パスバージョン)
+            files = glob.glob('C:\\temp\\*')   #正規表現による検索可能
+            for file in files:
+                print(files)
+
+            ⇒C:\temp\bk
+              C:\temp\tmp
+              C:\temp\iblok
+
+        </pre>
+        <h1>文字列操作</h1>
+        <pre>
+            ○文字列カット
+            ymd = '20150401'
+            pirnt( ymd[0:4] + '/' + ymd[4:6] + '/' + ymd[6:] )
+            ⇒2015/04/01
+        </pre>
+        <h1>zip化</h1>
+        <pre>
+            import zipfile
+            zp = zipfile.ZipFile('[圧縮後のファイル名(フルパス)]','w', zipfile.ZIP_DEFLATED)      #ここは圧縮された後のZIPファイル名
+            zp.write('[圧縮するファイル名(フルパス)]','[ (変更する場合のみ)圧縮後ファイル名]')    #ここはzip内に含めるファイル名
+            zp.close()
+        </pre>
+        <h1>コレクション</h1>
+        <pre>
+            ①List
+            list1 = [ 'a' , 1 ,  [ 'b' , 1 ] ]
+            
+                ⇒  [ 'a' , 1 ,  [ 'b' , 1 ] ]
+            
+            #変更可能
+            list1[1] = 'c'
+
+                ⇒  [ 'a' , 'c' ,  [ 'b' , 1 ] ]
+
+            #末尾に追加
+            list1.append('d')
+
+            #希望位置に追加
+            list1.insert(2,'x')
+
+            #要素の取得1
+            for line in li:
+                print(line)
+
+            #要素の取得2
+            for line in range(len(li)):
+                print(line[line])
+            
+
+        </pre>
+        <pre>
+            ②Tuple
+            tuple1 = ( 'a' , 1 , ['b',1] )
+            
+                ⇒  ( 'a' , 1 ,  [ 'b' , 1 ] )
+            
+            #変更不可
+            tuple1[0] = 'c'
+            
+                ⇒ エラーとなる
+            
+            ただし、タプル内に含まれるリストの変更は可能
+            tuple1[2][1] = '10'
+            
+                ⇒   ( 'a' , 1 ,  [ 'b' , '10' ] )
+            
+            #要素追加不可
+            
+            #要素の取得
+            List同様
+        </pre>
+        <pre>
+            ③Dictionary
+
+            dict1 = {'1':'avex' , '2':'TOYS' , '3': {'1': 'SONY', '2': 'VICTOR'} }
+            
+                ⇒ {'3': {'2': 'VICTOR', '1': 'SONY'}, '2': 'TOYS', '1': 'avex'}
+                 ※追加順は保持されない
+           
+           #変更可能
+           dict1['1'] = 'seven'
+           
+                ⇒ {'3': {'2': 'VICTOR', '1': 'SONY'}, '2': 'TOYS', '1': 'seven'}
+
+           #要素の取得
+           for key,value in dict1.items():
+               print( key + '/' + value)      #但し、これだと辞書、リスト、タプルが値として含むとエラーとなる
+           
+           for key in dict1.keys():
+               print(dict1[key])
+
+        </pre>
+        <h1>関数への引数の渡し方</h1>
+        <pre>
+            ●辞書をそのまま渡す
+            dict1 = { 'a' : 100 , 'b' : 200 , 'c' : 300}
+            
+            def kansu1(a,b,c):
+                print( a + b + c )
+
+            kansu(<b>**</b>dict1)
+            
+            ※なお、リストやタプルの場合には『<b>*</b>』1つ
+
+            ●可変引数
+            def kansu(arg1,*arg2)
+                print(arg1,arg2)
+                
+            ★余剰分はタプルに格納される
+            ⇒kansu(1)
+              1
+           
+            ⇒kansu(1,2)
+              1 (2)
+           
+            ⇒kansu(1,2,3)
+              1 (2,3)
+        </pre>
+        <h1>便利なループのために</h1>
+        <pre>
+            ●zip  複数のシーケンスオブジェクトを同時にループ
+            a = [1,2,3]
+            b = [4,5,6]
+            
+            for (a1,b1) in zip(a,b):
+                print(a1 * b1 )
+            
+            ⇒4
+              10
+              18
+
+            ●enumerate  ループする際にインデックスを付与してくれる
+            list1 = [ 'a' , 'b' , 'c' ]
+            
+            for (k,v) in enumerate(list1):
+                print(k,v)
+            
+            ⇒ 0 a
+               1 b
+               2 c
+        </pre>
+        <br>
+        <br>
+        <hr>
+        <a href="index.html">TOP</a>
+    </body>
+</html>
+
+<!--
+        <h1></h1>
+        <pre>
+
+        </pre>
+-->

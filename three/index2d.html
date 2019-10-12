@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ja">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<title>3d-render</title>
+		<style>
+			html, body {
+				height: 100%;
+			}
+
+			body {
+				background-color: #000000;
+				margin: 0;
+				font-family: Helvetica, sans-serif;;
+				overflow: hidden;
+				position:relative;
+				-webkit-transform-style:preserve-3d;
+				-webkit-transform: perspective(20);
+			}
+
+			.element {
+				position : absolute;
+				width: 100px;
+				height: 120px;
+				box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+				border: 1px solid rgba(127,255,255,0.25);
+				text-align: center;
+				cursor: default;
+				font-weight: bold;
+				background-color : rgba(256,256,256,1)
+				/* rgba(0,127,127,0.5); */
+			}
+
+/*
+			.element:hover {
+				box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
+				border: 1px solid rgba(127,255,255,0.75);
+			}
+*/
+
+		</style>
+	</head>
+	<body>
+		<script src="./three.min.js"></script>
+		<script src="./Tween.js"></script>
+		<script src="./CSS3DRenderer.js"></script>
+		<div id="viewspot"></div>
+		<script>
+
+			/*
+			camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 3000 );
+			camera.position.z = 500;
+			
+			scene = new THREE.Scene();
+
+			var object = new THREE.CSS3DObject( element );
+
+			var element = document.createElement( 'div' );
+			element.className = 'element';
+			element.style.backgroundColor = 'rgba(0,65,65,' + ( Math.random() * 0.5 + 0.25 ) + ')';
+			
+			var object = new THREE.CSS3DObject( element );
+			scene.add( object );
+
+			renderer = new THREE.CSS3DRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			renderer.domElement.style.position = 'absolute';
+			document.getElementById( 'viewspot' ).appendChild( renderer.domElement );
+			*/
+
+			var update = function(){
+
+				if(this.dom == 1){
+					domobj = element;
+				}else{
+					domobj = element2;
+				}
+				//縦位置
+				//element.style.left = this.x + 'px';
+				//横位置
+				//element.style.top = this.y + 'px';
+				//回転・大きさ
+				//element.style.webkitTransform = 'scale(' + this.scale + ') rotate(' + this.rotate + 'deg) translate3d(' + this.x + 'px,' + this.y + 'px,' + this.z + 'px)';
+				domobj.style.webkitTransform = 'scale(' + this.scale + ') translate3d(' + this.x + 'px,' + this.y + 'px,' + this.z + 'px)';
+				//文字色
+				//element.style.color = 'rgba(' + Math.round(this.color) + ',' +  Math.round(this.color) + ',0,0.75)';
+//				element.style.wkbkitTrasition = '';
+
+			}
+
+			var element = document.createElement('div');
+			var element2 = document.createElement('div');
+			element.className = 'element';
+			element2.className = 'element';
+			element2.style.backgroundColor = 'rgba(0,127,127,1)';
+			element.innerText = '1';
+			element2.innerText = '2';
+			document.getElementById( 'viewspot' ).appendChild(element);
+			document.getElementById( 'viewspot' ).appendChild(element2);
+
+			var tweenobj;
+
+			//開始時のプロパティ値
+			var pos = {x : 0 , y : 0 , z : 0 , rotate : 0 ,scale : 1, color : 256 , dom : 1 };
+			var pos2 = {x : 200 , y : 200 , z : 0 , rotate : 0 ,scale : 1, color : 256 , dom : 2 };
+
+			tweenobj = new TWEEN.Tween(pos)
+				//終了時のプロパティ値
+				.to({x : 100 , y : 100 , z : 0 ,  rotate : 0 , scale : 1, color : 0 },5000)
+				//変化の速度
+				.easing(TWEEN.Easing.Cubic.InOut)
+				//.repeat(Infinity)
+				//変化中の呼出ファンクション
+				.onUpdate(update);
+
+			tweenobj2 = new TWEEN.Tween(pos2)
+				//終了時のプロパティ値
+				.to({x : 100 , y : 100 , z : 0 , rotate : 0 , scale : 1, color : 0 },5000)
+				//変化の速度
+				.easing(TWEEN.Easing.Elastic.Out)
+				//.repeat(2)
+				.yoyo(true)
+				//変化中の呼出ファンクション
+				.onUpdate(update);
+
+			tweenobj.start();
+			tweenobj2.start();
+
+
+			var animate = function(){
+				requestAnimationFrame(animate);
+				TWEEN.update();
+			}
+
+			animate();
+
+		</script>
+
+	</body>
+</html>

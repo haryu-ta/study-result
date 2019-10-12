@@ -1,0 +1,142 @@
+<html>
+    <head>
+        <link rel=stylesheet type="text/css" href="./css/common.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>ショートカット</title>
+    </head>
+    <body>
+        <script type="text/javascript">
+
+             var functions = {};
+             functions.displayonoff = function(elem,domid){
+
+                 dom = document.getElementById(domid)
+
+                 if ( dom.style.display == "block" ){
+                     dom.style.display="none";
+                     elem.innerText = "表示";
+                 }else{
+                     dom.style.display="block";
+                     elem.innerText = "非表示";
+                 }
+
+             }
+
+        </script>
+
+        <h1>EXCEL</h1>
+        <a href="javascript:void(0);" onclick="functions.displayonoff(this,'excel');return false;">非表示</a>
+        <pre id="excel">
+            <table border="1" cellspacing="0" cellpadding="0" >
+                <tr >
+                    <th style="width:20%;">ショートカットキー</th>
+                    <th style="width:70%;">動作</th>
+                </tr>
+                <tr>
+                    <td>Ctrl + space</td>
+                    <td>列の選択</td>
+                </tr>
+                <tr>
+                    <td>Shift + space</td>
+                    <td>行の選択</td>
+                </tr>
+                <tr>
+                    <td>Ctrl + Shift + space</td>
+                    <td>全体の選択</td>
+                </tr>
+                <tr>
+                    <td>Ctrl + -</td>
+                    <td>行の削除</td>
+                </tr>
+                <tr>
+                    <td>Ctrl + Shift + +</td>
+                    <td>行の挿入</td>
+                </tr>
+                <tr>
+                    <td>Ctrl + Alt + V</td>
+                    <td>[形式を選択して貼り付け]ダイアログボックスが表示</td>
+                </tr>
+                <tr>
+                    <td>Ctrl + Shift + 6</td>
+                    <td>外枠罫線を適用</td>
+                </tr>
+                <tr>
+                    <td>Ctrl + Shift + _</td>
+                    <td>外枠罫線を削除</td>
+                </tr>
+                <tr>
+                    <td>Ctrl + 1</td>
+                    <td>書式設定ダイアログの表示</td>
+                </tr>
+                <tr>
+                    <td>Ctrl + 3</td>
+                    <td>斜体の設定</td>
+                </tr>
+                <tr>
+                    <td>Ctrl + 5</td>
+                    <td>取消線の設定</td>
+                </tr>
+                <tr>
+                    <td>Ctrl + 9</td>
+                    <td>選択行の非表示</td>
+                </tr>
+                <tr>
+                    <td>Ctrl + 0</td>
+                    <td>選択列の非表示</td>
+                </tr>
+                <tr>
+                    <td>Ctrl + Shift + 0</td>
+                    <td>選択列の表示</td>
+                </tr>
+                <tr>
+                    <td>Ctrl + Shift + 9</td>
+                    <td>選択行の表示</td>
+                </tr>
+                <tr>
+                    <td>Ctrl + Shift + ^</td>
+                    <td>標準書式を適用/td>
+                </tr>
+                <tr>
+                    <td>Shift + F9</td>
+                    <td>アクティブシートの再計算</td>
+                </tr>
+                <tr>
+                    <td>Shift + F2</td>
+                    <td>コメントの新規挿入・編集</td>
+                </tr>
+            </table>
+        </pre>
+        <h1>eclipse</h1>
+        <a href="javascript:void(0);" onclick="functions.displayonoff(this,'eclipse');return false;">非表示</a>
+        <pre id="eclipse">
+            <table border="1" cellspacing="0" cellpadding="0" >
+                <tr>
+                    <th style="width:20%;">ショートカットキー</th>
+                    <th style="width:70%;">動作</th>
+                </tr>
+                <tr>
+                    <td>Ctrl + / </td>
+                    <td>コメント化(解除)</td>
+                </tr>
+                <tr>
+                    <td>Ctrl + Shift + f </td>
+                    <td>インデントを自動調整</td>
+                </tr>
+            </table>            
+        </pre>
+        <br>
+        <br>
+        <hr>
+        <a href="index.html">TOP</a>
+
+    </body>
+</html>
+
+<!--
+
+        <h1>タイトル</h1>
+        <pre>
+            内容
+        </pre>
+
+-->

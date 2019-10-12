@@ -1,0 +1,375 @@
+<html>
+    <head>
+        <link rel=stylesheet type="text/css" href="./css/common.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>LINUXコマンド</title>
+    </head>
+    <body>
+        <h1>SFTP</h1>
+        <pre>
+            sftp [username]@[IP adress]
+            [password]
+
+            put [送信ファイルパス] [送信先ファイルパス]
+
+            quit
+        </pre>
+        <h1>tar(アーカイブ化)</h1>
+        <pre>
+            ●ディレクトリ毎
+            tar cvzf [圧縮ファイル出力先ディレクトリパス] [圧縮ディレクトリ]
+            
+            ●指定ファイルのみ
+            
+        </pre>
+        <h1>/dev/null逃がし</h1>
+        <pre>
+            ls -l * > /dev/null 2>&1
+        </pre>
+        <h1>シェル内でのSQLファイル実行</h1>
+        <pre>
+            sqlplus -s ${ORACLE_USER}/${ORACLE_PW}@${ORACLE_SID} << EOF
+
+                @${EXEC_SQL_FILE} ${SQL_PARAMETER1} ${SQL_PARAMETER2}
+
+            EOF
+        </pre>
+        <h1>シェル内でSQLの検索結果件数を取得</h1>
+        <pre>
+    count=`sqlplus -S owneruser/ZaW26yJM << EOF
+WHENEVER SQLERROR EXIT 1 ROLLBACK
+set echo off
+set pages 0
+SELECT COUNT(*) FROM T_XXX;
+EXIT 0
+EOF`
+        </pre>
+        <h1>指定のファイルのみアーカイブ</h1>
+        <pre>
+            find . -name "*" -type f -print0 | tar cvzf [圧縮後ファイル名] --null -T -
+
+            -name 検索するファイル(ディレクトリ名)
+            -type 検索するタイプ(f:ファイル d:ディレクトリ)
+
+        </pre>
+        <h1>sedコマンド</h1>
+        <pre>
+            ●文字列を置換する
+            sed -e "s/[被置換文字列]/[置換文字列]/g"
+
+            ●テキストファイルの5～10行目を削除する
+            sed -e "5,10d" source.txt
+
+            ●特定文字列がある行に，任意文字列の新しい行を追加する
+            sed -e "/[特定文字列]/i [任意文字列]" source.txt
+        </pre>
+        <h1>ディレクトリ容量確認</h1>
+        <pre>
+            du [ディレクトリ名] -option  →  指定ディレクトリ配下のサブディレクトリもすべて表示
+            
+            -k  キロバイトで表示
+            -m  メガバイトで表示
+            -h  適切な単位で表示
+            -s  サブディレクトリは表示しない
+        </pre>
+        <h1>cron (スケジューラー)</h1>
+        <pre>
+            ●編集
+            crontab -option
+            
+            -e cronの設定
+            -r cronの設定削除
+            -l cronの設定確認
+            -u 他ユーザーのcron設定/確認等
+
+            設定値:
+            分 時 日 月 曜 [実行コマンド]
+
+            リスト：0,10,20   分とした場合0分、10分、20分に起動
+            範囲  ：0-5       分とした場合0、1、2、3、4、5分に起動
+            間隔  ：*/10      分とした場合10分間隔で起動
+            
+            曜日  : 0(日曜) 1(月曜) 2(火曜) … 6(土曜) 7(日曜)
+            
+            ※cronからの実行は環境変数が引き継がれないため、
+              必要な環境変数は別途定義が必要。
+        </pre>
+        <h1>dateコマンド</h1>
+        <pre>
+            date "+[表示書式]"
+
+            %Y YYYY(年)
+            %m MM(月)
+            %d DD(日)
+            %H HH(時) 24時間表記
+            %M MI(分)
+            %S SS(秒)
+        </pre>
+        <h1>sortコマンド</h1>
+        <pre>
+            sort -t ',' -k 2,3
+
+            -t フィールドセパレーター
+            -k ソート対象列
+        </pre>
+        <h1>手動でJP1イベント送信</h1>
+        <pre>
+            /opt/jp1base/bin/jevsendd -i [イベントID] -d [送信先サーバー名]
+
+            ポート : 送信元 → 送信先 20098ポートの解放が必要
+        </pre>
+        <h1>sudoコマンド</h1>
+        <pre>
+            sudo [実行コマンド]
+            → rootユーザーでコマンドを実行
+
+            ※sudoコマンドの使用では以下の設定が必要です
+              ①②いずれも<font color="red">root</font>でしか設定変更できません
+
+            ★バッチ起動時
+            ①パスワードの入力を求められなくする
+              visudo (vi /etc/sudoers)
+
+              例：appbatch ALL=(root) NOPASSWD:/bin/chmod,/bin/kill
+
+              ⇒appbatchユーザーがrootユーザー権限でchmod,killコマンドを発行できる(パスワードなしで)
+
+            ★JP1起動時
+            ②バックグラウンドプロセスからの実行時(JP1起動、cron起動)にsudoを有効にする
+              visudo (vi /etc/sudoers)
+
+              #Defaults    requiretty  <strong>←コメントアウトする</strong>
+
+              (エラー内容) sudo: sudo を実行するには tty がなければいけません。すみません
+
+
+            ★cron起動でエラー情報をログに出力させる方法
+            26 11 * * * /home/batch/aaa.sh > /home/batch/aaa.log <strong>2>&1</strong>
+
+        </pre>
+        <h1>シェル内でのSQL実行</h1>
+        <pre>
+            USER=USER
+            PASSWORD=PASS
+            SID=infodb
+
+            sqlplus -s ${USER}/${PASSWORD}@${SID} << EOF
+
+                <strong>実行したいSQL</strong>
+
+            EOF
+        </pre>
+        <h1>共通環境変数の設定</h1>
+        <pre>
+            #全ユーザー適用
+            vi /etc/profile
+
+            #特定ユーザーのみ適用
+            vi /home/[ユーザー]/.bash_profile   (.profile/.bash_login)
+
+            #Oracle環境変数定義
+            export ORACLE_BASE=/u01/app/oracle
+            export ORACLE_HOME=$ORACLE_BASE/product/11.2.0/dbhome_1
+            export LANG=ja_JP.UTF-8
+            export NLS_LANG=Japanese_Japan.AL32UTF8
+            export ORACLE_SID=INFODB
+            PATH=$PATH:$ORACLE_HOME/bin
+
+        </pre>
+        <h1>ファイル検索</h1>
+        <pre>
+            ○find
+            find [検索ルートディレクトリ] -name [検索ファイル名(正規表現可)] -ls
+            
+            #オプション
+            -type d ディレクトリを検索
+            -type f ファイルを検索
+            
+            例① 
+            ホームディレクトリ配下の拡張子が「.gif」でかつサイズが100K以上のファイルを検索し、
+            結果をreultに書き出す
+            find ~ -name "*.gif" -and -size +100k -fprint result
+            
+            例②
+            ホームディレクトリ配下でファイル名に「temp」を含むファイルを検索し、
+            ヒットしたファイルを削除する。
+            「-ok」を「exec」にするとユーザー問合せがなくなる。
+            find ~/ -name "*temp*" -ok rm {} \;
+        </pre>
+        <h1>viコマンド</h1>
+        <pre>
+            行数を表示する  ⇒  待機中に 「:set number」
+            ファイル内検索  ⇒  待機中に 「/検索文字」  正規表現使用可能
+            置換            ⇒  待機中に 「:s/[oldword]/[newword]/」 → 現在の行の最初のヒットのみ
+                                         「:s/[oldword]/[newword]/g」 → 現在の行の全て
+                                         「:%s/[oldword]/[newword]/」 → ファイル内全て
+                                         「:%s/[oldword]/[newword]/c」 → ファイル内全て(確認付き)
+        </pre>
+        <h1>ファイルを読み込みループ</h1>
+        <pre>
+            while read LINE
+            do
+
+                ${LINE}
+
+            done < [読込みファイル名]
+
+            cat [読込みファイル名] | while read LINE
+            do
+            
+            done
+        </pre>
+        <h1>繰返し</h1>
+        <pre>
+            ○一定回数の繰返し
+            for line in `seq 1 N`
+            do
+                echo ${line}
+            done
+        </pre>
+        <h1>sedコマンド</h1>
+        <pre>
+            ●置換
+            sed -e 's/被置換文字列/置換文字列/g' ファイル名
+
+                -iオプション 置換後のファイルの書き換えまで実行
+
+                ☆特定行のみ置換
+                sed -e '[sratrline],[endline]s/被置換文字列/置換文字列/g' ファイル名
+
+                   sed -e '10,15s/aaa/XXX/g' aaa.txt
+                   ⇒aaa.txtの10行目から15行目の「aaa」⇒「XXX」に置換
+
+                   sed -e '10,$s/aaa/XXX/g' aaa.txt
+                   ⇒aaa.txtの10行目から最終行目の「aaa」⇒「XXX」に置換
+
+            ●行削除
+            sed -e [削除したい行]d ファイル名
+
+                   sed -e '10,$d' text.txt
+                   ⇒10行目から最終行目までを削除
+
+                   sed -e '10,$<strong>!</strong>d' text.txt
+                   ⇒10行目から最終行目のみ表示(!は反対を意味する)
+
+                   sed -e '1<strong>~</strong>2!d' text.txt
+                   sed -n -e '1<strong>~</strong>2p' text.txt
+                   ⇒奇数行目のみ表示  (~はn行毎に表示)
+
+                   sed -e '/^$/d' text.txt
+                   ⇒空行の削除
+
+                   sed -e '/^[[:blank:]]*$/d'
+                   ⇒スペースのみの行を空行とみなして削除
+
+            ●検索
+            sed -n -e '/[正規表現]/p' ファイル名
+
+                   sed -n -e '/MBST[0-9][0-9]1/p' text.txt
+                   ⇒MBSTXX1にヒットする列のみ検索して表示 (=grep)
+
+                   sed -n -e '/MBST[0-9][0-9]1/,+5p' text.txt
+                   ⇒正規表現にヒットする行から5行を表示
+
+            ●とび技
+
+            find . -type f -exec sed -i 's/^/\/\//g' {} \;
+                カレントディレクトリに存在する全てのファイルの全ての行の先頭に[//]を挿入する
+                [s]の前に行数をしていすれば特定行のみ置換も可能
+
+            find . -type f -name t2* -exec sed -i '1s/^/--/g' {} \;
+
+            ・複数置換
+            cat [ファイル名] | sed -e 's/置換前/置換後/g' -e 's/別の置換前/別の置換後/g'
+
+            
+        </pre>
+        <h1>AWK</h1>
+        <pre>
+            ○縦横変換
+            ・1列だけを
+            cat failname | awk 'BEGIN{FS="\t";ORS=","}{print $1}'
+            cat failname | awk 'BEGIN{str=""}{if(NR!=1)str=str","$1;else str=$1}END{print str}'
+            
+            ・ファイル全体を
+            COLNUM=`head -1 sample.txt | awk -F '\t' '{print NF}'`
+            for ind in `seq 1 ${COLNUM}`
+            do
+                cat sample.txt | awk -F '\t' 'BEGIN{str=""}{if(NR != 1)str=str","$'$ind';else str=$'$ind'}END{print str}'
+            done
+            
+            ⇒スクリプトファイルによる実行
+            COLNUM=`head -1 sample.txt | awk -F '\t' '{print NF}'`
+            for ind in `seq 1 ${COLNUM}`
+            do
+                cat sample.txt | awk -F '\t' -v indx=${ind} -f script.awk   #外部変数は-vオプションで指定
+            done
+            
+              スクリプトファイル
+              BEGIN{str=""}
+              {
+                  if(NR != 1){
+                      str=str","$indx
+                  } else {
+                      str=$indx
+                  }
+              }
+              END{print str}
+        </pre>
+        <h1>viの設定</h1>
+        <pre>
+            #ユーザーのホームディレクトリ
+            vi .vimrc
+            
+            #タブ数の設定
+            set tabstop=4
+            #行番号の表示
+            set number
+        </pre>
+        <h1>少数点計算</h1>
+        <pre>
+            echo "scale = 5;1050/1000" | bc 
+            ⇒1.05000
+            
+            ※末尾0除去
+            echo "scale = 5;1050/1000" | bc | sed -e 's/0*$//' | sed -e 's/\.$//'
+            ⇒1.05
+        </pre>
+        <h1>シェル小言</h1>
+        <pre>
+            ○桁数チェック
+            if [ `expr "${val}" : ".*"` -ne 桁数値 ];
+            
+            ○プロセス切り離し実行
+            nohup ***.sh > /dev.null 2>&1 &
+            
+            ○改行変換
+            perl -p -e 's/\n/\r\n/' < 入力ファイル > 出力ファイル
+        </pre>
+        <h1>文字数カウント</h1>
+        <pre>
+            #文字数カウント(ディレクトリ配下の全ファイル)
+            for line in `ls -1`
+            do
+
+                fcnt=`cat ${line} | sed -e 's/ //g' | perl -p -e 's/\n//' | wc -m`
+                echo "${line} @ ${fcnt}"
+
+            done
+        </pre>
+        <br>
+        <br>
+        <hr>
+        <a href="index.html">TOP</a>
+
+    </body>
+</html>
+
+<!--
+
+        <h1>タイトル</h1>
+        <pre>
+            内容
+        </pre>
+
+-->

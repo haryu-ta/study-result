@@ -1,0 +1,337 @@
+<html>
+    <head>
+        <link rel=stylesheet type="text/css" href="css/common.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>VBAコマンド</title>
+    </head>
+    <body>
+        <h1>小ネタ</h1>
+        <pre>
+            ●警告画面OFF
+            Application.DisplayAlerts = False
+
+            ●自動計算OFF
+            Application.Calculate = False
+
+            ●最終行取得
+            Activesheet.Cells.SpecialCells(xlTypeLastCells).Row
+
+            ●フィルタON/OFF
+            Selection.AutoFilter Field:=1 Criteria1:="<>*HCM*",Operator:=xlAnd
+            Worksheets("Book1").AutoFilterMode = False
+
+            ●多ブックマクロ起動
+            Application.Run("多ブック名.xls!Main",引数)
+
+        </pre>
+        <h1>セルへの読み書き高速化</h1>
+        <pre>
+
+            Dim args() As Variant
+
+            '指定範囲を一括でメモリーに読み込み
+            args = ActiveSheet.Range(Cells(1, 1), Cells(5, 3)).Value
+
+            Dim arr() As Variant
+            ReDim arr(UBound(args, 2) - 1, UBound(args, 1) - 1) As Variant  '変数による要素指定はReDimじゃないと出来ない
+
+            For colind = 1 To UBound(args, 2)
+
+                For rowind = 1 To UBound(args, 1)
+
+                    '行列を置き換えて格納
+                    arr(colind - 1, rowind - 1) = args(rowind, colind)
+
+                Next
+
+            Next
+
+
+            Worksheets("Sheet2").Select
+            '指定範囲に一括で書き込み
+            ActiveSheet.Range(Cells(1, 1), Cells(3, 5)).Value = arr
+
+        </pre>
+        <h1>テキスト保存</h1>
+        <pre>
+            Dim path As String
+            Dim intFF As Integer
+
+            path = [書出ファイルパス]
+            intFF = FreeFile
+
+            Open path For Output As #intFF
+
+            Print #intFF, [書出内容]
+
+            Close #intFF
+        </pre>
+        <h1>ディレクトリ配下のファイル一覧取得</h1>
+        <pre>
+            filefullpath = Dir( [ディレクトリパス] & "\" & "*.xls")
+
+            If filefullpath = "" Then
+                MsgBox("該当ファイルなし")
+                Exit Sub
+            End If
+
+            Set filenamecol = New Collection
+
+            '該当するファイル名をコレクションに追加
+            Do While filefullpath <> ""
+
+                filenamecol.Add (filefullpath)
+                filefullpath = Dir()
+
+            Loop
+
+            For Each filefullpath In filenamecol
+
+                Workbooks.Open [ディレクトリパス] & "\" & filefullpath
+
+                '保存しますか?対策
+                Application.DisplayAlerts = False
+
+                'ブックを閉じる
+                Workbooks(filefullpath).Close
+
+                Application.DisplayAlerts = True
+
+            Next
+        </pre>
+        <h1>モジュール解放</h1>
+        <pre>
+            '前提 [Microsoft Visual Basic for Application Extensibility]参照設定
+
+            Dim args As Variant
+            args = Array("aaa.bas","bbb.frm","ccc.cls")
+
+            Dim Obj As VBIDE.VBProject
+            Set Obj = ActiveWorkbook.VBProject
+
+            For Each argname In args
+
+                '拡張子不要のため除去処理
+                argname = Replace(Replace(Replace(argname, "frm", ""), ".cls", ""), ".bas", "")
+
+                '削除処理本体
+                Call Obj.VBComponents.Remove(Obj.VBComponents(argname))
+
+            Next
+
+            Set Obj = Nothing
+        </pre>
+        <h1>モジュール取込</h1>
+        <pre>
+            ' このブックのVBProjectをオブジェクト変数に格納する。
+            Dim Obj As VBIDE.VBProject
+            Set Obj = ActiveWorkbook.VBProject
+
+            Dim args as Variant
+            args = Array(" [取込みファイルフルパス] "," [取込みファイルフルパス] ")
+
+            ' インポートしたいファイル名を決める。
+            Dim ImpFile As Variant
+
+            For Each ImpFile In args
+
+                If ImpFile <> "" Then
+                    ' このブックにVBAモジュールをインポートします。
+                    Obj.VBComponents.Import ImpFile
+                End If
+
+            Next
+
+            ' オブジェクトを破棄する。
+            Set Obj = Nothing
+        </pre>
+        <h1>モジュール全解放</h1>
+        <pre>
+            For Each VBC In ActiveWorkbook.VBProject.VBComponents
+
+                If VBC.Type = 1 Or VBC.Type = 2 Or VBC.Type = 3 Then
+                    '標準モジュール(1)
+                    'クラスモジュール(2)
+                    'formモジュール(3)
+
+                      ActiveWorkbook.VBProject.VBComponents.Remove VBC
+
+                End If
+
+            Next VBC
+        </pre>
+        <h1>テキスト読み書き</h1>
+        <pre>
+            ●読込
+            Dim FSO As New FileSystemObject ' FileSystemObject
+            Dim TS As TextStream            ' TextStream
+
+            Set TS = FSO.OpenTextFile([ファイルパス], ForReading)
+
+            '1行ずつ読込
+            Do Until TS.AtEndOfStream
+
+                '読込内容
+                strRec = TS.ReadLine
+
+            Loop
+
+            '終了処理
+            TS.Close
+            Set TS = Nothing
+            Set FSO = Nothing
+        </pre>
+        <hr style="width:70%;"/>
+        <pre>
+            ●書込
+            Set FSO = CreateObject("Scripting.FileSystemObject")
+
+            Set TS = FSO.CreateTextFile(filename:=[ファイルパス], Overwrite:=True)
+
+            '書出
+            TS.WriteLine Content
+
+            'テキストストリームを閉じる
+            TS.Close
+
+            '終了処理
+            Set TS = Nothing
+            Set FSO = Nothing
+        </pre>
+        <h1>クラスモジュールの使い方</h1>
+        <pre>
+            ●クラスモジュール
+            <a href="./vba/classmodule.html">クラスモジュール</a>
+
+            ●標準モジュール
+            <a href="./vba/standardmodule.html">標準モジュール</a>
+        </pre>
+        <h1>コレクションの使い方</h1>
+        <pre>
+            Dim col As New Collection
+            'コレクションへの追加
+            col.Add Item:=[値] , Key:=[キー項目]
+            'コレクションからの取出
+            col.Item([キー項目])
+        </pre>
+        <h1>配列</h1>
+        <pre>
+            ●静的配列
+            Dim Number(2) As Integer
+            Number(0) = 0
+            Number(1) = 1
+            Number(2) = 2
+
+            Dim Nations() As String = {"カンボジア", "ミャンマー", "ラオス", "ブルネイ", "パラオ"}
+
+            Dim arr As Variant
+            arr = Array("カンボジア", "ミャンマー", "ラオス", "ブルネイ", "パラオ")
+
+            ●動的配列
+            Dim Names() As String
+            Redim Names(1)
+            Names(0) = "馬"
+
+            ※動的配列で「Redim」による配列数変更の際、[Preserve]キーワードをつけないと内容がすべてクリアされ配列が初期化される。
+            for cnt = 1 to 10
+                Redim Preserve Names(cnt)
+                Names(cnt) = "馬"
+            Next
+
+            ●配列の取出し
+            For Each Item In Names
+                'Itemで値が取得可能(添字不要)
+            Next
+
+            ●面白い方法
+            '国名と対応する首都名の配列を作成します。
+            Dim Nations() As String = {"日本", "アメリカ", "韓国", "イギリス"} '国名
+            Dim Cities() As String = {"東京", "ワシントン", "ソウル", "ロンドン"} '首都名
+            Dim K As Integer
+            '国名を並び替えます。(連動して首都名も並び変わります。)
+            Array.Sort(Nations, Cities)
+
+            '結果を表示します。
+            For K = 0 To UBound(Nations)
+                ListBox1.Items.Add(Nations(K) & "の首都は" & Cities(K))
+            Next
+        </pre>
+        <h1>Java起動</h1>
+        <pre>
+           ●VBAからのJava起動
+           '実行コマンド
+           Cmd1 = "java -cp C:\sample"
+           Set WSH = CreateObject("Wscript.Shell")
+           'コマンドプロンプトから実行
+           Set EndStatus = WSH.Exec("%ComSpec% /c" & "Cmd1)
+
+           '終了待機
+           Do While EndStatus.Status = 0
+
+               waitTime = Now + TimeValue("0:00:01")
+               Application.Wait waitTime
+
+           Loop
+
+           'javaでの標準出力を受け取る
+           MSG=EndStatus.StdOut.ReadAll
+        </pre>
+        <h1>検索した結果をオブジェクトに格納</h1>
+        <pre>
+            Set obj = Sheets("【設定】URL情報").Columns("A:A").Find(What:=setting("URL"), LookIn:=xlValues, LookAt:=xlWhole, MatchCase:=True, Matchbyte:=True)
+                <font color="green">
+                'What       検索対象文字列
+                'LookIn     値で検索(xlValues)/数式(xlFormat)/コメント(xlComents)
+                'LookAt     部分一致(xlPart)/完全一致(xlWhole)
+                'MatchCase  大文字と小文字を区別(True)
+                'MatchByte  全角・半角を区別(True)
+                </font>
+            obj.Row  ← マッチした行番号が取れる
+            
+        </pre>
+        <h1>最終行の取得方法</h1>
+        <pre>
+            ①連続して値が入力されている場合に最終行を取得できる
+              ※「Ctrl+↓」と同義
+              ActiveWorkbook.Worksheets("Sheet1").Range("A1").End(xlDown).Row
+              
+            ②値の入力がなくても、書式等設定されていれば有効行と判断して最終行を取得
+              ActiveWorkbook.Worksheets("Sheet1").UsedRange.Rows.Count
+              
+            ③SpecialCellsの引数により如何様にもなる
+              ActiveWorkbook.Worksheets("Sheet1").Cells.SpecialCells(xlCellTypeLastCell).Row
+
+                <font color="green">
+                'xlCellTypeAllFormatConditions       表示形式が設定されているセル
+                'xlCellTypeAllValidation             条件の設定が含まれているセル
+                'xlCellTypeBlanks                    空白セル
+                'xlCellTypeComments                  コメントが含まれているセル
+                'xlCellTypeFormulas                  数式が含まれているセル
+                'xlCellTypeVisible                   すべての可視セル
+                'xlCellTypeConstants                 定数が含まれているセル
+                'xlCellTypeSameFormatConditions      同じ表示形式が設定されているセル
+                'xlCellTypeSameValidation            同じ条件の設定が含まれているセル
+                </font>
+        </pre>
+        <h1>デスクトップの取得</h1>
+        <pre>
+
+            Set objWSH = CreateObject("WScript.shell")
+            objWSH.specialFolders("DeskTop")
+            
+        </pre>
+        <br>
+        <br>
+        <hr>
+        <a href="index.html">TOP</a>
+    </body>
+</html>
+
+<!--
+
+        <h1>タイトル</h1>
+        <pre>
+            内容
+        </pre>
+
+-->

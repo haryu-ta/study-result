@@ -1,0 +1,40 @@
+--sys
+Grant create procedure to obj_usr;
+
+--JAVAソースの確認
+set long 2000;
+select text from user_source;
+
+--ラッパファンクションの定義
+CREATE OR REPLACE FUNCTION CONVERTKANJ(kanji in varchar2)
+RETURN VARCHAR2
+IS LANGUAGE java
+NAME 'Kanji.convert(java.lang.String) return java.lang.String'
+;
+/
+
+--Oracleへのロード
+loadjava -verbose -force -resolve -user obj_usr/pass Kanji.java kanji2.properties
+loadjava -verbose -force -resolve -user obj_usr/pass FileIO.java
+dropjava -verbose -user obj_usr/pass Kanji
+
+--権限付与
+--SYSユーザーにて実行
+call dbms_java.grant_permission( 'OBJ_USR','SYS:java.io.FilePermission', 'kanji2.properties', 'read' )
+
+--
+native2ascii kanji.properties kanji2.properties
+
+--実行
+select CONVERTKANJ('惠') from dual;
+select CONVERTKANJ('營') from dual;
+select CONVERTKANJ('邊') from dual;
+
+CREATE OR REPLACE PROCEDURE FILEOUT (value varchar2)
+IS LANGUAGE java
+NAME 'FileIO.write(java.lang.String)'
+;
+/
+call dbms_java.grant_permission( 'OBJ_USR', 'SYS:java.io.FilePermission','C:\work\test.txt', 'write' );
+
+exec FILEOUT('邊');

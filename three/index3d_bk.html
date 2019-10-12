@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+	<head>
+		<meta charset="UTF-8">
+		<style>
+			html, body {
+				height: 100%;
+			}
+
+			body {
+				background-color: #000000;
+				margin: 0;
+				font-family: Helvetica, sans-serif;;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body onLoad="main()">
+		<script src="./three.min.js"></script>
+		<script src="./Tween.js"></script>
+		<script src="./CSS3DRenderer.js"></script>
+		<script>
+
+
+			var main = function(){
+
+				// (1)レンダラの初期化
+				var renderer = new THREE.CSS3DRenderer();
+				renderer.setSize(700, 700);
+				renderer.setClearColor("rgb(256,256,256)", 1);
+				renderer.domElement.style.position = 'absolute'; // スタイル設定 {position:absolute}
+				document.getElementById("viewspot").appendChild(renderer.domElement);
+				//document.body.appendChild( renderer.domElement );
+
+				// (2)シーンの作成
+				var scene = new THREE.Scene();
+
+				// (3)カメラの作成
+
+				//第一引数 ： 画角は値を小さくすれば望遠レンズ、大きくすれば広角レンズの効果
+				//第二引数 ： アスペクト比は画面の横幅を高さで割った値です。
+				var camera = new THREE.PerspectiveCamera(10, 500 / 500,1,1000);  
+				//カメラ位置
+				//camera.position = new THREE.Vector3(0, 0, 500);
+				camera.position.set(0, 0, 500);
+				
+				//注視点
+				camera.lookAt( { x:0, y:0, z:0 });
+				scene.add(camera);
+
+				// (4)ライトの作成
+				var light = new THREE.DirectionalLight(0xcccccc);  //ライト色を指定
+				light.position.set(0, 0, 0)  // = new THREE.Vector3(0, 0.5, 0.5);  
+				scene.add(light);
+
+				var ambient = new THREE.AmbientLight(0xcccccc);
+				scene.add(ambient);
+
+				// (5)表示する物体の作成
+				var dom = document.createElement('div');
+				dom.className = "box";
+				dom.innerHTML = "H<br>水素"; 
+				dom.style.backgroundColor = '#5D7DF0'; 
+				var object = new THREE.CSS3DObject(dom);
+				object.position.set(0,0,0);
+				scene.add(object);
+
+				var dom2 = document.createElement('div');
+				dom2.className = "box";
+				dom2.innerHTML = "He<br>ヘリウム"; 
+				dom2.style.backgroundColor = '#A384F8'; 
+				var object2 = new THREE.CSS3DObject(dom2);
+				object2.position.set(0,20,0);
+				scene.add(object2);
+
+				baseTime = +new Date;
+
+				function render(){
+
+					requestAnimationFrame(render);
+					object.position.x = 0.3 * (+new Date - baseTime) / 100;
+					renderer.render(scene, camera);
+
+
+				}
+				render();
+
+
+			};
+		</script>
+
+		<div id="viewspot"></div>
+
+	</body>
+</html>

@@ -1,0 +1,117 @@
+<html>
+    <head>
+        <link rel=stylesheet type="text/css" href="../css/common.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JAVA</title>
+    </head>
+    <body>
+        <h1>ソート処理</h1>
+        <pre>
+        ●ソート処理
+        ======================================================================
+            List<infoBean> list = new ArrayList<infoBean>();
+            list.add(new infoBean(1,"リンゴ",120));
+            list.add(new infoBean(2,"みかん",100));
+            list.add(new infoBean(3,"マンゴー",1000));
+
+            //Collection.sort(ソート対象,並び替え条件)
+            Collection.sort(list,new CompareByPrice());
+
+            for( int cnt = 0; cnt < list.size();cnt++ ){
+
+                ib = list.get(cnt);
+                System.out.println(ib.getName());
+
+            }
+        ======================================================================
+        
+        ●ソート内容定義
+        ======================================================================
+        CompareByPrice.java
+
+        import java.util.Comparator;
+
+        public class CompareByPrice implements Comparator<infoBean> {
+
+        public int compare(infoBean o1, infoBean o2) {
+
+            int price1 = Integer.parseInt(o1.getPrice());
+            int price2 = Integer.parseInt(o2.getPrice());
+
+            if( price1 > price2 ){
+
+                //昇順のソート
+                //return 1;
+                //降順のソート
+                return -1;
+
+            }else if( price1 < price2 ){
+
+                //昇順ソートの場合
+                //return -1;
+                //降順ソートの場合
+                return 1;
+
+            }
+
+            //等価の場合
+            return 0;
+
+
+            }
+
+        }
+        ======================================================================
+
+        ●Beanクラス
+        ======================================================================
+        infoBean.java
+
+        public class infoBean {
+
+            private int code;
+            private String name;
+            private int price;
+
+            public infoBean(int code,String name,int price){
+                this.code = code;
+                this.name = name;
+                this.price = price;
+            }
+
+            public int getPrice(){
+                return price;
+            }
+
+            public Stirng getName(){
+                return name;
+            }
+
+        }
+        ======================================================================
+
+        ●実行結果
+        ======================================================================
+        <font style="color:red;">
+        マンゴー
+        りんご
+        みかん
+        </font>
+        ======================================================================
+        </pre>
+        <br>
+        <br>
+        <hr>
+        <a href="../java.html">javaへ</a><br>
+        <a href="index.html">TOP</a>
+    </body>
+</html>
+
+<!--
+
+        <h1>タイトル</h1>
+        <pre>
+            内容
+        </pre>
+
+-->

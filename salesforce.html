@@ -1,0 +1,441 @@
+<html>
+    <head>
+        <link rel=stylesheet type="text/css" href="css/common.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>SalesForce</title>
+        <style type="text/css">
+            .header{background-color:yellow;}
+            tr td:nth-child(1){font-weight:bold;}
+            span.objprefix{
+                font-weight:bold;
+                font-style:Italic;
+                color:red;
+            }
+            span.objname{
+                font-weight:bold;
+                font-style:Italic;
+                color:blue;
+            }
+            span.recid{
+                font-weight:bold;
+                font-style:Italic;
+                color:pink;
+            }
+            span.vfpage{
+                font-weight:bold;
+                font-style:Italic;
+                color:purple;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>URLまとめ</h1>
+        <div>ベースURL ： <b>https://{インスタンス名}.salesforce.com</b></div>
+        <br>
+        <br>
+        <div>
+            <table border="1" style="width:80%;">
+                <tr>
+                    <th class="header" style="width:20%;">画面</td>
+                    <th class="header" style="width:80%;">URL</td>
+                </tr>
+                <tr>
+                    <td>ホーム画面</td>
+                    <td>/home/home.jsp</td>
+                </tr>
+                <tr>
+                    <td>すべてのタブ画面</td>
+                    <td>/home/showAllTabs.jsp</td>
+                </tr>
+                <tr>
+                    <td>タブ画面</td>
+                    <td>/<span class="objprefix">[obj_prefix]</span>/o<br><br>URLFOR($Action.<span class="objname">[obj_name]</span>.Tab)</td>
+                </tr>
+                <tr>
+                    <td>新規画面</td>
+                    <td>/<span class="objprefix">[obj_prefix]</span>/e<br><br>URLFOR($Action.<span class="objname">[obj_name]</span>.New)</td>
+                </tr>
+                <tr>
+                    <td>詳細画面</td>
+                    <td>/<span class="recid">[record_id]</span><br><br>URLFOR($Action.<span class="objname">[obj_name]</span>.View,<span class="recid">[record_id]</span>)</td>
+                </tr>
+                <tr>
+                    <td>編集画面</td>
+                    <td>/<span class="recid">[record_id]</span>/e<br><br>URLFOR($Action.<span class="objname">[obj_name]</span>.Edit,<span class="recid">[record_id]</span>)</td>
+                </tr>
+                <tr>
+                    <td>VisualForceページ</td>
+                    <td>/apex/<span class="vfpage">[vfpage_name]<span></td>
+                </tr>
+            </table>
+            ※コピー機能のURL   [record_id]/e?clone=1
+        </div>
+        <h1>URLパラメータ</h1>
+        <div>
+            <table border="1" style="width:100%;">
+                <tr>
+                    <th class="header" style="width:20%;">パラメーター</td>
+                    <th class="header" style="width:20%;">意味</td>
+                    <th class="header" style="width:60%;">値</td>
+                </tr>
+                <tr>
+                    <td>retURL</td>
+                    <td>遷移元画面のURL</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>isdtp</td>
+                    <td>デスクトップモード</td>
+                    <td>vw、mnなどを指定すると、ヘッダー、サイドバーが非表示になる。ビュー画面やレポート画面で使用可能。</td>
+                </tr>
+                <tr>
+                    <td>cancelURL</td>
+                    <td>キャンセル時に遷移するURL</td>
+                    <td>/home/home.jsp</td>
+                </tr>
+                <tr>
+                    <td>saveURL</td>
+                    <td>保存時に遷移するURL</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>標準項目ラベル</td>
+                    <td>デフォルト値</td>
+                    <td>例： Name=板村<br>API参照名『Name』に”板村”をセット</td>
+                </tr>
+                <tr>
+                    <td>カスタム項目ラベル/td>
+                    <td>デフォルト値</td>
+                    <td>例： F00NN0000001Maw7=板村<br>項目ID『F00NN0000001Maw7』に"板村"をセット<br><span style="color:red;font-weight:bold;">※該当項目が参照関係の項目の場合<b>『CF+項目ID』</b>とする必要がある。</span> </td>
+                </tr>
+                <tr>
+                    <td>標準項目ラベル + _lkid</td>
+                    <td>標準項目の参照先レコードIDのデフォルト値</td>
+                    <td>レコードIDを指定<br><br><span style="color:red;font-weight:bold;">①標準項目ラベルと同時に指定すること<br>②標準項目ラベルは「日本語名」、こちらは『参照ID』を指定<br>
+                    ③参照関係のIDを設定したい場合のみ必要</span></td>
+                </tr>
+                <tr>
+                    <td>カスタムラベル + _lkid</td>
+                    <td>カスタム項目の参照先レコードIDのデフォルト値</td>
+                    <td>レコードIDを指定<br><br><span style="color:red;font-weight:bold;">①カスタム項目ラベルと同時に指定すること<br>②カスタム項目ラベルは「日本語名」、こちらは『参照ID』を指定<br>
+                    ③参照関係のIDを設定したい場合のみ必要</span></td>
+                </tr>
+            </table>
+            <pre>使用例 ： 
+                {!URLFOR($Action.A019_Task__c.New)}?&
+                    CF00NN0000001Maw7={!A019_Case__c.A019_CustomerInfo__c}&                   <span style="color:green;">'顧客属性に名前をセット</span>
+                    CF00NN0000001Maw7_lkid={!A019_Case__c.A019_CustomerInfoId__c}&            <span style="color:green;">'顧客属性参照にIDをセット</span>
+                    CF00NN0000001Mavx={!A019_Case__c.Name}&
+                    CF00NN0000001Mavx_lkid={!A019_Case__c.Id}
+            </pre>
+        </div>
+        <h1>VisualForceタグ</h1>
+        <pre>
+             ○カスタム詳細画面で、オリジナルっぽく表示させる
+
+             <apex:detail subject="{!C002_Case__c.Id}" relatedList="false" title="true"/>
+
+                  relatedList="(true|false)"  関連リスト等を表示するかを指定する
+                  subject="(ID)"              レコードの ID を指定する
+        </pre>
+        <h1>登録時の処理順序</h1>
+        <pre>
+
+            下記が、レコードに適用される salesforce ロジックの順序です。
+            ①古いレコードをデータベースからロード（または、新しい挿入の初期化）
+            ②新しいレコードの値で古い値を上書き
+            ③システムの入力規則
+            ④すべての before トリガを実行（EE / UE のみ）
+            ⑤カスタム入力規則
+            ⑥レコードをデータベースに保存（しかし、コミットされていない）
+            ⑦レコードをデータベースから再ロード
+            ⑧すべての after トリガを実行（EE / UE のみ）
+            ⑨割り当てルール
+            ⑩自動応答ルール
+            ⑪ワークフロー ルール
+            ⑫エスカレーション ルール
+            ⑬積み上げ集計数式の値の更新（存在する場合）
+            ⑭データベースのコミット
+            ⑮コミット後のロジック（メールの送信）
+
+        </pre>
+        <h1>ガバナ制限</h1>
+        <pre>
+            ○1オブジェクト中の制限
+            カスタム項目作成     800個
+            参照項目              40個
+            
+            ○DML
+            ・1回のトランザクション中に実行されるSOQLクエリで取得できるレコードは最大50,000件まで
+               （解決策）Where句または、Limit句付加する
+            ・Visualforce反復コンポーネントにバインドできるコレクションの項目数は最大1,000件まで
+               （解決策）Limit句付加する。ページング処理を行う（QueryLocatorを使う）
+                  →QueryLocatorで取得できるレコードは10,000件に制限されているので注意が必要です。
+            ・1回のトランザクション中に実行されるDMLで処理できるレコードは最大10,000件まで
+                （解決策）ジョブの実行間隔を短くする
+                          SFDCの外からAPIを使って削除する。ただし、APIを使うことで別の制約（1日にコールできるAPI数など）を考慮することになります。
+        </pre>
+        <h1>監査項目を手動設定</h1>
+        <pre>
+        以下の4項目を新規作成時にAPI経由でのみ自動で設定できるようになった。
+        
+        ・作成者（CreatedById）
+        ・作成日（CreatedDate）
+        ・最終更新者（LastModifiedById）
+        ・最終更新日（LastModifiedDate）
+
+        <a href="http://docs.releasenotes.salesforce.com/ja-jp/winter16/release-notes/rn_general_audit_fields_inactive_owners.htm" target="blank">参考</a>
+        </pre>
+        <h1>完全削除</h1>
+        <pre>
+        Contact[] delList = [SELECT Id FROM Contact];
+        delete delList;
+
+        if(delList.size() > 0) {
+            Database.emptyRecycleBin(delList);
+        }
+        
+        ※注意 Database.emptyRecycleBinで削除されるリストはサイズが必ず1以上であること。0だとエラーとなる。
+        </pre>
+        </pre>
+        <h1>JavaScript in VisualForce</h1>
+        <pre>
+        Visualforceには、コンポーネントのid値を取得するグローバル関数「$Component」が用意されています。
+
+        &lt;apex:page&gt;
+            &lt;apex:outputPanel id="outputpanel_id"&gt;hogehoge&lt;/apex:outputPanel&gt;
+
+            &lt;script&gt;
+                var elem = document.getElementById("{!$Component.outputpanel_id}");
+                alert(elem.innerHTML);
+            &lt;/script&gt;
+
+        &lt;/apex:page>
+        </pre>
+        <h1>JQuery in VisualForce</h1>
+        <pre>
+        ①ダウンロードしたファイルは、静的リソースに登録します。
+        ②VisualForceにて静的リソースに登録したJavascriptを呼び出す。
+        &lt;apex:includeScript value="{!$Resource.JQuery}"/&gt;
+        
+        ③SFDCの場合、jQuery以外のJavascriptライブラリを使用しているので、"$"が特殊文字として被ってしまうかもしれません。
+        このため、jQuery.noConflict()を使って、"$"を別の文字で書き換えてあげます。
+        &lt;script&gt;
+            var $jq = jQuery.noConflict();
+
+            $jq(function() {
+                // ここにコードを書く
+            }); 
+        &lt;/script&gt;
+        
+        ※注意
+        jQueryは、id属性にコロン":"が入っている場合は、idセレクタで要素を取得できないようです。(つまり、VisualForceではid指定では使えない)
+        なので、classセレクタで要素を取得しないといけないことを忘れないでください。
+        </pre>
+        <h1>sdlファイル</h1>
+        <pre>
+            ●参照項目を親項目の外部IDキーから取得する
+            [CSVファイルヘッダー]=○○__r:\△△__c
+
+            ●固定値
+            "false"=△△__c
+        </pre>
+        <h1>オブジェクト情報の取得</h1>
+        <pre>
+            Schema.DescribesObjectResult res = [オブジェクトAPI参照名].sObjectType.getDescribe();
+            res.[下記メソッド];
+
+            <div>
+                <table border="1" style="width:100%;">
+                    <tr>
+                        <th class="header" style="width:30%;">メソッド</td>
+                        <th class="header" style="width:40%;">内容</td>
+                    </tr>
+                    <tr>
+                        <td>getLabel()</td>
+                        <td>オブジェクトのラベル名を返却</td>
+                    </tr>
+                    <tr>
+                        <td>getName()</td>
+                        <td>オブジェクトのAPI参照名を返却</td>
+                    </tr>
+                    <tr>
+                        <td>isAccessible()</td>
+                        <td>現在のユーザがこの項目を参照できる場合はtrue</td>
+                    </tr>
+                    <tr>
+                        <td>isCreateable()</td>
+                        <td>現在のユーザがオブジェクトを作成できる場合はtrue</td>
+                    </tr>
+                    <tr>
+                        <td>isCustomSetting()</td>
+                        <td>オブジェクトがカスタム設定の場合はtrue</td>
+                    </tr>
+                    <tr>
+                        <td>isDeletable()</td>
+                        <td>現在のユーザがオブジェクトを削除できる場合はtrue</td>
+                    </tr>
+                    <tr>
+                        <td>isQueryable()</td>
+                        <td>現在のユーザがオブジェクトをクエリできる場合はtrue</td>
+                    </tr>
+                    <tr>
+                        <td>getKeyPrefix()</td>
+                        <td>オブジェクトの 3 文字のプレフィックスコードを返します</td>
+                    </tr>
+                    <tr>
+                        <td>getRecordTypeInfos()</td>
+                        <td>そのオブジェクトがもつレコードタイプの情報を返却する。<br/>返却値 : List&lt;Schema.RecordTypeInfo&gt;</td>
+                    </tr>
+                    <tr>
+                        <td>fields.getMap()</td>
+                        <td>該当オブジェクトのフィールド一覧を返却する。<br/> : Map&lt;String, Schema.SObjectField&gt;</td>
+                    </tr>
+                </table>
+            </div>
+        </pre>
+        <h1>オブジェクト項目情報の取得</h1>
+        <pre>
+            Schema.DescribesFieldResult res = [オブジェクトAPI参照名].[項目API参照名].getDescribe();
+            res.[下記メソッド参照]
+            
+            getByteLength()
+            getCalculatedFormula()
+            getDefaultValue()
+            getDigits()
+            getInlineHelpText()
+            getLabel()
+            getLength()
+            getName()
+            getPicklistValues() ⇒ List<Schema.PicklistEntry>
+            getPrecision()
+            getType()
+            isExternalID()
+        </pre>
+        <h1>動的にオブジェクト、項目情報を取得</h1>
+        <pre>
+            //オブジェクト情報を取得
+            Schema.DescribeSObjectResult o = Schema.getGlobalDescribe().get([オブジェクトAPI参照名]).getDescribe();
+            
+            //フィールド情報を取得
+            Schema.DescribeFieldResult c = o.fields.getMap().get([フィールドAPI参照名]).getDescribe();
+        </pre>
+        <h1>Afterトリガ内でレコードを更新する方法</h1>
+        <pre>
+            ●DMLExceptionが発生する方法
+            Map<String,SObjtct> map = Trigger.newMap;
+            List<SObject> uplist = new List<SObject>();
+            for( SObject so : map.values() ){
+                so.put('Name','更新後項目');
+                uplist.add(so);
+            }
+            update uplist;
+
+           ●DMLExceptionが発生しない方法
+            Map<String,△△__c> map = Trigger.newMap;
+            List<SObject> uplist = new List<SObject>();
+            for( △△__c so : map.values() ){
+                Schema.SObjectType sot = so.Id.getSObjectType();
+                SObject so = sot.newSObject(so.Id);
+                uplist.add(so);
+            }
+            update uplist;
+
+        </pre>
+        <h1>関連リスト</h1>
+        <pre>
+            list属性に指定する値
+            □添付資料  ⇒ CombinedAttachments
+            □承認申請  ⇒ ProcessSteps
+        </pre>
+        <h1>承認プロセス</h1>
+        <pre>
+            □申請者設定
+            ・レコード所有者
+            ・レコード作成者
+            ・指定ユーザ
+            ・公開グループ
+            ・ロール
+            
+            □承認者設定（ステップ毎に設定可能）
+            ・ユーザが手動指定
+            ・固定のキュー
+            ・固定のユーザ
+            ・関連ユーザ（該当オブジェクトのユーザの参照項目の設定値）
+            
+            ※動的な承認プロセスにする場合の参考
+              <a href="http://d.hatena.ne.jp/mercystage/20120108/1327134048" target="_blank">参考リンク</a>
+        </pre>
+        <h1>ToDo</h1>
+        <pre>
+            □任命先に指定できる値
+            ・ユーザ
+            ・ロール
+            ・レコード所有者
+        </pre>
+        <h1>メールアラート</h1>
+        <pre>
+            □送信先に指定できる値
+            ・ユーザ
+            ・ロール
+            ・レコード所有者
+            ・レコード作成者
+            ・公開グループ
+            ・関連ユーザ
+        </pre>
+        <h1>オブジェクトの全項目名取得</h1>
+        <pre>
+            Map<String,Schema.SObjectField> fmap = Schema.getGlobalDescribe.get('[オブジェクトAPI参照名]').fields.getMap();
+            for(Schema.SObjectField fieldname : fmap.values()){
+                system.debug(fieldname);
+            }
+        </pre>
+        <h1>SOQL</h1>
+        <pre>
+            ■Like演算子
+            
+            % : 0個以上の文字に一致
+            _ : 1文字に一致
+            
+            ※バックスラッシュ（/）がエスケープ文字
+            
+            ■複数選択リストの検索
+            
+            Where [API参照名] INCLUDES '指定値'   → 含む検索
+            Where [API参照名] EXCLUDES '指定値'   → 含まない検索
+            
+            ■親から子を取得
+            Select Id,Name,(select Id,Name From [子リレーション名]) From Parent__c
+            
+            ■子から親を取得
+            Select Id,Name,ParentRef__r.Name From Child__c
+        </pre>
+        <h1>入力規則</h1>
+        <pre>
+            ISNULL → 数値項目と通貨項目のみ使用可能
+            ISBLANK → 全部でOK
+        </pre>
+        <h1> JavaScript </h1>
+        <pre>
+            document.getElementById('${Component.XXX.xxx.zzz}');
+        </pre>
+        <h1> 完全削除 </h1>
+        <pre>
+            List<SObject> dellist = [Select Id from obj__c];
+            delete dellist;
+            
+            if( dellist.size() > 0 )Database.emptyRecycleBin(dellist);
+        </pre> 
+        <br>
+        <br>
+        <hr>
+        <a href="index.html">TOP</a>
+    </body>
+</html>
+
+<!--
+        <h1></h1>
+        <pre>
+
+        </pre>
+-->

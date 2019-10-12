@@ -1,0 +1,89 @@
+<html>
+    <head>
+        <link rel=stylesheet type="text/css" href="../css/common.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JAVA</title>
+    </head>
+    <body>
+        <h1>JSON</h1>
+        <pre>
+            <strong>jacksonが必要です</strong>
+            <strong>単純なオブジェクトの受け渡し</strong>
+
+            public class jsonclass extends HttpServlet{
+
+                public void doPost(HttpServletRequest req,HttpServletResponse res)
+                    throws IOException, ServletException{
+
+                    //エンコード
+                    req.setCharacterEncoding("UTF-8");
+                    BufferedReader bufferReaderBody = new BufferedReader(req.getReader());
+                    String body = bufferReaderBody.readLine();
+
+                    //①リクエストのJSONデータを取得
+                    ObjectMapper mapper = new ObjectMapper();
+                    //@SuppressWarnings("unchecked")
+                    initdto requestdata = mapper.readValue(body, initdto.class);     //requestdataにリクエスト内容を詰めてくれる
+
+                    //②レスポンスの返却
+                    initdto responsedata = new initdto("板村 亮平","男",);           //返却値をDTOに詰める
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    String json = objectMapper.writeValueAsString(responsedata);
+                    res.getOutputStream().write(json.toString().getBytes("UTF-8"));
+
+                    //例外：単純テキストを返却
+                    //res.getOutputStream().write("板村は男だよ".toString().getBytes("UTF-8"));
+
+            }
+
+            ====================================================================================
+            initdto.java (Jacksonデータ授受用)
+
+            
+            public class initdto {
+                private String name;
+                private String sex;
+            
+                public initdto(String name,String old){
+                    super();
+                    this.name = "";
+                    this.sex = "";
+                }
+
+                public void setName() {
+                    this.name = name;
+                }
+
+                public String getName() {
+                    return name;
+                }
+
+                public void setSex() {
+                    this.sex = sex;
+                }
+
+                public String getSex() {
+                    return sex;
+                }
+            ====================================================================================
+        </pre>
+        <h1>JSON -その２-</h1>
+        <pre>
+            <strong>配列の受け渡し</strong>
+        </pre>
+        <br>
+        <br>
+        <hr>
+        <a href="../java.html">javaへ</a><br>
+        <a href="index.html">TOP</a>
+    </body>
+</html>
+
+<!--
+
+        <h1>タイトル</h1>
+        <pre>
+            内容
+        </pre>
+
+-->

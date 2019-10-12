@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ja">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<title>3d-render</title>
+		<style>
+			html, body {
+				height: 100%;
+			}
+
+			body {
+				background-color: #000000;
+				margin: 0;
+				font-family: Helvetica, sans-serif;;
+				overflow: hidden;
+				position:relative;
+				-webkit-transform-style:preserve-3d;
+				-webkit-transform: perspective(20);
+			}
+
+			.element {
+				position : absolute;
+				width: 100px;
+				height: 120px;
+				box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+				border: 1px solid rgba(127,255,255,0.25);
+				text-align: center;
+				cursor: default;
+				font-weight: bold;
+				background-color : rgba(0,127,127,0.5)
+			}
+
+/*
+			.element:hover {
+				box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
+				border: 1px solid rgba(127,255,255,0.75);
+			}
+*/
+
+		</style>
+	</head>
+	<body>
+		<script src="./three.min.js"></script>
+		<script src="./Tween.js"></script>
+		<script src="./CSS3DRenderer.js"></script>
+		<div id="viewspot"></div>
+		<script>
+
+			camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 3000 );
+			camera.position.z = 3000;
+			
+			scene = new THREE.Scene();
+
+			var element = document.createElement('div');
+			element.className = 'element';
+			element.innerText = '1';
+			document.getElementById( 'viewspot' ).appendChild(element);
+
+			//レンダー設定
+			function render() {
+
+				renderer.render( scene, camera );
+
+			}
+
+			function render2() {
+
+				renderer.render( scene, camera );
+
+			}
+
+			//開始点の設定
+			var fromobject = new THREE.CSS3DObject( element );
+			fromobject.position.x = 10;
+			fromobject.position.y = 10;
+			fromobject.position.z = 5000;
+			fromobject.rotation.x = 0;
+			fromobject.rotation.x = 0;
+
+			scene.add( fromobject );
+
+
+			//終了点の設定
+			var toobject = new THREE.Object3D();
+			toobject.position.x = 10;
+			toobject.position.y = 10;
+			toobject.position.z = 0;
+			toobject.rotation.x = 45;
+			toobject.rotation.y = 0;
+
+
+			//終了点の設定
+			var to2object = new THREE.Object3D();
+			to2object.position.x = 10;
+			to2object.position.y = 10;
+			to2object.position.z = 2500;
+			to2object.rotation.x = 0;
+			to2object.rotation.x = 0;
+
+			//画面の設定
+			renderer = new THREE.CSS3DRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			renderer.domElement.style.position = 'absolute';
+			document.getElementById( 'viewspot' ).appendChild( renderer.domElement );
+
+			var tweenobj;
+			var tweenobj2;
+			var tweenobj3;
+
+			var obj = 
+			new TWEEN.Tween(fromobject.position)
+				//終了時のプロパティ値
+				.to({x : toobject.position.x , y : toobject.position.y , z : toobject.position.z },2000)
+				//変化の速度
+				.easing(TWEEN.Easing.Quadratic.InOut)
+				; //.start()
+
+			var obj2 =
+			new TWEEN.Tween(fromobject.rotation)
+				.to({x : toobject.rotation.x , y : toobject.rotation.y },2000)
+				.easing(TWEEN.Easing.Quadratic.InOut)
+				; //.start();
+
+			TWEEN.add(obj);
+			TWEEN.add(obj2);
+
+			tweenobj = new TWEEN.Tween( fromobject )
+				.to( {}, 4000 )
+				.onUpdate( render );
+
+			var obj3 = 
+			new TWEEN.Tween(fromobject.position)
+				//終了時のプロパティ値
+				.to( {x : to2object.position.x , y : to2object.position.y , z :  to2object.position.z },2000)
+				//変化の速度
+				.easing(TWEEN.Easing.Exponential.In)
+				.onUpdate( render2 );
+				//.start();
+
+			var obj4 = 
+			new TWEEN.Tween(fromobject.rotation)
+				//終了時のプロパティ値
+				.to({x : to2object.rotation.x , y : to2object.rotation.y },6000)
+				//変化の速度
+				.easing(TWEEN.Easing.Exponential.In)
+				.onUpdate( render2 );
+				//.start();
+
+			tweenobj2 = new TWEEN.Tween( fromobject )
+				.to( {}, 4000 )
+				.onUpdate( render );
+
+			tweenobj.chain(tweenobj2);
+			//obj3.chain(obj4);
+			tweenobj.start();
+
+			
+
+			var animate = function(){
+				requestAnimationFrame(animate);
+				TWEEN.update();
+			}
+
+			animate();
+
+
+		</script>
+
+	</body>
+</html>

@@ -1,0 +1,58 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Javaストアドプロシージャサンプル</title>
+    </head>
+    <body>
+        <pre>
+            import java.io.IOException;
+            import java.util.Enumeration;
+            import java.util.HashMap;
+            import java.util.ResourceBundle;
+
+            public class Kanji {
+
+                private static String confpath = "kanji2";
+
+                public static String convert(String kanji) throws IOException {
+
+                     HashMap<String,String> name = readConfig();
+                     String returnkanji = "";
+
+                     if( name.containsKey(kanji) ){
+
+                        returnkanji = name.get(kanji);
+
+                     }else{
+
+                         returnkanji = kanji;
+
+                     }
+
+                    return returnkanji;
+
+                }
+
+                private static HashMap<String, String> readConfig() throws IOException {
+
+                    HashMap<String,String> map = new HashMap<String,String>();
+
+                    ResourceBundle rb = ResourceBundle.getBundle(confpath);
+                    Enumeration<String> em = rb.getKeys();
+                    String key;
+                    while ( em.hasMoreElements() ){
+                        key=em.nextElement();
+                        map.put(key,rb.getString(key));
+                    }
+
+
+                    return map;
+                }
+
+            }        
+        </pre>
+        <br>
+        <br>
+        <a href="../oracle.html">Oracle</a>
+    </body>
+</html>

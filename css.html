@@ -1,0 +1,63 @@
+<html>
+    <head>
+        <link rel=stylesheet type="text/css" href="css/common.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>CSS</title>
+    </head>
+    <body>
+        <h1>CSSセレクタ</h1>
+        &nbsp;&nbsp;&nbsp;<a href="cssselector.html">cssセレクタ一覧</a>
+        <hr>
+        <h1>画面サイズによるセレクタ切替</h1>
+        <pre>
+            /* ipad設定 */
+            @media screen and (min-width:421px) {
+                .hcm-title {
+                   color :red;
+                }
+            }
+
+            /* iphone設定 */
+            @media screen and (max-width:420px) {
+                .hcm-title {
+                   color :blue;
+                }
+            }
+        </pre>
+        <br>
+        <br>
+        <h1>HTML記載テンプレート</h1>
+        <pre>
+&lt;html&gt;
+    &lt;header&gt;
+        &lt;title&gt;&lt;/title&gt;
+        &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/&gt;
+        &lt;link rel=stylesheet type="text/css" href="xxxx.css"&gt;
+        &lt;script type="text/javascript" src="xxxx.js"&gt;&lt;/script&gt;
+        &lt;script&gt;
+            var func = function(){
+                alert('1');
+            }
+        &lt;/script&gt;
+        &lt;style type="text/css"&gt;
+            .class{
+                background-color:red;
+            }
+        &lt;/style&gt;
+    &lt;/header&gt;
+    &lt;body onload="func();"&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+        </pre>
+        <a href="index.html">TOP</a>
+    </body>
+</html>
+
+<!--
+
+        <h1>タイトル</h1>
+        <pre>
+            内容
+        </pre>
+
+-->

@@ -1,0 +1,109 @@
+html, body {
+	height: 100%;
+}
+
+body {
+	background-color: #000000;
+	margin: 0;
+	font-family: Helvetica, sans-serif;;
+	overflow: hidden;
+	position:relative;
+	-webkit-transform-style:preserve-3d;
+	-webkit-transform: perspective(20);
+}
+
+.element {
+	position : absolute;
+	width: 100px;
+	height: 120px;
+	box-shadow: 0px 0px 12px rgba(0,255,255,0.5);
+	border: 1px solid rgba(127,255,255,0.25);
+	text-align: center;
+	cursor: default;
+	font-weight: bold;
+	background-color : rgba(0,127,127,0.5);
+}
+
+.action1 {
+	-webkit-animation-name: animate1;
+	-webkit-animation-duration: 5s;
+	-webkit-animation-timing-function: linear;
+	-webkit-animation-iteration-count: 1;
+
+	top : 10px;
+	left : 10px;
+}
+
+
+@-webkit-keyframes animate1{
+	0%
+	{
+		-webkit-transform : scale(1.0) translateX(10px) translateY(10px);
+	}
+	20%
+	{
+		-webkit-transform : scale(2.0) translateX(200px) translateY(200px) rotate(90deg);
+	}
+	40%
+	{
+		-webkit-transform : scale(4.0) translateX(200px) translateY(200px) rotate(0deg);
+	}
+	60%
+	{
+		-webkit-transform : scale(2.0) translateX(200px) translateY(200px) rotate(90deg);
+	}
+	100%
+	{
+		-webkit-transform : scale(1.0) translateX(10px) translateY(10px);
+	}
+}
+
+.action2 {
+
+	-webkit-animation-name: animate2;
+	-webkit-animation-duration: 5s;
+	-webkit-animation-timing-function: ease-in-out;
+	-webkit-animation-iteration-count: 1;
+	
+	top : 10px ;
+	left : 140px ;
+
+}
+
+@-webkit-keyframes animate2{
+	0%
+	{
+		-webkit-transform : scale(1.0) translateX(200px) translateY(200px);
+	}
+	20%
+	{
+		-webkit-transform : scale(2.0) translateX(400px) translateY(400px) rotate(90deg);
+	}
+	40%
+	{
+		-webkit-transform : scale(4.0) translateX(400px) translateY(400px) rotate(0deg);
+	}
+	60%
+	{
+		-webkit-transform : scale(2.0) translateX(400px) translateY(400px) rotate(90deg);
+	}
+	100%
+	{
+		-webkit-transform : scale(1.0) translateX(10) translateY(140px);
+	}
+}
+
+.bnr a {
+  display: inline-block;
+  background: url(http://placehold.it/300x100/cd5c5c/ffffff&text=banana) no-repeat;
+  background-size: cover;
+}
+ 
+.bnr a img {
+  vertical-align: middle;
+  transition: opacity 1.0s;
+}
+ 
+.bnr a:hover img {
+  opacity: 0;
+}

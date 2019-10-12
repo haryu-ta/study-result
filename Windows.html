@@ -1,0 +1,162 @@
+<html>
+    <head>
+        <link rel=stylesheet type="text/css" href="css/common.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>DOSコマンド</title>
+    </head>
+    <body>
+        <h1>ファイル拡張子関連付け</h1>
+        <pre>
+            assoc .txt=txtfile
+            ftype txtfile="C:\Program Files\sakura\sakura.exe" "%1"
+        </pre>
+        <h1>入力待ち</h1>
+        <pre>
+            set /p [変数名]="入力してください : "
+            echo %[変数名]%
+        </pre>
+        <h1>echoコマンド</h1>
+        <pre>
+            @echo off → ファイル文頭でecho offも表示させない
+            echo.  →    空行
+        </pre>
+        <h1>制御文</h1>
+        <pre>
+            if %selectindex%==1 (
+            
+            ) else if %selectindex%==2 (
+            
+            ) else (
+            
+            )
+        </pre>
+        <h1>for文</h1>
+        <pre>
+            ①カウンタ値によるループ
+            for /L %a in ([開始値],[ステップ値],[終了値]) do [処理]
+
+             ex. for /L %a in (2,2,20) do @echo %a.txt >> test.log
+
+            ②ファイル数分のループ処理
+            for %a in ([ファイル名(正規表現可)]) do [処理]
+
+            ex.  for %a in (C:\temp\*) do @echo %a
+
+            ③ディレクトリ数分のループ処理
+            for /D %a in ([ファイル名(正規表現可)]) do [処理]
+
+            ex.  for /D %a in (C:\temp\*) do @echo %a
+
+            ④スクリプト指定のループ処理
+            for /F "[option]" %a in ([各種パターン]) do [処理]
+
+            <table border="1" cellspacing="0" cellpadding="0" style="width:50%;margin-left:60px;">
+                <tr style="background-color:pink;">
+                    <td style="width:10%;text-align:center;">構文</td>
+                    <td style="width:60%;;text-align:center;">意味</td>
+                </tr>
+                <tr>
+                    <td style="text-align:center;">eol=c</td>
+                    <td>行頭文字を１文字指定。指定された文字から始まる列は読み飛ばす</td>
+                </tr>
+                <tr>
+                    <td style="text-align:center;">skip=n</td>
+                    <td>ファイルの先頭から読み飛ばす行数</td>
+                </tr>
+                <tr>
+                    <td style="text-align:center;">delims=c</td>
+                    <td>区切り文字を指定。省略した場合にはスペースとタブ</td>
+                </tr>
+                <tr>
+                    <td style="text-align:center;">tokens=c</td>
+                    <td>解析結果のデータのうちどれを 変数に設定するかを指定。</td>
+                </tr>
+                <tr>
+                    <td style="text-align:center;">usebackq</td>
+                    <td>[各種パターン]に指定する値にスペースや()を含む場合、オプションでこれを指定して、ファイル名などを""で囲む必要がある。</td>
+                </tr>
+            </table>
+            <br /> 
+            例)
+            for /F "tokens=1,2,*" %1 in ("This is a pen.") do @echo "%1" "%2" "%3"
+            
+            ⇒ 変数1に1番目、変数2に2番目、変数3にそれ以外を設定する。
+               したがって["This" "is" "a pen" ]
+
+            ○ディレクトリ配下に特定名の名前のファイルがあるかをチェック
+            for /D %a in (M2AHN*) do (
+            echo ===========================================
+            echo %a
+            IF EXIST .\%a\expected_B.xlsx (
+                dir /b .\%a\expected*
+            ) else (
+                echo "なし"
+            )
+            echo ===========================================
+            )
+
+            ○特定ファイル内の各行を読み込んで実行
+            for /F "delims=" %f in (C:\temp\aaa.txt) do @mkdir %f
+
+            ⇒aaa.txtの各行の名前でディレクトリを作成
+
+        </pre>
+        <h1>遅延展開</h1>
+        <pre>
+            DOSの場合、if文、for文内で変数が想定通りの動きとならないことの解決策
+
+            ○コマンドプロンプトからの実行の場合
+            cmd /v
+            for %a in (M2AHN*) do (
+                set val1=%a
+                echo !val1!   ←ここがポイント
+            )
+
+            ○バッチファイルからの実行
+            setlocal ENABLEDELAYEDEXPANSION
+            for %a in (M2AHN*) do (
+                set val1=%a
+                echo !val1!   ←ここがポイント
+            )
+            endlocal
+        </pre>
+        <h1>文字列置換</h1>
+        <pre>
+            set val=M2AHN030.dat
+            echo %val:.dat=.csv%
+            
+            → 「M2AHN030.csv」が表示
+            
+            ○ポイント
+            %変数:[被置換文字]=[置換文字]%
+            
+            ※遅延展開の場合には『%』→『!』
+        </pre>
+        <h1>特殊変数</h1>
+        <pre>
+            %~nx[変数] → フルパスからファイル名のみ取得
+            %~f[変数]  → ファイル名からフルパスを取得
+        </pre>
+        <h1>複数ファイルの統合</h1>
+        <pre>
+            type *.csv >> [出力ファイル名]
+        </pre>
+        <h1>ファイル中の行数カウント</h1>
+        <pre>
+            type *.csv | find /c /v "" 
+        </pre>
+        <br>
+        <br>
+        <hr>
+        <a href="index.html">TOP</a>
+    </body>
+</html>
+
+<!--
+
+        <h1>タイトル</h1>
+        <pre>
+            内容
+        </pre>
+
+-->

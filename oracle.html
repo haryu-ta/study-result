@@ -1,0 +1,437 @@
+<html>
+    <head>
+        <link rel=stylesheet type="text/css" href="css/common.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Oracleコマンド</title>
+    </head>
+    <body>
+        <h1 class="oracle-header">SQL PLUSオプション</h1>
+        <pre>
+            --表示形式指定
+            set [カラム名] format a[桁数]
+            column [カラム名] format '000.00' (数値形式)
+
+            --nullを<null>と表示させる
+            set null <null>
+        </pre>
+        <hr>
+        <h1 class="oracle-header">MVIEW</h1>
+        <h3>マテビューの作成</h3>
+        <pre>
+            create materialized view [MVIEW_NAME]
+            refresh [fast|complete|force] with rowid
+            as
+            select *
+            from [テーブル名]
+            ;
+        </pre>
+        <h3>マテビューのリフレッシュ</h3>
+        <pre>
+            exec dbms_mview.refresh('[MVIEW_NAME]','[c|f|?]');
+        </pre>
+        <h3>マテビューのリフレッシュ方法確認</h3>
+        <pre>
+            select MVIEW_NAME,LAST_REFRESH_TYPE,LAST_REFRESH_DATE from user_mviews;
+        </pre>
+        <hr>
+        <h1 class="oracle-header">SQL</h1>
+        <h3>バッファークリア</h3>
+        <pre>
+            ALTER SYSTEM FLUSH SHARED_POOL;
+            ALTER SYSTEM FLUSH BUFFER_CACHE;
+
+            ※sysdba権限を有するユーザーで実行
+        </pre>
+        <h3>実行統計取得</h3>
+        <pre>
+            set line 200;
+            set pages 2000;
+            set timing on;
+            set tim on;
+
+            alter session set statistics_level=ALL;
+
+            [実行SQL]
+
+            select * from table(dbms_xplan.display_cursor(null,null,'ALLSTATS LAST'));
+            alter session set statistics_level=TYPICAL;
+        </pre>
+        <h3>特定カラムの内容を横持ちとして出力</h3>
+        <pre>
+
+            select cols
+            from(
+                select ltrim(sys_connect_by_path(table_name, ','),',') as cols
+                from (
+                    select table_name,
+                        row_number() over (order by table_name) as num,
+                        row_number() over (order by table_name) + 1 as num2
+                    from user_tables
+                    where table_name NOT LIKE 'MV_%'
+                    and table_name NOT LIKE 'WK_%'
+                )
+                start with num = 1
+                connect by prior num2 = num
+                order by cols desc
+            )
+            where rownum  = 1;
+
+            【解説】
+               row_number() over (order by [カラム名])  
+                  →  カラム名でソートしたデータに連番を振る
+
+               sys_connect_by_path([カラム名], '[接続子]')  
+                  →  カラム名の取得値を[接続子]で横に並べていく
+                      そもそも親子関係を持たせるSQL
+
+               start with [カラム名] = 1   
+                  →  条件を満たすレコードを一番の親とする
+
+               connect by prior [カラム名] = [カラム名2]
+                  →  親子関係を定義する。条件を満たすレコードに親子関連を持たせる。
+               
+
+        </pre>
+        <hr>
+        <h1 class="oracle-header">インストール関連</h1>
+        <pre>
+            ●リスナーの設定
+            listener.oraに下記の設定が記載されていない場合には動的割り当てのため下記コマンドを発行する必要がある
+
+            SID_LIST_LISTNER = XXXX
+            
+            ●リスナーの割り当て
+            sqlplus sys/pass as sysdba
+            alter system set local_listener = '(ADDRESS = (PROTOCOL = TCP)(HOST = u2006c00247-t1.tisnt.tis.co.jp )( PORT = 11521))';
+            alter system register;
+
+            ●ポート開放
+            vi /etc/sysconfig/iptables
+
+            =================================================
+            -A INPUT -m state --state NEW -m tcp -p tcp --dport 11521 -j ACCEPT
+            -A OUTPUT -m state --state NEW -m tcp -p tcp --dport 11521 -j ACCEPT
+            =================================================
+
+            /etc/init.d/iptables restart
+
+            ●リスナーの起動
+            lsnrctl start
+            lsnrctl service
+
+            ※リスナーの起動停止等のさいに、
+              名前解決ができないと正しく起動停止できない。
+               
+            ●hostsの設定
+            vi /etc/hosts
+
+            ●インストールユーザー以外でsqlplusを利用する設定
+            ①他ユーザーに権限を与える
+            下記に対してアクセスできるように権限を与える(途中のディレクトリも)
+             ${ORACLE_HOME}/oracle
+
+            ②TNSNAMES.ORAに読み込み権限を与える
+             ${ORACLE_HOME}/network/admin/tnsnames.ora
+
+            ③profileファイル等で環境変数を設定する
+             vi /etc/profile
+             ============設定内容=====================
+             export ORACLE_BASE=/u01/app/oracle
+             export ORACLE_HOME=$ORACLE_BASE/product/11.2.0/dbhome_1
+             export LANG=ja_JP.UTF-8
+             export NLS_LANG=Japanese_Japan.AL32UTF8
+             export ORACLE_SID=INFODB
+             PATH=$PATH:$ORACLE_HOME/bin
+        </pre>
+        <h1 class="oracle-header">Oracle起動(サーバー再起動時等)</h1>
+        <pre>
+            #ORACLE_SID指定
+            export ORACLE_SID=INFODB
+
+            --システムユーザーにて接続
+            sqlplus sys/sys as sysdba
+
+            --データベースノーマウント
+            startup nomount
+
+            --データベースマウント
+            alter database mount;
+
+            --データベース起動
+            alter database open;
+
+            #hostsファイル起動(固定IPであれば実施不要)
+            ifconfig
+            su - root
+            vi /etc/hosts
+
+            #リスナー起動
+            lsnrctl start
+
+        </pre>
+        <hr>
+        <h1 class="oracle-header">JAVAストアドプロシージャ</h1>
+        <pre>
+            ①javaソースコードの作成
+
+               &lt;<a href="./oracle/javasample.html">サンプルはこちら</a>&gt;
+
+            ②プロパティファイルを作成(必要な場合のみ)
+
+               プロパティファイルはパッケージ内に含めないほうが便利！！(src直下) 
+               ●含めない場合
+               ResourceBundle.getBundle(setting);
+               ●含める場合
+               ResourceBundle.getBundle(XXXX.setting);
+
+            ③プロパティファイルの変換
+
+               ○コマンドプロンプトより実行
+               native2ascii [変換したいファイル名] [変換後のファイル名]
+
+            ④権限付与(１回のみ)
+
+               ○SYSユーザーにて
+               Grant create procedure to [スキーマ名];
+
+            ⑤Java(プロパティ)ファイルのコンパイル及びロード
+
+               ○コマンドプロンプトより実行
+               loadjava -verbose -force -resolve -user [スキーマ名]/[パスワード] ファイル名1 ファイル名2
+
+               →例 ：loadjava -verbose -force -resolve -user OWNERUSER/ZaW26yJM CommonUtil.java createFile.java setting.properties
+
+               ※削除時
+               dropjava dropjava -verbose -user obj_usr/pass [スキーマ名]/[パスワード] クラス名1 クラス名2
+               
+               注意：削除時はファイル名ではなくクラス名 (XXX.java⇒XXX)
+                     また、プロパティファイルの削除は「dropjava」では不可 (⇒手順「■削除手順」を参照)
+
+            ⑥Javaストアドのラッパークラスの実装
+
+                --ラッパファンクションの定義
+                CREATE OR REPLACE FUNCTION CONVERTKANJI(kanji in varchar2)
+                RETURN VARCHAR2
+                IS LANGUAGE java
+                    NAME 'Kanji.convert(java.lang.String) return java.lang.String'
+                ;
+                /
+
+                --ラッププロシージャの定義
+                CREATE OR REPLACE PROCEDURE CSV(TBLNAME in varchar2)
+                IS LANGUAGE java
+                    NAME 'oracle/createFile.csv(java.lang.String)'
+                ;
+                /
+
+                ○要点 ： NAME '[クラス名].[ファンクション名](引数型) return 戻り値型'
+
+            ⑦実行
+                select CONVERTKANJI('惠') from dual;
+                execute CSV('MBST110');
+
+            ■確認手順
+            ・load内容の確認
+               --JAVAソースの確認
+               set long 2000;
+               select text from user_source;
+
+            ・load有無の確認
+              select * from user_objects where object_type like 'JAVA%';
+
+            ■削除手順
+            ・Javaファイルの削除
+              DROP JAVA SOURCE "[クラス名]";
+
+            ・プロパティファイルの削除
+              DROP JAVA RESOURCE "[ファイル名]";
+
+            <font size="12px" color="blue">★ファイルI/Oに関して</font>
+            ①Javaコードは普通に記載する
+
+            ②SYSユーザーで読み書込みファイルに対して実行ORACLEユーザーにパーミッションを付与
+            call dbms_java.grant_permission( '[ユーザー名]', 'SYS:java.io.FilePermission','C:\work\test.txt', 'write,read' );
+
+            ※linuxの場合これとは別に、oracleのインストールユーザー(oracle)に対しファイル出力ディレクトリに書込権限と実行権限が必要
+
+            ●権限の確認
+            set line 500
+            set pages 500
+            select KIND || ',' || GRANTEE || ',"' || ACTION || '",' || TYPE_SCHEMA || ',' || TYPE_NAME || ',' || NAME || ',' || ENABLED || ',' ||SEQ
+            from dba_java_policy
+            WHERE GRANTEE='OWNERUSER';
+            
+            ●権限の停止
+            「SEQ」は上記SQLで取得されたSEQを使用
+            call dbms_java.disable_permission(SEQ);
+
+            ●権限の削除
+            call dbms_java.delete_permission(SEQ);
+
+            停止しないと削除できないので注意(停止せず削除してもエラーはでないが、削除できていない)
+
+            <font size="12px" color="blue">★DB接続</font>
+            
+            Connection con = DriverManager.getConnection(<font color="red">"jdbc:default:connection:"</font>);
+            Statement state  = con.createStatement();
+            String sql = "select * from " + tablename;
+            ResultSet rs = state.executeQuery(sql);
+
+
+        </pre>
+        <h1 class="oracle-header">ハードパース回数の分析</h1>
+        <pre>
+            --セッションごとのハードパース量
+            select sid,name,value
+            from v$sesstat vss,v$statname vsn
+            where vss.statistic# = vsn.statistic#
+            and name in ('parse count (hard)','parse count (total)')
+            order by sid,name
+            ;
+
+            ※SIDの特定方法が不明のため、使えない方法?
+
+            --システム全体でのハードパース量
+            SELECT name,value
+            FROM v$sysstat
+            WHERE name LIKE '%parse%';
+
+            --SQLID調査
+            select *
+            from(
+            select SQL_ID,substr(SQL_TEXT,1,50), LAST_LOAD_TIME,PARSING_SCHEMA_NAME
+            from v$sql 
+            WHERE PARSING_SCHEMA_NAME = 'RYOHEI'
+            ORDER BY LAST_LOAD_TIME desc
+            )
+            where rownum < 100;
+
+            --SQLIDを元に実行統計を確認
+            SELECT * FROM TABLE(DBMS_XPLAN.DISPLAY_CURSOR('[SQLID]'))
+        </pre>
+        <h1 class="oracle-header">SQLトレース</h1>
+        <pre>
+            --出力先確認
+            SHOW PARAMETERS user_dump_dest
+
+            //SQLトレース設定(JAVA)
+            Statement smt = con.createStatement();
+            smt.executeUpdate("alter session set sql_trace=true");
+            //実行SQL
+            smt.executeUpdate("alter session set sql_trace=false");
+
+            #ファイル編集
+            cd C:\work
+            time_tmp=%time: =0%
+            tkprof haruka_ora_9408.trc %date:~-10,4%%date:~-5,2%%date:~-2,2%%time_tmp:~0,2%%time_tmp:~3,2%%tim_tmp:~6,2%.txt
+
+            --全てのセッション
+            exec DBMS_MONITOR.DATABASE_TRACE_DISABLE;
+            exec DBMS_MONITOR.DATABASE_TRACE_ENABLE;
+
+        </pre>
+        <hr>
+        <h1 class="oracle-header">データパンプ</h1>
+        <pre>
+
+            --ディレクトリ調査
+            SELECT * FROM all_directories;
+
+            --エクスポートダンプ(表領域指定)
+            expdp ${owner} directory=DIR_BK tablespaces=TBS_TBL logfile=`date +%Y%m%d`.log file=`date +%Y%m%d`.dmp
+
+            --エクスポートダンプ(テーブル指定)
+            expdp ${owner} directory=DIR_BK tables=MBST150,MBST104 logfile=`date +%Y%m%d`.log file=`date +%Y%m%d`.dmp
+
+            --インポートダンプ(表領域指定)
+            impdp ${owner} directory=DIR_BK tablespaces=TBS_TBL file=`date +%Y%m%d`.dmp
+
+            --オプション
+            ●テーブルが既に存在する場合
+            table_exists_action=[TRUNCATE|REPLACE|APPEND]  
+            
+                →REPLACE → 内部的に一旦テーブルを削除して再作成
+                
+            content=[DATA_ONLY|METADATA_ONLY|ALL(デフォルト)]
+
+            
+        </pre>
+        <hr>
+        <h1 class="oracle-header">表領域作成</h1>
+        <pre>
+
+             --テーブル用表領域
+             CREATE TABLESPACE TBS_TBL
+             DATAFILE '/u01/app/oracle/oradata/INFODB/TBS_TBL.dbf' size 100M
+             AUTOEXTEND ON NEXT 100M MAXSIZE UNLIMITED
+             ONLINE;
+
+             --表領域削除
+             DROP TABLESPACE TBS_TBL INCLUDING CONTENTS AND DATAFILES CASCADE CONSTRAINTS;
+
+             --データファイルダイエット
+             ALTER DATABASE DATAFILE '/u01/app/oracle/oradata/INFODB/TBS_TBL.dbf' RESIZE 1000M;
+
+        </pre>
+        <h1 class="oracle-header">HWM確認</h1>
+        <pre>
+            set serveroutput on
+            
+            declare
+              v_total_blocks              number;
+              v_total_bytes               number;
+              v_unused_blocks             number;
+              v_unused_bytes              number;
+              v_last_used_extent_file_id  number;
+              v_last_used_extent_block_id number;
+              v_last_used_block           number;
+            begin
+              dbms_space.unused_space(upper('OWNERUSER'), upper('WK_MBST515'), 'TABLE',
+                v_total_blocks, v_total_bytes, v_unused_blocks, v_unused_bytes, 
+                v_last_used_extent_file_id, v_last_used_extent_block_id, 
+            v_last_used_block);
+              dbms_output.put_line('テーブルで保持するブロック数          ：'
+                || to_char(v_total_blocks, '9,999,990'));
+              dbms_output.put_line('テーブルで保持する未使用ブロック数    ：'
+                || to_char(v_unused_blocks, '9,999,990'));
+              dbms_output.put_line('HWMのあるブロックのファイルID         ：'
+                || to_char(v_last_used_extent_file_id, '9,999,990'));
+              dbms_output.put_line('HWMのあるエクステントのブロックID     ：'
+                || to_char(v_last_used_extent_block_id, '9,999,990'));
+              dbms_output.put_line('HWMのあるブロックID     ：'
+                || to_char(v_last_used_block, '9,999,990'));
+            end;
+            /
+
+        </pre>
+        <h1 class="oracle-header">SQL Loaderダイレクトパスロード</h1>
+        <pre>
+            ●他スキーマのテーブルにロードする場合
+              そのテーブルへのINSERTオブジェクト権限が必要
+
+              --オブジェクト権限付与
+              GRANT INSERT ON [所有スキーマ].[テーブル名] TO [実行スキーマ];
+
+              --オブジェクト権限剥奪
+              REVOKE INSERT ON [所有スキーマ].[テーブル名] FROM [実行スキーマ];
+
+              --確認
+              SELECT GRANTEE,PRIVILEGE,TABLE_NAME FROM USER_TAB_PRIVS;
+              
+              GRANTEE → 誰に
+              PRIVILEGE → 何の
+              TABLE_NAME → どこに
+              
+        </pre>
+        <a href="index.html">TOP</a>
+    </body>
+</html>
+
+<!--
+
+        <h1 class="oracle-header">タイトル</h1>
+        <pre>
+            内容
+        </pre>
+
+-->

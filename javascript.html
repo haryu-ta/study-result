@@ -1,0 +1,208 @@
+<html>
+    <head>
+        <link rel=stylesheet type="text/css" href="css/common.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>javascript</title>
+    </head>
+    <body>
+        <h1>イベントハンドラ</h1>
+        <a href="./js/jsevent.html">イベントハンドラ一覧</a>
+        <h1>HTML内での記載方法</h1>
+        <pre>
+            &lt;html&gt;
+                &lt;head&gt;
+                    &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+                    &lt;!--  CSS読込  --&gt;
+                    <b>&lt;link rel="Stylesheet" href="/mobile/css/common.css" /&gt;</b>
+                    &lt;!--  JS読込(外部ファイル)  --&gt;
+                    <b>&lt;script type="text/javascript" src="/mobile/js/jsp.js"&gt;&lt;/script&gt;</b>
+                &lt;/head&gt;
+                &lt;body&gt;
+                    &lt;!--  JS読込  --&gt;
+                    <b>&lt;script type="text/javascript"&gt;
+                        func exec(){
+                            alert('a');
+                        }
+                    &lt;/script&gt;</b>
+                    &lt;input type="button" value="実験" onclick="exec();"&gt;
+                &lt;/body&gt;
+            &lt;/html>
+        </pre>
+        <h1>submit</h1>
+        <pre>
+            =======================================================================
+            HTML
+            
+            &lt;form method="post" action="/mobile/servlet/login" name="loginfrm"&gt;
+                ユーザーID：&lt;input type="text" name="userid" id="userid" value="aaa"&gt;&lt;br&gt;
+                パスワード：&lt;input type="password" name="password" id="password" value="a"&gt;&lt;br&gt;&lt;br&gt;
+            &lt;/form&gt;
+            &lt;hr&gt;
+            &lt;input type="radio" name="acttype" value="servlet"&gt;servlet
+            &lt;input type="radio" name="acttype" value="jsp" checked&gt;jsp
+            &lt;hr&gt;
+            &lt;input type="button" value="ログイン" onclick="exec();">
+            =======================================================================
+
+            =======================================================================
+            JavaScript
+            
+            function exec(){
+                document.getElementById("password").style.backgroundColor = "red";
+                var type = document.getElementsByName("acttype");
+                //ラジオボタンのチェック状態取得
+                for (var cnt = 0;cnt < type.length;cnt++){
+                    //チェックされている？
+                    if( type[cnt].checked ){
+
+                        if( type[cnt].value == type[0].value ){
+                            actiontype = "/mobile/servlet/login";
+                        }else{
+                            actiontype = "/mobile/jsp/login";
+                        }
+                        break;
+
+                    }
+                }
+                document.loginfrm.action = actiontype;
+                document.loginfrm.submit();
+            }
+            =======================================================================
+        </pre>
+        <h1>AJAX通信</h1>
+        <pre>
+
+            //httpオブジェクトを作成
+            var httpoj;
+            //ブラウザのAJAX通信対応有無を確認
+            if ( window.XMLHttpRequest){
+                httpoj = new XMLHttpRequest();
+            }else{
+                alert("ブラウザが未対応");
+                return;
+            }
+
+            //通信方式設定
+            httpoj.open(
+                "POST",             //通信方法
+                "/mobile/jsp/js"    //URL
+                true                //非同期
+            );
+            httpoj.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
+
+            //通信後の操作
+            httpoj.onreadystatechange = function(){
+                
+                if( this.readyState == 4 ){
+
+                    if( this.status == 200 ){
+                        //テキストデータを受信した場合
+                        var data = this.responseText;
+                        //jsonデータを受信した場合
+                        var jsondata = this.responseText;
+                        var data = JSON.parse(jsondata);
+                        alert(data["キー名"]);
+                    }else{
+                        //エラーの場合
+                        alert( this.status + this.statusText );
+                    }
+
+                }
+            }
+
+            //サーバーへの引数を組立
+            var data = {"name":"板村","old":"31","adress":"東京"};
+
+            //通信開始
+            httpoj.send(JSON.stringify(data));
+
+        </pre>
+        <a href="./java/json.html">javaによるJSONデータの取り扱い</a>
+        <h1>処理時間計測</h1>
+        <pre>
+            var start_time = new Date();
+            //処理
+            var end_time = new Date();
+            alert((end_time - start_time) /1000 + "ms");
+        </pre>
+        <h1>Functionのオブジェクト化</h1>
+        <pre>
+            var ind = {};
+            ind.sort = function(){
+                alert("a");
+            }
+
+            &lt;input type="button" onclick="ind.sort();"&gt;
+        </pre>
+        <h1>イベントバインド</h1>
+        <pre>
+            ind.load = function(){
+                //ブラウザがtouchイベントをサポートしている場合
+                if (!("ontouchstart" in window)) {
+                    document.addEventListener("touchstart",ind.touchstart,false);
+                    document.addEventListener("touchmove",ind.touchmove,false);
+                    document.addEventListener("touchend",ind.touchend,false);
+                    //DOMロード後でないとエラーとなる
+                    var obj = document.getElementById("tablestyle");
+                    //addEventListnerは必ず単一の要素に適用
+                    obj.addEventListener("click",ind.click,false);
+                }
+            }
+
+            ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+
+            document以外のイベントバインドはLoad後に実施しないとエラーとなるためHTMLには以下を記載する
+            &lt;script&gt;
+                //DOMをロードしたとき
+                document.addEventListener("DOMContentLoaded", ind.load, false);
+            &lt;/script&gt;
+
+        </pre>
+        <h1>キーボード押下イベント</h1>
+        <pre>
+            //キーボタン押下時のイベント
+            ind.KeyDownFunc = function(event){
+
+                alert(event.keyCode);
+
+            }
+
+            //フォーカスが当たった場合
+            ind.focuson = function(){
+                if(document.addEventListener){
+
+                    // キーボードを押したときに実行されるイベント
+                    document.addEventListener("keydown" , ind.KeyDownFunc);
+
+                // アタッチイベントに対応している
+                }else if(document.attachEvent){
+
+                    // キーボードを押したときに実行されるイベント
+                    document.attachEvent("onkeydown" , ind.KeyDownFunc);
+
+                }
+            }
+
+            //フォーカスが外れた場合
+            ind.focusout = function(){
+                if(window.removeEventListener){
+                    document.removeEventListener("keydown",ind.KeyDownFunc);
+                }else if(window.attachEvent){
+                    document.detachEvent("onkeydown",ind.KeyDownFunc);
+                }
+
+            }
+        </pre>
+        <br>
+        <br>
+        <hr>
+        <a href="index.html">TOP</a>
+    </body>
+</html>
+
+<!--
+        <h1></h1>
+        <pre>
+
+        </pre>
+-->
