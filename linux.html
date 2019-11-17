@@ -357,6 +357,21 @@ EOF`
 
             done
         </pre>
+        <h1>SnapCrabで取得したファイルのリネーム</h1>
+        <pre>
+            for line in `seq 1 10`
+            do
+                #list.txtよりリネーム後のファイル名を取得
+                filename=`head -${line} list.txt | tail -1`
+                fileno=`echo $((${line} - 1))`
+                length=`echo 0000${fileno} | wc -m`
+                if [ ${length} -eq 6 ]; then
+                    mv "sc000${fileno}.png" "0${line}_${filename}.png"
+                else
+                    mv "sc00${fileno}.png" "${line}_${filename}.png"
+                fi
+            done
+        </pre>
         <br>
         <br>
         <hr>
