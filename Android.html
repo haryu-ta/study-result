@@ -23,6 +23,40 @@
         <ul>
             <li><a href="https://nulab.com/ja/blog/nulab/android-library-glide/" target="_blank">Glide(画像読み込みライブラリ)</a></li>
         </ul>
+        <hr>
+        <br>
+        <h1>画面作成</h1>
+        <pre>
+            class MainActivity : AppCompatActivity() {
+
+                override fun onCreate(savedInstanceState: Bundle?) {
+                    super.onCreate(savedInstanceState)
+                    setContentView(R.layout.activity_main)
+
+                    val nextScreenBtn = findViewById(R.id.[button_id]) as Button
+
+                    nextScreenBtn.setOnClickListner{
+                        Intent(this,SecondActivity::class.java).putExtra(SecondActivity.MSG_KEY,"メッセージ").let{startActivity(it)}
+                    }
+                }
+            }
+
+            class SecondActivity : AppCompatActivity() {
+
+                companion object {
+                    const val MSG_KEY : String = "MAIN_SECOND_KEY"
+                }
+
+                override fun onCreate(savedInstanceState: Bundle?) {
+                    super.onCreate(savedInstanceState)
+                    setContentView(R.layout.activity_second)
+
+                    val text = findViewById(R.id.[textarea_id]) as EditText
+
+                    text.setText(intent.getStringExtra(MSG_KEY))
+                }
+            }
+        </pre>
         <br>
         <hr>
         <a href="index.html">TOP</a>
