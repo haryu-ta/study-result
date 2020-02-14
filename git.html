@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Gitコマンド</title>
+</head>
+<body>
+<h1>コマンド</h1>
+<pre>
+    
+    ■ add前ファイルの取消（ファイル単位）
+    git checkout HEAD -- [ファイル名]
+    
+    →ファイル変更が消える
+    
+    ■ addの取消（Unstageのみ）
+    git reset HEAD
+    
+    →ファイル変更は残る
+
+    ■ commitの取消（直前のコミットのみ取消。addも取消）
+    git reset --mixed HEAD^
+
+    ■ commitの取消（直前のコミットのみ取消。addされた状態）
+    git reset --soft HEAD^
+    
+    ■ commitの取消（直前のコミットのみ取消。ファイル変更もなし）
+    git reset --hard HEAD^
+</pre>
+<hr>
+<a href="index.html">TOP</a>
+</body>
+</html>

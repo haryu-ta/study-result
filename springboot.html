@@ -5,6 +5,27 @@
 <title>Spring Boot</title>
 </head>
 <body>
+<h1>My batisテンプレ</h1>
+<pre>
+&lt;!--?xml version="1.0" encoding="UTF-8" ?--&gt;
+&lt;!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" &gt;
+&lt;mapper namespace="[Dao Interfaceフルパス]"&gt;
+
+    &lt;resultMap id="tableInfoMap" type="[Entity フルパス]" &gt;
+        &lt;result column="COLUMN_NAME" property="column_name"/&gt;
+    &lt;/resultMap&gt;
+
+    &lt;select id="sql_Id" parameterType="java.lang.String" resultMap="tableInfoMap"&gt;
+        SELECT
+            column_name
+        FROM
+            table_name
+    &lt;/select&gt;
+
+&lt;/mapper&gt;
+</pre>
+<hr>
 <h1>バッチ関連</h1>
 <pre>
 	<!--SpringバッチのインメモリDB依存-->
