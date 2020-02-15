@@ -82,6 +82,20 @@
         </pre>
         <br>
         <hr>
+        <h1>ファイル読込</h1>
+        <pre>
+            ＠Autowired
+            lateinit private val resourceLoader : ResourceLoader
+
+            val resource: Resource = resourceLoader.getResource("file:[ファイル名]")
+            val bf : BufferedReader = BufferedReader(FileReader(resource.file))
+            bf.use{
+                line = it.readLine()
+            }
+            // useを使うとclose不要
+        </pre>
+        <br>
+        <hr>
         <h1>オブジェクト式</h1>
         <pre>
             Interface Greeter{

@@ -26,6 +26,23 @@
 &lt;/mapper&gt;
 </pre>
 <hr>
+<h1>外部ファイル読み込み/h1>
+<pre>
+	@Autowired
+	ResourceLoader resourceLoader;
+
+	// クラスパス内に存在しないファイル
+	Resource resource = resourceLoader.getResource("file:[ファイルフルパス]");
+
+	// クラスパス内に存在する場合
+	Resource resource = resourceLoader.getResource("classpath:file/[ファイル名]");
+
+	BufferedReader br = new BufferedReader(new FileReader(resource.getFile()));
+	while ( (line = br.readLine()) != null){
+		System.out.println(line);
+	}
+</pre>
+<hr>
 <h1>バッチ関連</h1>
 <pre>
 	<!--SpringバッチのインメモリDB依存-->
