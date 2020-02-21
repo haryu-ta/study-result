@@ -1,0 +1,127 @@
+<html>
+    <head>
+        <link rel=stylesheet type="text/css" href="css/common.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>kotlin</title>
+    </head>
+    <body>
+        <h1>when文</h1>
+        <pre>
+            val x : String = ""
+            val result = when(x){
+                1 -&gt; 'A'
+                2,3 -&gt; 'B'
+                callFunction() -&gt; 'C'
+                in 4 .. 10 -&gt; 'D' 
+                else ->&gt;'E'
+            }
+
+
+            when {
+                score &lt;= 90 -&gt; 'A'
+                score &lt;= 80 -&gt; 'B'
+                else        -&gt; 'C'
+            }
+        </pre>
+        <br>
+        <hr>
+        <h1>forループ</h1>
+        <pre>
+            val name = listOf("亮平","佳奈","陽花","龍太","咲明")
+            for( index in name.indexs){
+                println(index)
+            }
+
+            0
+            1
+            2
+            3
+            4
+        </pre>
+        <br>
+        <hr>
+        <h1>NULL安全</h1>
+        <pre>
+            // 変数にNULLを代入する場合
+            var val1 : String? = null
+
+            val a : String? = "itamura"
+
+            // これはコンパイルエラー
+            //a.length()
+
+            if( a != null){
+                a.length()  // NullチェックしたあとならOK
+            }
+        </pre>
+        <br>
+        <hr>
+        <h1>安全呼び出し</h1>
+        <pre>
+            ■ メンバ呼出
+            val a : Int? = 1
+            
+            // aがNULLの場合にはnull
+            // aがNULL以外の場合には関数が呼び出される
+            val aInc : Int ? = a?.inc()
+
+            ■ 関数の呼出
+            fun square(i : Int) : Int = i * i
+
+            val param : Int? = 5
+            val aSquare = if ( param != null ) square(param) else null
+
+            // これも同じ意味
+            val aSquare = param?.let{ square(it) }
+        </pre>
+        <br>
+        <hr>
+        <h1>エルビス演算子</h1>
+        <pre>
+            // 変数がNULLの場合にはデフォルト値を使う
+            var param : String? = "KEY"
+            param ?: "NOKEY"
+
+            param = null
+            param ?: "NOKEY"
+
+            ~~~
+            KEY
+            NOKEY
+
+        </pre>
+        <br>
+        <hr>
+        <h1>安全キャスト</h1>
+        <pre>
+            // キャストの際に、失敗した際にNullを返す
+            val a : Any = "Hello!! World!!"
+            a as String   // 成功
+            a as? Int     // 失敗（エラーを吐かず、NULLとなる）
+        </pre>
+        <br>
+        <hr>
+        <h1>オブジェクト式</h1>
+        <pre>
+            Interface Greeter{
+                fun greet()
+            }
+
+            val greeter = object : Greeter {
+                fun greet(){
+                    println("Hello")
+                }
+            }
+            
+            greeter.greet()
+            →Hello
+
+            ■注意点
+            別の場所で利用可能な型は定義されない
+        </pre>
+        <br>
+        <hr>
+        <a href="../kotlin.html">TOP</a>
+    </body>
+</html>
+ 
