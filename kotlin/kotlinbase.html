@@ -7,8 +7,6 @@
     <body>
      　 <h1>クラス委譲</h1>
         <hr>
-        <h1>コンストラクタ・イニシャライザ</h1>
-        <hr>
         <h1>エクステンション</h1>
         <hr>
         <h1>コンパニオンオブジェクト</h1>
@@ -19,6 +17,49 @@
         <hr>
         <h1>ジェネリクス</h1>
         <hr>
+        
+        <h1>コンストラクタ</h1>
+        <pre>
+            // スーパークラス
+            class SuperClass(){
+            }
+            
+            // 継承する場合
+            class SubClass() : SuperClass() {
+            
+            }
+            
+            ※　継承する場合は、親クラスの初期化も同時に行う必要がある。
+            
+            // 他のコードからインスタンス化を禁止する。コンストラクタをprivate化する。
+            class SecretClass private constructor(){}
+        </pre>
+        <hr>
+        <h1>セカンドコンストラクタ</h1>
+        <pre>
+            open class SuperClass{
+                constructor(ctx : Context){
+                    // initialize code
+                }
+                
+                constructor(ctx : Context,attr : Attribute){
+                    // initialize code
+                }
+            }
+            
+            // 継承する場合には、基底クラスも初期化する
+            class Subclass : SuperClass {
+                constructor(ctx : Context) : super(ctx) {
+                
+                }
+                constructor(ctx : Context,attr : Attribute) : super(ctx,attr){
+                }
+            }
+            
+            ※　上記例のように、プライマリコンストラクタがない場合にはセカンダリコンストラクタから基底クラスを初期化する必要がある。
+            ※　Kotlinにおいて、セカンダリコンストラクタはJavaとの互換性で設けることになる。
+        </pre>
+        <hr>_
         <h1>when文</h1>
         <pre>
             val x : String = ""
