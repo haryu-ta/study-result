@@ -5,8 +5,6 @@
         <title>kotlin</title>
     </head>
     <body>
-     　 <h1>クラス委譲</h1>
-        <hr>
         <h1>エクステンション</h1>
         <hr>
         <h1>コンパニオンオブジェクト</h1>
@@ -17,7 +15,57 @@
         <hr>
         <h1>ジェネリクス</h1>
         <hr>
-        
+     　 <h1>クラス委譲</h1>
+        <pre>
+            Inteface ServiceClass{
+                fun method1()
+            }
+
+            class ServiceClassImpl : ServiceClass{
+                override fun method1(){
+                    println("override method")
+                }
+            }
+
+            // 委譲を利用するクラス
+            class ServiceTransfer(private val service : ServiceClass) : ServiceClass by service {
+                fun method2(){
+                    println("override method2")
+                }
+            }
+
+            fun main(args:Array&lt;String&gt;){
+                // 委譲元クラスをインスタンス化
+                val service = ServiceClassImpl()
+                val transferClass = ServiceTransfer(service)
+                transferClass.method1()
+                transferClass.method2()
+            }
+        </pre>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--------------------------------------------------------------------<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>&gt; override method</b><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>&gt; override method2</b>
+        <br>
+        <br>
+        <pre>
+            ■ 使い所
+            インターフェースを継承しているクラスで実装されているメソッドをオーバーライドすることなしに
+            新メソッドを追加する。
+
+            class ListExtends(private val list : List<String>) : List<String>  by list{
+                fun printList(){
+                    println(list.toString())
+                }            
+            }
+            
+            fun main(args:Array<String>){            
+                val list : List<String> = mutableListOf("1","2","3","2","0","2")
+                val extendsClass = ListExtends(list)
+                println(extendsClass.lastIndexOf("2"))
+                extendsClass.printList()            
+            }
+        </pre>
+        <hr>
         <h1>コンストラクタ</h1>
         <pre>
             // スーパークラス
