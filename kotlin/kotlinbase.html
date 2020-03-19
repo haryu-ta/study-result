@@ -5,109 +5,20 @@
         <title>kotlin</title>
     </head>
     <body>
-        <h1>エクステンション</h1>
+        <h1>エクステンション(拡張関数)</h1>
+        <pre>
+            Kotlinは継承をせずとも、既存のクラスを拡張できる機能を持っています。その一つが拡張関数です。
+　          継承禁止クラスを含む既存のクラスに、新たに関数を追加することができます。(正確には、実際にクラスメンバを追加している訳ではない)
+
+
+        </pre>
         <hr>
         <h1>コンパニオンオブジェクト</h1>
         <hr>
         <h1>列挙型</h1>
         <hr>
-        <h1>委譲プロパティ</h1>
-        <hr>
         <h1>ジェネリクス</h1>
         <hr>
-     　 <h1>クラス委譲</h1>
-        <pre>
-            Inteface ServiceClass{
-                fun method1()
-            }
-
-            class ServiceClassImpl : ServiceClass{
-                override fun method1(){
-                    println("override method")
-                }
-            }
-
-            // 委譲を利用するクラス
-            class ServiceTransfer(private val service : ServiceClass) : ServiceClass by service {
-                fun method2(){
-                    println("override method2")
-                }
-            }
-
-            fun main(args:Array&lt;String&gt;){
-                // 委譲元クラスをインスタンス化
-                val service = ServiceClassImpl()
-                val transferClass = ServiceTransfer(service)
-                transferClass.method1()
-                transferClass.method2()
-            }
-        </pre>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--------------------------------------------------------------------<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>&gt; override method</b><br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>&gt; override method2</b>
-        <br>
-        <br>
-        <pre>
-            ■ 使い所
-            インターフェースを継承しているクラスで実装されているメソッドをオーバーライドすることなしに
-            新メソッドを追加する。
-
-            class ListExtends(private val list : List<String>) : List<String>  by list{
-                fun printList(){
-                    println(list.toString())
-                }            
-            }
-            
-            fun main(args:Array<String>){            
-                val list : List<String> = mutableListOf("1","2","3","2","0","2")
-                val extendsClass = ListExtends(list)
-                println(extendsClass.lastIndexOf("2"))
-                extendsClass.printList()            
-            }
-        </pre>
-        <hr>
-        <h1>コンストラクタ</h1>
-        <pre>
-            // スーパークラス
-            class SuperClass(){
-            }
-            
-            // 継承する場合
-            class SubClass() : SuperClass() {
-            
-            }
-            
-            ※　継承する場合は、親クラスの初期化も同時に行う必要がある。
-            
-            // 他のコードからインスタンス化を禁止する。コンストラクタをprivate化する。
-            class SecretClass private constructor(){}
-        </pre>
-        <hr>
-        <h1>セカンドコンストラクタ</h1>
-        <pre>
-            open class SuperClass{
-                constructor(ctx : Context){
-                    // initialize code
-                }
-                
-                constructor(ctx : Context,attr : Attribute){
-                    // initialize code
-                }
-            }
-            
-            // 継承する場合には、基底クラスも初期化する
-            class Subclass : SuperClass {
-                constructor(ctx : Context) : super(ctx) {
-                
-                }
-                constructor(ctx : Context,attr : Attribute) : super(ctx,attr){
-                }
-            }
-            
-            ※　上記例のように、プライマリコンストラクタがない場合にはセカンダリコンストラクタから基底クラスを初期化する必要がある。
-            ※　Kotlinにおいて、セカンダリコンストラクタはJavaとの互換性で設けることになる。
-        </pre>
-        <hr>_
         <h1>when文</h1>
         <pre>
             val x : String = ""
@@ -204,6 +115,123 @@
         </pre>
         <br>
         <hr>
+     　 <h1>クラス委譲</h1>
+        <pre>
+            Inteface ServiceClass{
+                fun method1()
+            }
+
+            class ServiceClassImpl : ServiceClass{
+                override fun method1(){
+                    println("override method")
+                }
+            }
+
+            // 委譲を利用するクラス
+            class ServiceTransfer(private val service : ServiceClass) : ServiceClass by service {
+                fun method2(){
+                    println("override method2")
+                }
+            }
+
+            fun main(args:Array&lt;String&gt;){
+                // 委譲元クラスをインスタンス化
+                val service = ServiceClassImpl()
+                val transferClass = ServiceTransfer(service)
+                transferClass.method1()
+                transferClass.method2()
+            }
+        </pre>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--------------------------------------------------------------------<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>&gt; override method</b><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>&gt; override method2</b>
+        <br>
+        <br>
+        <pre>
+            ■ 使い所
+            インターフェースを継承しているクラスで実装されているメソッドをオーバーライドすることなしに
+            新メソッドを追加する。
+
+            class ListExtends(private val list : List&lt;String&gt;) : List&lt;String&gt;  by list{
+                fun printList(){
+                    println(list.toString())
+                }            
+            }
+            
+            fun main(args:Array&lt;String&gt;){            
+                val list : List&lt;String&gt; = mutableListOf("1","2","3","2","0","2")
+                val extendsClass = ListExtends(list)
+                println(extendsClass.lastIndexOf("2"))
+                extendsClass.printList()            
+            }
+        </pre>
+        <hr>
+        <h1>委譲プロパティ</h1>
+        <pre>
+            ▼▽▼▽▼▽▼▽▼▽▼▽▼▽▼▽ 遅延初期化 ▼▽▼▽▼▽▼▽▼▽▼▽▼▽▼▽
+            class PropertiyDelegate(){
+
+                // lateinit はオブジェクト型のみ
+                lateinit var lateInitClass : ClassS
+            
+                // プリミティブ型 はlateinitは使えない
+                // lateinit var lateInitInteger : Int
+            
+                // プリミティブ型 は委譲プロパティで遅延初期化
+                var lateInitInt : Int by Delegates.notNull&lt;Int&gt;()
+            
+                init{
+                    lateInitClass = ClassS(10,"仙台")
+                    lateInitInt = 20
+                }
+            
+            }
+            
+            data class ClassS(var no : Int,var name : String )
+        </pre>
+        <hr>
+        <h1>コンストラクタ</h1>
+        <pre>
+            // スーパークラス
+            class SuperClass(){
+            }
+            
+            // 継承する場合
+            class SubClass() : SuperClass() {
+            
+            }
+            
+            ※　継承する場合は、親クラスの初期化も同時に行う必要がある。
+            
+            // 他のコードからインスタンス化を禁止する。コンストラクタをprivate化する。
+            class SecretClass private constructor(){}
+        </pre>
+        <hr>
+        <h1>セカンドコンストラクタ</h1>
+        <pre>
+            open class SuperClass{
+                constructor(ctx : Context){
+                    // initialize code
+                }
+                
+                constructor(ctx : Context,attr : Attribute){
+                    // initialize code
+                }
+            }
+            
+            // 継承する場合には、基底クラスも初期化する
+            class Subclass : SuperClass {
+                constructor(ctx : Context) : super(ctx) {
+                
+                }
+                constructor(ctx : Context,attr : Attribute) : super(ctx,attr){
+                }
+            }
+            
+            ※　上記例のように、プライマリコンストラクタがない場合にはセカンダリコンストラクタから基底クラスを初期化する必要がある。
+            ※　Kotlinにおいて、セカンダリコンストラクタはJavaとの互換性で設けることになる。
+        </pre>
+        <hr>_
         <h1>オブジェクト式</h1>
         <pre>
             Interface Greeter{
