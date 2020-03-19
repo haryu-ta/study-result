@@ -169,6 +169,7 @@
         <h1>委譲プロパティ</h1>
         <pre>
             ▼▽▼▽▼▽▼▽▼▽▼▽▼▽▼▽ 遅延初期化 ▼▽▼▽▼▽▼▽▼▽▼▽▼▽▼▽
+
             class PropertiyDelegate(){
 
                 // lateinit はオブジェクト型のみ
@@ -188,6 +189,32 @@
             }
             
             data class ClassS(var no : Int,var name : String )
+
+            ▼▽▼▽▼▽▼▽▼▽▼▽▼▽▼▽ 共通処理 ▼▽▼▽▼▽▼▽▼▽▼▽▼▽▼▽
+            class DelegateClass(){
+
+                var name : String by LoggerProperty("bbb")
+                var gender : Int  by LoggerProperty(2)
+                var isWorker : Boolean by LoggerProperty(false)
+            
+            }
+            
+            // 値が設定されたset,getされる時に標準出力に設定値を表示するクラス
+            class LoggerProperty<R,T>(var setval : T): ReadWriteProperty<R,T>{
+                override fun setValue(thisRef: R, property: KProperty&lt;*&gt;, value: T) {
+                    println("set = ${value}")
+
+                    // setvalがそのときにプロパティに設定された値を保持する変数
+                    setval = value
+                }
+            
+            
+                override fun getValue(thisRef: R, property: KProperty&lt;*&gt;): T {
+                    println("get = ${setval}")
+                    return setval
+                }
+            
+            }
         </pre>
         <hr>
         <h1>コンストラクタ</h1>
