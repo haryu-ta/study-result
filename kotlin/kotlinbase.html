@@ -10,7 +10,57 @@
             Kotlinは継承をせずとも、既存のクラスを拡張できる機能を持っています。その一つが拡張関数です。
 　          継承禁止クラスを含む既存のクラスに、新たに関数を追加することができます。(正確には、実際にクラスメンバを追加している訳ではない)
 
+            // MutableListクラスに10以上の偶数のみ追加を許可するメソッドを拡張
+            fun MutableList<Int>.addEvenValue(no : Int){
+                when{
+                    no &gt; 9 -> return
+                    no % 2 != 0 -> return
+                    else  -&lt; {
+                        this.add(no)
+                        return
+                    }
+                }
+            }
 
+            val listInteger = mutableListOf<Int>()
+            listInteger.addEvenValue(1)
+            listInteger.addEvenValue(10)
+            listInteger.addEvenValue(15)
+            println(listInteger.toString())
+
+        ▼▽▼▽▼▽▼▽▼▽▼▽▼▽▼▽ 面白い拡張 ▼▽▼▽▼▽▼▽▼▽▼▽▼▽▼▽
+
+            class ExtClass1(){
+                fun method1(){
+                    println("ExtClass1 @ method1")
+                }
+            }
+            
+            class ExtClass2(val cls : ExtClass1){
+                fun method2(){
+                    println("ExtClass2 @ method2")
+                }
+            
+                fun ExtClass1.method3(){
+                    method1()  // ExtClass1
+                    method2()  // ExtClass2
+                    this@ExtClass2.method1()  // ExtClass2
+                }
+
+                fun method1(){
+                    println("ExtClass2 @ method1")
+                }
+
+                fun method4(){
+                    cls.method1()
+                    cls.method3()
+                }
+            }
+
+            val cls : ExtClass1 = ExtClass1()
+            val cls2 : ExtClass2 = ExtClass2(cls)
+            cls2.method4()
+            //cls.method3()  // error method3はExtClass2内からしか呼びだせない 
         </pre>
         <hr>
         <h1>コンパニオンオブジェクト</h1>
@@ -27,7 +77,7 @@
                 2,3 -&gt; 'B'
                 callFunction() -&gt; 'C'
                 in 4 .. 10 -&gt; 'D' 
-                else ->&gt;'E'
+                else -&gt;'E'
             }
 
 
@@ -199,7 +249,7 @@
             
             }
             
-            // 値が設定されたset,getされる時に標準出力に設定値を表示するクラス
+            // 値が設定されてset,getされる時に標準出力に設定値を表示するクラス
             class LoggerProperty<R,T>(var setval : T): ReadWriteProperty<R,T>{
                 override fun setValue(thisRef: R, property: KProperty&lt;*&gt;, value: T) {
                     println("set = ${value}")
