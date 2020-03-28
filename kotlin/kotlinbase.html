@@ -66,6 +66,51 @@
         <h1>コンパニオンオブジェクト</h1>
         <hr>
         <h1>列挙型</h1>
+        <pre>
+            enum class COUNTRYINFOENUM(val capital:String, val population : Long) {
+                JAPAN("東京", 126535920L),
+                AMERICA("ワシントン", 453798817L),
+                FRANCE("パリ", 62787427L),
+                ENGLAND("ロンドン", 62035570L),
+                AUSTRARIA("シドニー", 22268384L),
+                SPAIN("マドリード", 46076989L),
+                KOREA("ソウル", 48183584L) ,
+                CHINA("北京", 601514587L);
+            
+                // 取得名を返却する
+                fun capital(): String {
+                    return this.capital
+                }
+            
+                // 人口数を返却する
+                fun population(): String {
+                    // 3桁のカンマ区切りに形式変更
+                    return "%,d".format(this.population)
+                }
+            
+                // 両情報を返却する
+                fun info(): String {
+                    return this.capital() + " &gt;&gt; " + this.population()
+                }
+            
+            }
+            
+            fun main(args : Array&lt;String&gt;){
+                
+                for(country in COUNTRYINFOENUM.values()){
+                    println("${country.capital} : ${country.population}")
+            
+                }
+            
+                println(COUNTRYINFOENUM.valueOf("JAPAN").capital)
+            
+                println("首都 : ${COUNTRYINFOENUM.AMERICA.capital()}")
+                println("人口 : ${COUNTRYINFOENUM.AMERICA.population()}")
+            
+                println(COUNTRYINFOENUM.KOREA.info())
+            
+            }
+        </pre>
         <hr>
         <h1>ジェネリクス</h1>
         <hr>
