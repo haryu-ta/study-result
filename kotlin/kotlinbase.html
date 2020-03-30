@@ -5,6 +5,8 @@
         <title>kotlin</title>
     </head>
     <body>
+        <h1>ジェネリクス</h1>
+        <hr>
         <h1>エクステンション(拡張関数)</h1>
         <pre>
             Kotlinは継承をせずとも、既存のクラスを拡張できる機能を持っています。その一つが拡張関数です。
@@ -64,6 +66,30 @@
         </pre>
         <hr>
         <h1>コンパニオンオブジェクト</h1>
+        <pre>
+            class CompanionClass(){
+
+                companion object {
+                    var longv :  Long = 10000L
+            
+                    fun comma3format(num : Long): String{
+                        return "%,d".format(num)
+                    }
+                }
+            
+                var long2v : Long = 0
+            
+                fun add(addnum : Long):Long{
+                    long2v = long2v + addnum
+                    return long2v
+                }
+            
+            }
+
+            fun main(args : Array&lt;String&gt;){
+                println(CompanionClass.comma3format(CompanionClass.longv));
+            }
+        </pre>
         <hr>
         <h1>列挙型</h1>
         <pre>
@@ -111,8 +137,6 @@
             
             }
         </pre>
-        <hr>
-        <h1>ジェネリクス</h1>
         <hr>
         <h1>when文</h1>
         <pre>
