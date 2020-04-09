@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>docker container runオプション</title>
+	<style type="text/css">
+		table { width : 90%; }
+		.header {background:yellow;}
+		th:nth-of-type(1) { width : 20%; }
+		th:nth-of-type(2) { width : 70%; }
+    th:nth-of-type(3) { width : 40%; }
+		tr th { font-weight:bold;}
+    td { border-top:solid 1px; }
+    th { border-top:solid 1px; }
+    tr:nth-child(even) { background: aliceblue; }
+	</style>
+</head>
+<body>
+<h1>オプション</h1>
+<pre>
+    <table align="center">
+      <tr class="header">
+        <th>オプション</th>
+        <th>説明</th>
+      </tr>
+      <tr>
+        <td>--it</td>
+        <td>標準入力を使用する</td>
+      </tr>
+      <tr>
+        <td>-d</td>
+        <td>バックグラウンド実行</td>
+      </tr>
+      <tr>
+        <td>--name</td>
+        <td>コンテナに名前を付与する</td>
+      </tr>
+      <tr>
+        <td>--rm</td>
+        <td>コマンド 実行完了後にコンテナを削除する</td>
+      </tr>
+      <tr>
+        <td>--restart</td>
+        <td>コマンドの実行結果によって再起動を行う</td>
+      </tr>
+      <tr>
+        <td>-p [ホストのポート番号]:[コンテナのポート番号]</td>
+        <td>ホストの任意のポートをコンテナに割り当てる</td>
+      </tr>
+      <tr>
+        <td>-h</td>
+        <td>コンテナ自身のホスト名を割り当てる</td>
+      </tr>
+      <tr>
+        <td>--add-host [コンテナ自身のホスト名]:[コンテナ自身のIPアドレス]</td>
+        <td>コンテナの/etc/hostsに定義を追加</td>
+      </tr>
+      <tr>
+        <td>-c＝[割り当て]</td>
+        <td>コンテナが使用するCPU使用の配分を指定<br>-c=512</td>
+      </tr>
+      <tr>
+        <td>-m=[メモリ使用制限サイズ]</td>
+        <td>コンテナが使用するメモリを制限して実行（b,k,m,gのいずれか）<br>-m=1g</td>
+      </tr>
+      <tr>
+        <td>-v [ホストのディレクトリ]:[コンテナのディレクトリ]</td>
+        <td>ホストとコンテナのディレクトリを共有</td>
+      </tr>
+      <tr>
+        <td>-e [変数名]=[設定値]</td>
+        <td>環境変数を設定する</td>
+      </tr>
+      <tr>
+        <td>--env-file [環境変数を設定したファイル名]</td>
+        <td>環境変数をファイルから設定する</td>
+      </tr> 
+      <tr>
+        <td>-w</td>
+        <td>コンテナの作業ディレクトリを指定する</td>
+      </tr>  
+    </table>
+</pre>
+<hr>
+<a href="../docker.html">docker</a>
+</body>
+</html>
