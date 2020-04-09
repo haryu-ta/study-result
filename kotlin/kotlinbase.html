@@ -1,0 +1,404 @@
+<html>
+    <head>
+        <link rel=stylesheet type="text/css" href="css/common.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>kotlin</title>
+    </head>
+    <body>
+        <h1>ジェネリクス</h1>
+        <hr>
+        <h1>エクステンション(拡張関数)</h1>
+        <pre>
+            Kotlinは継承をせずとも、既存のクラスを拡張できる機能を持っています。その一つが拡張関数です。
+　          継承禁止クラスを含む既存のクラスに、新たに関数を追加することができます。(正確には、実際にクラスメンバを追加している訳ではない)
+
+            // MutableListクラスに10以上の偶数のみ追加を許可するメソッドを拡張
+            fun MutableList<Int>.addEvenValue(no : Int){
+                when{
+                    no &gt; 9 -> return
+                    no % 2 != 0 -> return
+                    else  -&lt; {
+                        this.add(no)
+                        return
+                    }
+                }
+            }
+
+            val listInteger = mutableListOf<Int>()
+            listInteger.addEvenValue(1)
+            listInteger.addEvenValue(10)
+            listInteger.addEvenValue(15)
+            println(listInteger.toString())
+
+        ▼▽▼▽▼▽▼▽▼▽▼▽▼▽▼▽ 面白い拡張 ▼▽▼▽▼▽▼▽▼▽▼▽▼▽▼▽
+
+            class ExtClass1(){
+                fun method1(){
+                    println("ExtClass1 @ method1")
+                }
+            }
+            
+            class ExtClass2(val cls : ExtClass1){
+                fun method2(){
+                    println("ExtClass2 @ method2")
+                }
+            
+                fun ExtClass1.method3(){
+                    method1()  // ExtClass1
+                    method2()  // ExtClass2
+                    this@ExtClass2.method1()  // ExtClass2
+                }
+
+                fun method1(){
+                    println("ExtClass2 @ method1")
+                }
+
+                fun method4(){
+                    cls.method1()
+                    cls.method3()
+                }
+            }
+
+            val cls : ExtClass1 = ExtClass1()
+            val cls2 : ExtClass2 = ExtClass2(cls)
+            cls2.method4()
+            //cls.method3()  // error method3はExtClass2内からしか呼びだせない 
+        </pre>
+        <hr>
+        <h1>コンパニオンオブジェクト</h1>
+        <pre>
+            class CompanionClass(){
+
+                companion object {
+                    var longv :  Long = 10000L
+            
+                    fun comma3format(num : Long): String{
+                        return "%,d".format(num)
+                    }
+                }
+            
+                var long2v : Long = 0
+            
+                fun add(addnum : Long):Long{
+                    long2v = long2v + addnum
+                    return long2v
+                }
+            
+            }
+
+            fun main(args : Array&lt;String&gt;){
+                println(CompanionClass.comma3format(CompanionClass.longv));
+            }
+        </pre>
+        <hr>
+        <h1>列挙型</h1>
+        <pre>
+            enum class COUNTRYINFOENUM(val capital:String, val population : Long) {
+                JAPAN("東京", 126535920L),
+                AMERICA("ワシントン", 453798817L),
+                FRANCE("パリ", 62787427L),
+                ENGLAND("ロンドン", 62035570L),
+                AUSTRARIA("シドニー", 22268384L),
+                SPAIN("マドリード", 46076989L),
+                KOREA("ソウル", 48183584L) ,
+                CHINA("北京", 601514587L);
+            
+                // 取得名を返却する
+                fun capital(): String {
+                    return this.capital
+                }
+            
+                // 人口数を返却する
+                fun population(): String {
+                    // 3桁のカンマ区切りに形式変更
+                    return "%,d".format(this.population)
+                }
+            
+                // 両情報を返却する
+                fun info(): String {
+                    return this.capital() + " &gt;&gt; " + this.population()
+                }
+            
+            }
+            
+            fun main(args : Array&lt;String&gt;){
+                
+                for(country in COUNTRYINFOENUM.values()){
+                    println("${country.capital} : ${country.population}")
+            
+                }
+            
+                println(COUNTRYINFOENUM.valueOf("JAPAN").capital)
+            
+                println("首都 : ${COUNTRYINFOENUM.AMERICA.capital()}")
+                println("人口 : ${COUNTRYINFOENUM.AMERICA.population()}")
+            
+                println(COUNTRYINFOENUM.KOREA.info())
+            
+            }
+        </pre>
+        <hr>
+        <h1>when文</h1>
+        <pre>
+            val x : String = ""
+            val result = when(x){
+                1 -&gt; 'A'
+                2,3 -&gt; 'B'
+                callFunction() -&gt; 'C'
+                in 4 .. 10 -&gt; 'D' 
+                else -&gt;'E'
+            }
+
+
+            when {
+                score &lt;= 90 -&gt; 'A'
+                score &lt;= 80 -&gt; 'B'
+                else        -&gt; 'C'
+            }
+        </pre>
+        <br>
+        <hr>
+        <h1>forループ</h1>
+        <pre>
+            val name = listOf("亮平","佳奈","陽花","龍太","咲明")
+            for( index in name.indices){
+                println(index)
+            }
+
+            0
+            1
+            2
+            3
+            4
+        </pre>
+        <br>
+        <hr>
+        <h1>NULL安全</h1>
+        <pre>
+            // 変数にNULLを代入する場合
+            var val1 : String? = null
+
+            val a : String? = "itamura"
+
+            // これはコンパイルエラー
+            //a.length()
+
+            if( a != null){
+                a.length()  // NullチェックしたあとならOK
+            }
+        </pre>
+        <br>
+        <hr>
+        <h1>安全呼び出し</h1>
+        <pre>
+            ■ メンバ呼出
+            val a : Int? = 1
+            
+            // aがNULLの場合にはnull
+            // aがNULL以外の場合には関数が呼び出される
+            val aInc : Int ? = a?.inc()
+
+            ■ 関数の呼出
+            fun square(i : Int) : Int = i * i
+
+            val param : Int? = 5
+            val aSquare = if ( param != null ) square(param) else null
+
+            // これも同じ意味
+            val aSquare = param?.let{ square(it) }
+        </pre>
+        <br>
+        <hr>
+        <h1>エルビス演算子</h1>
+        <pre>
+            // 変数がNULLの場合にはデフォルト値を使う
+            var param : String? = "KEY"
+            param ?: "NOKEY"
+
+            param = null
+            param ?: "NOKEY"
+
+            ~~~
+            KEY
+            NOKEY
+
+        </pre>
+        <br>
+        <hr>
+        <h1>安全キャスト</h1>
+        <pre>
+            // キャストの際に、失敗した際にNullを返す
+            val a : Any = "Hello!! World!!"
+            a as String   // 成功
+            a as? Int     // 失敗（エラーを吐かず、NULLとなる）
+        </pre>
+        <br>
+        <hr>
+     　 <h1>クラス委譲</h1>
+        <pre>
+            Inteface ServiceClass{
+                fun method1()
+            }
+
+            class ServiceClassImpl : ServiceClass{
+                override fun method1(){
+                    println("override method")
+                }
+            }
+
+            // 委譲を利用するクラス
+            class ServiceTransfer(private val service : ServiceClass) : ServiceClass by service {
+                fun method2(){
+                    println("override method2")
+                }
+            }
+
+            fun main(args:Array&lt;String&gt;){
+                // 委譲元クラスをインスタンス化
+                val service = ServiceClassImpl()
+                val transferClass = ServiceTransfer(service)
+                transferClass.method1()
+                transferClass.method2()
+            }
+        </pre>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--------------------------------------------------------------------<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>&gt; override method</b><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>&gt; override method2</b>
+        <br>
+        <br>
+        <pre>
+            ■ 使い所
+            インターフェースを継承しているクラスで実装されているメソッドをオーバーライドすることなしに
+            新メソッドを追加する。
+
+            class ListExtends(private val list : List&lt;String&gt;) : List&lt;String&gt;  by list{
+                fun printList(){
+                    println(list.toString())
+                }            
+            }
+            
+            fun main(args:Array&lt;String&gt;){            
+                val list : List&lt;String&gt; = mutableListOf("1","2","3","2","0","2")
+                val extendsClass = ListExtends(list)
+                println(extendsClass.lastIndexOf("2"))
+                extendsClass.printList()            
+            }
+        </pre>
+        <hr>
+        <h1>委譲プロパティ</h1>
+        <pre>
+            ▼▽▼▽▼▽▼▽▼▽▼▽▼▽▼▽ 遅延初期化 ▼▽▼▽▼▽▼▽▼▽▼▽▼▽▼▽
+
+            class PropertiyDelegate(){
+
+                // lateinit はオブジェクト型のみ
+                lateinit var lateInitClass : ClassS
+            
+                // プリミティブ型 はlateinitは使えない
+                // lateinit var lateInitInteger : Int
+            
+                // プリミティブ型 は委譲プロパティで遅延初期化
+                var lateInitInt : Int by Delegates.notNull&lt;Int&gt;()
+            
+                init{
+                    lateInitClass = ClassS(10,"仙台")
+                    lateInitInt = 20
+                }
+            
+            }
+            
+            data class ClassS(var no : Int,var name : String )
+
+            ▼▽▼▽▼▽▼▽▼▽▼▽▼▽▼▽ 共通処理 ▼▽▼▽▼▽▼▽▼▽▼▽▼▽▼▽
+            class DelegateClass(){
+
+                var name : String by LoggerProperty("bbb")
+                var gender : Int  by LoggerProperty(2)
+                var isWorker : Boolean by LoggerProperty(false)
+            
+            }
+            
+            // 値が設定されてset,getされる時に標準出力に設定値を表示するクラス
+            class LoggerProperty<R,T>(var setval : T): ReadWriteProperty<R,T>{
+                override fun setValue(thisRef: R, property: KProperty&lt;*&gt;, value: T) {
+                    println("set = ${value}")
+
+                    // setvalがそのときにプロパティに設定された値を保持する変数
+                    setval = value
+                }
+            
+            
+                override fun getValue(thisRef: R, property: KProperty&lt;*&gt;): T {
+                    println("get = ${setval}")
+                    return setval
+                }
+            
+            }
+        </pre>
+        <hr>
+        <h1>コンストラクタ</h1>
+        <pre>
+            // スーパークラス
+            class SuperClass(){
+            }
+            
+            // 継承する場合
+            class SubClass() : SuperClass() {
+            
+            }
+            
+            ※　継承する場合は、親クラスの初期化も同時に行う必要がある。
+            
+            // 他のコードからインスタンス化を禁止する。コンストラクタをprivate化する。
+            class SecretClass private constructor(){}
+        </pre>
+        <hr>
+        <h1>セカンドコンストラクタ</h1>
+        <pre>
+            open class SuperClass{
+                constructor(ctx : Context){
+                    // initialize code
+                }
+                
+                constructor(ctx : Context,attr : Attribute){
+                    // initialize code
+                }
+            }
+            
+            // 継承する場合には、基底クラスも初期化する
+            class Subclass : SuperClass {
+                constructor(ctx : Context) : super(ctx) {
+                
+                }
+                constructor(ctx : Context,attr : Attribute) : super(ctx,attr){
+                }
+            }
+            
+            ※　上記例のように、プライマリコンストラクタがない場合にはセカンダリコンストラクタから基底クラスを初期化する必要がある。
+            ※　Kotlinにおいて、セカンダリコンストラクタはJavaとの互換性で設けることになる。
+        </pre>
+        <hr>_
+        <h1>オブジェクト式</h1>
+        <pre>
+            Interface Greeter{
+                fun greet()
+            }
+
+            val greeter = object : Greeter {
+                fun greet(){
+                    println("Hello")
+                }
+            }
+            
+            greeter.greet()
+            →Hello
+
+            ■注意点
+            別の場所で利用可能な型は定義されない
+        </pre>
+        <br>
+        <hr>
+        <a href="../kotlin.html">TOP</a>
+    </body>
+</html>
+ 

@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <link rel=stylesheet type="text/css" href="css/common.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>kotlin</title>
+    </head>
+    <body>
+        <h1>ファイル読込</h1>
+        <pre>
+            ＠Autowired
+            lateinit private val resourceLoader : ResourceLoader
+
+            val resource: Resource = resourceLoader.getResource("file:[ファイル名]")
+            val bf : BufferedReader = BufferedReader(FileReader(resource.file))
+            bf.use{
+                line = it.readLine()
+            }
+            // useを使うとclose不要
+        </pre>
+        <br>
+        <hr>
+        <h1>ファイル書込</h1>
+        <pre>
+
+        </pre>
+        <br>
+        <hr>
+        <a href="../kotlin.html">TOP</a>
+    </body>
+</html>

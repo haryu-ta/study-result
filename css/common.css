@@ -36,6 +36,10 @@ table tr td:first-child:not(.text-notright) {
 	text-align      :right;
 }
 
+.textleft{
+	text-align: left;
+}
+
 .onmouse:hover {
 	font-weidht     : bold;
 	color           : green;

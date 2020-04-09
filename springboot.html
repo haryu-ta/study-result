@@ -5,6 +5,18 @@
 <title>Spring Boot</title>
 </head>
 <body>
+<h1>スタンドアロン実行</h1>
+<pre>
+	@SpringBootApplication
+	class SampleApplication() : CommandLineRunner {
+
+	}
+
+	fun main(args: Array<String>) {
+		runApplication<SampleApplication>(*args)
+	}
+</pre>
+<hr>
 <h1>My batisテンプレ</h1>
 <pre>
 &lt;!--?xml version="1.0" encoding="UTF-8" ?--&gt;

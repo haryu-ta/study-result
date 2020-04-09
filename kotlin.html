@@ -5,117 +5,13 @@
         <title>kotlin</title>
     </head>
     <body>
-        <h1>スコープ関数</h1>
-        <pre>            
-            拡張関数let
-            定義 ： public inline fun<T,R> T.let(block:(T)-> R):R = block(this)
-
-            ■ 使用注意点
-            レシーバー自体を引数として渡しているため、関数内でthisを返却できない。
-            このため、引数に渡した関数のみを実行するイメージ
-
-            ■ 使い途
-            レシーバー（T）がNULLの場合にはletは実行されないため、NULL安全
-
-            ■ コードサンプル
-            fun countup(i : Int):Int{
-                return i + 1
-            }
-            var num : Int = 2
-            num.let(::countup)
-            num.let{it + 1}
-        </pre>
-        <br>
-        <hr>
-        <pre>
-            スコープ関数with
-            定義 ： public inline fun <T, R> with(receiver: T, block: T.() -> R): R = receiver.block()
-            
-            ■ 使用注意点
-            関数の戻りがない場合には、UNIT型を返却する。
-            thisを返却することでレシーバ自体を戻すことが可能
-
-            ■ 使い途
-            レシーバーにクラスをもち、そのクラスに対して複数処理を行う際に便利（VBAの WITH 〜 END WITHのイメージ） 
-            
-            ■ コードサンプル
-            class SampleClass (){
-                var arg1 : String = ""
-                var arg2 : String =""
-                fun display(arg1 : String ,arg2 : String){
-                    println("${arg1} は ${arg2}")
-                }
-            }
-
-            val cls = with(SampleClass()){
-                // thisは省略可能
-                arg1 = "ライオン"
-                arg2 = "動物"
-                display()
-                this
-            }
-            println(cls.args1)
-
-        </pre>
-        <br>
-        <hr>
-        <pre>
-            スコープ関数run
-            定義 ： public inline fun <T, R> T.run(block: T.() -> R): R = block()
-                
-            ■ 使用注意点
-            関数の戻りがない場合には、UNIT型を返却する。
-            thisを返却することでレシーバ自体を戻すことが可能
-    
-            ■ 使い途
-            let,withを合わせたような使い方。
-            letのNULL安全を使いながら、withでやっている複数処理をまとめる    
-        </pre>
-        <br>
-        <hr>
-        <pre>
-            拡張関数apply
-            定義 ： public inline fun<T> T.apply(block: T.()-> Unit): T{block();return this}
-
-            ■ 使い途
-            withの関数の最後にthisを返さなくてもapply自体が返却してくれる。
-        </pre>
-        <br>
-        <hr>
-        <h1>ファイル読込</h1>
-        <pre>
-            ＠Autowired
-            lateinit private val resourceLoader : ResourceLoader
-
-            val resource: Resource = resourceLoader.getResource("file:[ファイル名]")
-            val bf : BufferedReader = BufferedReader(FileReader(resource.file))
-            bf.use{
-                line = it.readLine()
-            }
-            // useを使うとclose不要
-        </pre>
-        <br>
-        <hr>
-        <h1>オブジェクト式</h1>
-        <pre>
-            Interface Greeter{
-                fun greet()
-            }
-            val greeter = object : Greeter {
-                fun greet(){
-                    println("Hello")
-                }
-            }
-            greeter.greet()
-            →Hello
-
-            ■注意点
-            別の場所で利用可能な型は定義されない
-        </pre>
-        <br>
-        <hr>
+        <h1>Kotlin</h1>
         <ul>
             <li><a href="https://qiita.com/opengl-8080/items/36351dca891b6d9c9687#tolist" target="_blank">コレクション</a></li>
+            <li><a href="https://qiita.com/kiririnyo/items/aee905225902d096f7c0" target="_blank">コレクション2</a>
+            <li><a href="./kotlin/kotlinbase.html">基本構造</a></li>
+            <li><a href="./kotlin/kotlinpractice.html">実践編</a></li>
+            <li><a href="./kotlin/scope.html">スコープ関数</a></li>
         </ul>
         <br>
         <hr>
