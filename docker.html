@@ -8,14 +8,14 @@
 		.header {background:yellow;}
 		.image th:nth-of-type(1) { width : 20%; }
 		.image th:nth-of-type(2) { width : 30%; }
-    .image th:nth-of-type(3) { width : 40%; }
-    .container th:nth-of-type(1) { width : 20%; }
-    .container th:nth-of-type(2) { width : 30%; }
-    .container th:nth-of-type(3) { width : 40%; }
-    .controll th:nth-of-type(1) { width : 20%; }
+		.image th:nth-of-type(3) { width : 40%; }
+		.container th:nth-of-type(1) { width : 20%; }
+		.container th:nth-of-type(2) { width : 30%; }
+		.container th:nth-of-type(3) { width : 40%; }
+		.controll th:nth-of-type(1) { width : 20%; }
 		.controll th:nth-of-type(2) { width : 70%; }
 		tr th { font-weight:bold;}
-		th
+		.note { font-weight:bold; margin-left : 50px; }
 	</style>
 </head>
 <body>
@@ -116,9 +116,12 @@
     </tr>
 </table>
 <br>
-docker container run --it --name testcontainer ubuntu /bin/bash
+<p class="note" style="margin-bottom : 0px;margin-top : 0px;">docker container run --it --name testcontainer ubuntu /bin/bash</p>
 <br>
 <h1>ネットワーク用コマンド </h1>
+
+<p class="note">Dockerコンテナ間の通信を行いたいときに利用する。</p>
+
 <table border="1" align="center">
   <tr class="header container">
       <th>コマンド</th>
@@ -126,11 +129,30 @@ docker container run --it --name testcontainer ubuntu /bin/bash
       <th>使い方</th>
     </tr>
     <tr>
-      <td>docker network </td>
-      <td></td>
-      <td>docker network </td>
+      <td>docker network create</td>
+      <td>ネットワークの作成</td>
+      <td>docker network create [オプション] {ネットワーク}</td>
     </tr>
-
+    <tr>
+      <td>docker network ls</td>
+      <td>ネットワークの確認</td>
+      <td>docker network ls</td>
+    </tr>
+    <tr>
+      <td>docker network connect</td>
+      <td>ネットワークの接続</td>
+      <td>docker network connect [オプション] {ネットワーク} {コンテナ}</td>
+    </tr>
+    <tr>
+      <td>docker network disconnect</td>
+      <td>ネットワークの接続解除</td>
+      <td>docker network disconnect</td>
+    </tr>
+    <tr>
+      <td>docker network rm</td>
+      <td>ネットワークの削除</td>
+      <td>docker network rm [オプション] {ネットワーク}</td>
+    </tr>
 </table>
 
 <h1>管理コマンド</h1>
