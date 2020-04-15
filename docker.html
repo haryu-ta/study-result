@@ -66,6 +66,16 @@
       <td>イメージのアップロード</td>
       <td>docker image push {イメージ名}:[タグ名]</td>
     </tr>
+    <tr>
+      <td>docker image import</td>
+      <td>tarファイルからイメージ作成</td>
+      <td>docker image import {ファイル or URL} {イメージ名}</td>
+    </tr>
+    <tr>
+      <td>docker image load</td>
+      <td>tarファイルからイメージを生成</td>
+      <td>docker image load [オプション]</td>
+    </tr>
 </table>
 <h1>コンテナコマンド</h1>
 <table border="1" align="center">
@@ -113,6 +123,39 @@
       <td>docker container rm</td>
       <td>コンテナの削除</td>
       <td>docker container rm [オプション] {コンテナ識別子}</td>
+    </tr>
+    <tr>
+      <td>docker container exec</td>
+      <td>稼動コンテナでプロセス実行</td>
+      <td>docker container exec [オプション] {コンテナ識別子} {実行するコマンド}</td>
+    </tr>
+    <tr>
+      <td>docker container top</td>
+      <td>稼動コンテナのプロセス確認</td>
+      <td>docker container top {コンテナ識別子}</td>
+    </tr>
+    <tr>
+      <td>docker container rename</td>
+      <td>稼動コンテナ名のリネーム</td>
+      <td>docker container rename {旧プロセス名}　{新プロセス名}</td>
+    </tr>
+    <tr>
+      <td>docker container cp</td>
+      <td>稼動コンテナとのファイルコピー</td>
+      <td>
+        docker container cp {ホストファイル}　{コンテナ識別子}:{コンテナ内のファイルパス}<br>
+        docker container cp {コンテナ識別子}:{コンテナ内のファイルパス}　{ホストディレクトリパス}
+      </td>
+    </tr>
+    <tr>
+      <td>docker container commit</td>
+      <td>コンテナからイメージ作成</td>
+      <td>docker container commit [オプション] {コンテナ識別子} {イメージ名}</td>
+    </tr>
+    <tr>
+      <td>docker container export</td>
+      <td>コンテナをtarファイルに出力</td>
+      <td>docker container export {コンテナ識別子} &gt; {tarファイル名}</td>
     </tr>
 </table>
 <br>
