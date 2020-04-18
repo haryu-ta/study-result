@@ -1,0 +1,59 @@
+## Dockerファイル
+
+**dockerファイルの実行**
+
+- docker build <Dockerfileの場所>
+
+
+
+FROM centos:7  
+RUN yum install -y java  
+ADD files/apache-tomcat-9.0.6.tar.gz /opt/  
+CMD ["/opt/apache-tomcat-9.0.6/bin/catalina.sh","run"]
+ENV mypath=/opt/
+
+
+```
+ADD  : tarの展開まで行うコマンド 　 ADD <コピー元>　<Docekrイメージのコピー・展開先>
+COPY : ファイルのコピーのみ。展開はなし
+CMD  : コマンドの実行（実行時の引数で置換可）
+ENDPOINT. : コマンドの実行（実行時の引数での置換不可）
+VOLUME  : 指定した名前でマウントポイントを作成し、他のホストやコンテナから外部マウント可能なボリュームにします
+WORKDIR  : 作業ディレクトを指定する。
+ENV  : 環境変数を設定する
+```
+
+-----
+
+### CMDとENTRYPOINT
+
+<dl>
+    <dt> CMD ["ping","127.0.0.1","-c","100"]</dt>
+    <dd> シェルを介さずに実行される</dd>
+    <br>
+    <dt> CMD ping 127.0.0.1 -c 100</dt>
+    <dd> /bin/bash -c の引数として実行される</dd>
+    <br>
+    <dt> CMD ping 127.0.0.1 -c 100</dt>
+    <dt> docker run test cat application.log</dt>
+    <dd> cat application.logが置換されて実行</dd>
+    <br>
+    <dt> CMD ["ping","127.0.0.1","-c","100"]</dt>
+    <dd> シェルを介さずに実行される</dd>
+    <br>
+    <dt> ENTRYPOINT ["ping","127.0.0.1","-c","100"]</dt>
+    <dd> シェルを介さずに実行される</dd>
+    <br>
+    <dt> ENTRYPOINT ping 127.0.0.1 -c 100</dd>
+    <dd> /bin/bash -c の引数として実行される</dd>
+    <br>
+    <dt> ENTRYPOINT ping 127.0.0.1 -c 100</dt>
+    <dt> docker run test cat application.log </dt>
+    <dd> 置換はされずpingコマンドが実行される </dd>
+    <br>
+    <dt> ENTRYPOINT ["ping"] </dt>
+    <dt> CMD ["127.0.0.1","-c","100"] </dt>
+    <dt> docker run test localhost </dt>
+    <dd> ping localhostが実行される </dd>
+
+</dl>
