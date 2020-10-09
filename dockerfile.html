@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>dockerfileコマンド</title>
+    <style type="text/css">
+    .codestyle {
+        background-color: black;
+        color: white;
+        font-weight: bold;
+        font-size: large;
+    }
+    code {
+        background-color:greenyellow;
+    }
+    .boldclass span{
+        font-weight: bold;
+    }
+    </style>
+</head>
+<body>
+    <a href="docker.html">docker</a>
+    <hr>
+    <h1>Dockerビルド</h1>
+    <pre>
+        docker build {Dockerfileの場所} -t {イメージ名}
+    </pre>
+    <br>
+    <hr>
+    <h1>Dockerfile記載方法</h1>
+        <div style="padding-left: 20px;">
+            <textarea readonly="true" class="codestyle" style="height:130px;width:60%;">
+FROM centos:7  
+RUN yum install -y java  
+ADD files/apache-tomcat-9.0.6.tar.gz /opt/  
+CMD ["/opt/apache-tomcat-9.0.6/bin/catalina.sh","run"]
+ENV mypath=/opt/
+            </textarea>
+        </div>
+    </pre>
+    <br>
+    <hr>
+    <h1>コマンド 説明</h1>
+    <pre>
+        <table border="1" align="center" style="width:90%;">
+            <tr style="background:yellow;">
+                <th style="width:20%">コマンド</th>
+                <th style="width:40%">内容</th>
+                <th style="width:40%">使い方</th>
+            </tr>
+            <tr>
+                <td>FROM</td>
+                <td>イメージファイルを指定</td>
+                <td>FROM ubuntu:1.0.0</td>
+            </tr>
+            <tr>
+                <td>RUN</td>
+                <td>ビルド時にコンテナ内で実行するコマンド</td>
+                <td>RUN ["yum","install","-y","java"]</td>
+            </tr>
+            <tr>
+                <td>CMD</td>
+                <td>完成したイメージファイルからコンテナを作成する時に実行するコマンド<br>ファイル内に１回しか書けない。（複数書いた場合には後勝ち）</td>
+                <td>CMD ["/opt/apache-tomcat-9.0.6/bin/catalina.sh","run"]<br>
+CMD echo "hello world"; \
+echo "Hello Ryohei" （バックスラッシュで区切れば複数コマンド実行可能）
+                </td>
+            </tr>
+            <tr>
+                <td>ENV</td>
+                <td>環境変数を設定する</td>
+                <td>EVN path=/opt</td>
+            </tr>
+            <tr>
+                <td>ADD</td>
+                <td>新しいファイルやディレクトリをコピーする<br>tarファイルの場合には展開まで行われる</td>
+                <td>1:ADD application.log /opt/log<br>2:ADD ["application.log","/opt/program files"]<br>※ファイル名やパスに空白を含む場合には2の形式</td>
+            </tr>
+            <tr>
+                <td>COPY</td>
+                <td>新しいファイルやディレクトリをコピーする<br>tarファイルの展開は行われない</td>
+                <td>指定形式はADDと同様。正規表現も指定可能（ADDも）</td>
+            </tr>
+            <tr>
+                <td>VOLUME</td>
+                <td>指定した名前でマウントポイントを作成し、他のホストやコンテナから外部マウント可能なボリュームにします</td>
+                <td>VOLUME /opt/log /opt/bin</td>
+            </tr>
+            <tr>
+                <td>WORKDIR</td>
+                <td class="boldclass">作業ディレクトを指定する<br>Dockerfile で <span>RUN</span> 、 <span>CMD</span> 、 <span>ENTRYPOINT</span> 、 <span>COPY</span> 、 <span>ADD</span> 命令実行時の<br>作業ディレクトリ（working directory）を指定します。</td>
+                <td>WORKDIR /opt</td>
+            </tr>
+        </table>
+    </pre>
+    <br>
+    <hr>
+    <h1>CMDコマンド とENTRYPOINTコマンド </h1>
+    <br>
+        <div style="padding-left: 20px;">
+            <p>共通点：</p>
+            どちらもイメージからコンテナを作成する際に実行されるコマンドを定義
+
+            <p>差異：</p>
+            CMDは実行時の引数により上書きを行うことができる。<br>
+            ENTRYPOINTは上記ができない。
+            <br>
+            <br>
+            <div>
+                <p>コード例:</p>
+
+                    <textarea readonly="true" class="codestyle" style="height:50px;width:500px;">
+ENTRYPOINT [&quot;sh&quot;]
+CMD [&quot;start.sh&quot;,&quot;1&quot;,&quot;2&quot;]
+                    </textarea>
+                    <br>
+                
+                <p>実行時コマンド :</p>
+                    <div>
+                        <code>
+                        docker run test<br> 
+                        </code> 
+                        → sh start.sh 1 2 が実行される<br>
+                    </div>
+                    <br>
+                    <div>
+                        <code>
+                        docker run test stop.sh 3 4<br>
+                        </code>
+                        → sh stop.sh 3 4 が実行される<br>
+                    </div>
+
+                <p>実行形式:</p>
+                直接実行<br>
+
+                <textarea readonly="true" class="codestyle" style="height:30px;width:500px;">
+CMD [&quot;echo&quot;,&quot;Hello World&quot;]
+                </textarea>
+                <pre>
+○ シェルを介さないので効率は良い
+× 複数コマンド を実行できない
+× 環境変数の展開ができない
+※ 複数コマンド 実行させる場合は、シェルを実行してやれば可能
+                </pre>
+                <br>
+                シェル実行<br>
+                <textarea readonly="true" class="codestyle" style="height:30px;width:500px;">
+CMD echo &quot;Hello World&quot;
+                </textarea>
+                <pre>
+× シェルを介すので実行効率は悪い
+○ 複数コマンド を実行可能
+○ 環境変数の展開ができる
+                </pre>
+                <div style="padding-left: 20px;">
+                    <p>複数コマンド 実行例</p>
+                    <textarea readonly="true" class="codestyle" style="height:50px;width:500px;">
+CMD echo &quot;Hello World&quot; \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo &quot;Hello World2&quot;
+                    </textarea>
+                </div>
+            </div>
+        </div>
+    <br>
+    <hr>
+<a href="index.html">TOP</a>
+</body>
+</html>
+
