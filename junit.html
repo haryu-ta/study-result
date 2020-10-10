@@ -2,7 +2,7 @@
     <head>
         <link rel=stylesheet type="text/css" href="css/common.css">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>DOSコマンド</title>
+        <title>JUnit</title>
     </head>
     <body>
         <h1>Exception発生テスト</h1>
@@ -11,6 +11,11 @@
 			void 文字列日付の型変換_Exception() {
 			  assertThrows(ParseException.class, () -> ConvertUtils.toSqlDate("20200750"));
 			}
+        </pre>
+        <br>
+        <h1>NULLテスト</h1>
+        <pre>
+			assertThat(returnDto.getXXXX(),nullValue());
         </pre>
         <br>
         <h1>DBユニット</h1>
@@ -33,11 +38,6 @@
 			}
         </pre>
         <br>
-        <h1>NULLテスト</h1>
-        <pre>
-			assertThat(returnDto.getXXXX(),nullValue());
-        </pre>
-        <br>
         <h1>通信内容キャプチャ</h1>
         <pre>
             // キャプチャしたいクラスを定義
@@ -53,6 +53,21 @@
 				requestDtoArgumentCaptor.getValue();
 			assertThat(tgkZokuseiHenkouRequestDto.getRequestKeyList().size(), is(2));
 
+        </pre>
+        <br>
+        <h1>privateメソッドテスト</h1>
+        <pre>
+			Method method = [対象クラス名].class.getDeclaredMethod("[メソッド名]", [引数の型]);
+			method.setAccessible(true);
+			return (戻り値の型) method.invoke([対象クラスをインスタンス化した変数], [メソッド引数]);
+			
+			使用例：
+			@Autowired
+			private RequestApproveService requestApproveService;
+			
+			Method method = RequestApproveServiceImpl.class.getDeclaredMethod("createCifList", List.class);
+            method.setAccessible(true);
+            List<CifDto> cifDto = (List<CifDto>) method.invoke(requestApproveService, cifInformationDtoList);
         </pre>
         <br>
         <br>
