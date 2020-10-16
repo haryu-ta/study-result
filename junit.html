@@ -13,6 +13,18 @@
 			}
         </pre>
         <br>
+        <h1>mockからExcptionをリターン<h1>
+        <pre>
+			■メソッドの戻り値がvoid
+			doThrow(BusinessErrorException.class).when(backPulldownCheckServiceMock)
+			.checkNotAccept(any(BackPulldownCheckDto.class));
+			
+			■メソッドの戻りあり
+			when(nayoseKouzaShoukaiServiceMock
+			.getNayoseInfo(any(TougoukokyakuNayoseKouzaShoukaiRequestDto.class)))
+			.thenThrow(SoaResultException.class);
+        </pre>
+        <br>
         <h1>NULLテスト</h1>
         <pre>
 			assertThat(returnDto.getXXXX(),nullValue());
