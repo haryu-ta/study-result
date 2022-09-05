@@ -1,0 +1,98 @@
+<html>
+    <head>
+        <link rel=stylesheet type="text/css" href="css/common.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JUnit</title>
+    </head>
+    <body>
+        <h1>Exception発生テスト</h1>
+        <pre>
+			@Test
+			void 文字列日付の型変換_Exception() {
+			  assertThrows(ParseException.class, () -> ConvertUtils.toSqlDate("20200750"));
+			}
+        </pre>
+        <br>
+        <h1>mockからExcptionをリターン<h1>
+        <pre>
+			■メソッドの戻り値がvoid
+			doThrow(BusinessErrorException.class).when(backPulldownCheckServiceMock)
+			.checkNotAccept(any(BackPulldownCheckDto.class));
+			
+			■メソッドの戻りあり
+			when(nayoseKouzaShoukaiServiceMock
+			.getNayoseInfo(any(TougoukokyakuNayoseKouzaShoukaiRequestDto.class)))
+			.thenThrow(SoaResultException.class);
+        </pre>
+        <br>
+        <h1>NULLテスト</h1>
+        <pre>
+			assertThat(returnDto.getXXXX(),nullValue());
+        </pre>
+        <br>
+        <h1>DBユニット</h1>
+        <pre>
+			@ExtendWith(MockitoExtension.class)
+			@SpringBootTest
+			@TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
+			    DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class,
+			    DbUnitTestExecutionListener.class})
+			@DbUnitConfiguration(dataSetLoader = XmlReplacementDataSetLoader.class)
+			@DatabaseTearDown(type = DatabaseOperation.TRUNCATE_TABLE)
+			public class xxxTest{
+			  
+			  @Test
+			  @DatabaseSetup("DailyInlessRequestServiceTest/updateNormalRecordStatus/setup3.xml")
+			  @ExpectedDatabase(value = "DailyInlessRequestServiceTest/updateNormalRecordStatus/expected3.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
+			  void テスト名(){
+			  
+			  }
+			}
+        </pre>
+        <br>
+        <h1>通信内容キャプチャ</h1>
+        <pre>
+            // キャプチャしたいクラスを定義
+			ArgumentCaptor<TougoukokyakuZokuseiHenkouRequestDto> requestDtoArgumentCaptor =
+				ArgumentCaptor.forClass(TougoukokyakuZokuseiHenkouRequestDto.class);
+			
+			// モック化したサービスが呼ばれた回数をテスト
+			verify(tougoukokyakuZokuseiHenkouServiceMock, times(1))
+				.update(requestDtoArgumentCaptor.capture());
+			
+			// キャプチャしたクラスから中身を取り出し比較
+			TougoukokyakuZokuseiHenkouRequestDto tgkZokuseiHenkouRequestDto =
+				requestDtoArgumentCaptor.getValue();
+			assertThat(tgkZokuseiHenkouRequestDto.getRequestKeyList().size(), is(2));
+
+        </pre>
+        <br>
+        <h1>privateメソッドテスト</h1>
+        <pre>
+			Method method = [対象クラス名].class.getDeclaredMethod("[メソッド名]", [引数の型]);
+			method.setAccessible(true);
+			return (戻り値の型) method.invoke([対象クラスをインスタンス化した変数], [メソッド引数]);
+			
+			使用例：
+			@Autowired
+			private RequestApproveService requestApproveService;
+			
+			Method method = RequestApproveServiceImpl.class.getDeclaredMethod("createCifList", List.class);
+            method.setAccessible(true);
+            List<CifDto> cifDto = (List<CifDto>) method.invoke(requestApproveService, cifInformationDtoList);
+        </pre>
+        <br>
+        <br>
+        <hr>
+        <a href="index.html">TOP</a>
+    </body>
+</html>
+
+<!--
+
+        <h1>タイトル</h1>
+        <pre>
+            内容
+        </pre>
+
+-->
