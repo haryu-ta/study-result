@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Redmineコマンド</title>
+</head>
+<body>
+	<h1>コマンド</h1>
+	<pre>
+oc get cm [pod名] -o=yaml
+oc get all
+oc exec -it [pod名] env
+oc logs [pod名]
+oc logs --since 10m account-close-api-web-1-7sv29
+oc describe pod [pod名]
+
+oc exec -it [pod名] /bin/bash
+curl -k https://127.0.0.1:8080/info
+	</pre>
+<a href="index.html">TOP</a>
+</body>
+</html>
+
