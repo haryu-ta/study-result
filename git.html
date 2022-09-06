@@ -5,33 +5,44 @@
 <title>Gitコマンド</title>
 </head>
 <body>
-<h1>コマンド</h1>
-<pre>
+	<h1>コマンド</h1>
+	<pre>
     
-    ■ add前ファイルの取消（ファイル単位）
-    git checkout HEAD -- [ファイル名]
-    
-    →ファイル変更が消える
-    
-    ■ addの取消（Unstageのみ）
-    git reset HEAD
-    
-    →ファイル変更は残る
+■ add前ファイルの取消（ファイル単位）
+git checkout HEAD -- [ファイル名]
 
-    ■ commitの取消（直前のコミットのみ取消。addも取消）
-    git reset --mixed HEAD^
+→ファイル変更が消える
 
-    ■ commitの取消（直前のコミットのみ取消。addされた状態）
-    git reset --soft HEAD^
-    
-    ■ commitの取消（直前のコミットのみ取消。ファイル変更もなし）
-    git reset --hard HEAD^
-</pre>
-<img src="./resetコマンド説明.png" title="git reset" width="1500px;" height="800px;">
-<hr>
-<pre>
+■ addの取消（Unstageのみ）
+git reset HEAD
+
+→ファイル変更は残る
+
+■ commitの取消（直前のコミットのみ取消。addも取消）
+git reset --mixed HEAD^
+
+■ commitの取消（直前のコミットのみ取消。addされた状態）
+git reset --soft HEAD^
+
+■ commitの取消（直前のコミットのみ取消。ファイル変更もなし）
+git reset --hard HEAD^
+	</pre>
+	<img src="./resetコマンド説明.png" title="git reset" width="1500px;" height="800px;">
+	<hr>
+	<pre>
+■ ローカルのリモートURL変更
 git remote set-url origin [URL]
-</pre>
+
+■ 親リポジトリのマージ
+cd [マージしたいリポジトリ]
+git remote add parent [親のリポジトリURL]
+git remote -v
+git checkout master
+git checkout -b merge_branch
+git fetch parent
+git merge parent/[マージ元ブランチ名]
+git push origin merge_branch
+	</pre>
 <a href="index.html">TOP</a>
 </body>
 </html>

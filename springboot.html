@@ -5,6 +5,16 @@
 <title>Spring Boot</title>
 </head>
 <body>
+<h1>バッチ関連</h1>
+<pre>
+* Selenideテスト
+-Dspring.profiles.active=uitest
+
+# jarファイル作成
+mvn -DskipUiTest=true -DskipTests=true package
+-Dfile.encoding=UTF-8
+</pre>
+<hr>
 <h1>スタンドアロン実行</h1>
 <pre>
 	@SpringBootApplication
