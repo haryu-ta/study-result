@@ -68,8 +68,13 @@ echo "Hello Ryohei" （バックスラッシュで区切れば複数コマンド
             </tr>
             <tr>
                 <td>ENV</td>
-                <td>環境変数を設定する</td>
+                <td>環境変数を設定する（実行時も有効）</td>
                 <td>EVN path=/opt</td>
+            </tr>
+            <tr>
+                <td>ARG</td>
+                <td>環境変数を設定する（イメージ作成時のみ有効）</td>
+                <td>ARG enveiroment <br/> docker image build . --build-arg enveiroment=prod</td>
             </tr>
             <tr>
                 <td>ADD</td>
@@ -93,6 +98,21 @@ echo "Hello Ryohei" （バックスラッシュで区切れば複数コマンド
             </tr>
         </table>
     </pre>
+    <br>
+    <hr>
+    <h1>マルチステージビルド </h1>
+    <br>
+    <div style="padding-left: 20px;">
+        <textarea readonly="true" class="codestyle" style="height:130px;width:60%;">
+FROM gcc:latest AS Compiler
+COPY ./hello.c .
+RUN gcc hello.c
+
+FROM ubuntu
+COPY --from=Compiler /app/a.out .
+CMD ["./a.out"] 
+        </textarea>
+    </div>
     <br>
     <hr>
     <h1>CMDコマンド とENTRYPOINTコマンド </h1>
