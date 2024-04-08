@@ -1,0 +1,57 @@
+<html>
+    <head>
+        <link rel=stylesheet type="text/css" href="css/common.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>React</title>
+    </head>
+    <body>
+        <h1>Stateの非同期更新</h1>
+        <pre>
+            <code>
+            import { useState } from "react";
+
+            const Example = () => {
+                // useStateは関数の一番上でしか使えない
+                const [ count,setCount ] = useState(0);
+            
+                const clickBtn = () => {
+                    // console.log(`前状態: ${count}`); 
+                    // setCount(count + 1);
+                    // //非同期的に処理されるため、初期状態
+                    // console.log(`後状態: ${count}`);
+                    // 前状態と後状態は同じ値になる
+                    setCount(count + 1);
+                    setCount( prevstate => {
+                        return prevstate + 1;
+                    });        
+                }
+            
+                return (
+                    &lt;&gt;
+                        &lt;p&gt;カウント数: {count}&lt;/p&gt;
+                        &lt;button
+                            onClick={clickBtn}&gt;
+                        +
+                        &lt;/button&gt;
+                    &lt;/&gt;
+                );
+            };
+            
+            export default Example;
+        </code>
+        </pre>
+        <br>
+        <br>
+        <hr>
+        <a href="index.html">TOP</a>
+        </body>
+        </html>
+
+<!--
+
+        <h1>タイトル<;/h1>
+        <pre>
+            内容
+        </pre>
+
+-->
