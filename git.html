@@ -8,15 +8,28 @@
 	<h1>コマンド</h1>
 	<pre>
     
-■ add前ファイルの取消（ファイル単位）
+■ 変更ファイルの取り消し(add前ファイルの取消)
 git checkout HEAD -- [ファイル名]
-
 →ファイル変更が消える
 
+git checkout HEAD -- [ディレクトリ名]
+→ディレクトリ単位で取り消し
+
+git checkout -- .
+→全変更の取り消し
+
 ■ addの取消（Unstageのみ）
-git reset HEAD
+git reset HEAD [ファイル名]
+git reset HEAD [ディレクトリ名]
+git reset HEAD .
 
 →ファイル変更は残る
+
+■ commitのやり直し（追加コミット）
+git commit --ammend
+
+→直前のコミットに追加でコミット内容を追加
+※pushした後に--amendすることは厳禁
 
 ■ commitの取消（直前のコミットのみ取消。addも取消）
 git reset --mixed HEAD^
@@ -30,6 +43,7 @@ git reset --hard HEAD^
 	<img src="./resetコマンド説明.png" title="git reset" width="1500px;" height="800px;">
 	<hr>
 	<pre>
+
 ■ ローカルのリモートURL変更
 git remote set-url origin [URL]
 
@@ -42,6 +56,16 @@ git checkout -b merge_branch
 git fetch parent
 git merge parent/[マージ元ブランチ名]
 git push origin merge_branch
+
+■ リモートから情報を取得
+git fetch [リモート名]
+git merge [リモート名]/[マージ元ブランチ]
+
+git pull [リモート名] [ブランチ名]
+→ fetchとmergeを1発で実施する
+	</pre>
+	<pre>
+■ 
 	</pre>
 <a href="index.html">TOP</a>
 </body>
