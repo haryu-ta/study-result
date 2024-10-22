@@ -7,7 +7,7 @@
 <body>
 	<h1>コマンド</h1>
 	<pre>
-    
+		
 ■ 変更ファイルの取り消し(add前ファイルの取消)
 git checkout HEAD -- [ファイル名]
 →ファイル変更が消える
@@ -25,9 +25,6 @@ git reset HEAD .
 
 →ファイル変更は残る
 
-■ commitのやり直し（追加コミット）
-git commit --ammend
-
 →直前のコミットに追加でコミット内容を追加
 ※pushした後に--amendすることは厳禁
 
@@ -40,9 +37,47 @@ git reset --soft HEAD^
 ■ commitの取消（直前のコミットのみ取消。ファイル変更もなし）
 git reset --hard HEAD^
 	</pre>
-	<img src="./resetコマンド説明.png" title="git reset" width="1500px;" height="800px;">
-	<hr>
+	<img src="./resetコマンド説明.png" title="git reset" width="1000px;" height="400px;">
 	<pre>
+■ リモートから情報を取得
+git fetch
+git merge [リモート名]/[取込ブランチ]
+→現在いるブランチに取込ブランチをMerge
+				
+git pull [リモート名] [ブランチ名]
+→ fetchとmergeを1発で実施する
+
+■ 履歴を整えた形で統合
+git rebase [親ブランチ名]
+→pushしたコミットをリベースは絶対にNG
+</pre>
+
+<img src="./git_rebase.jpg" title="git rebase" width="1000px;" height="400px;">
+
+<pre>
+■ commitのやり直し（追加コミット）
+git commit --ammend
+→直前の１回の取り消し
+
+git rebase -i HEAD~5
+→直前５回の取り消し（５回の中でどれとどれみたいな選択可能）
+
+■ 作業を一時退避
+git stash
+
+■ 退避データを確認
+git stash list
+
+■ 退避データを復元
+
+# 直前の作業を復元
+git stash apply
+git stash apply --index
+→ indexオプションを付加するとステージング状態（git addしたもの）のものも復元
+
+# 特定の作業を復元
+git stash apply [スタッシュ名]
+git stash apply stash@{1}
 
 ■ ローカルのリモートURL変更
 git remote set-url origin [URL]
@@ -57,12 +92,7 @@ git fetch parent
 git merge parent/[マージ元ブランチ名]
 git push origin merge_branch
 
-■ リモートから情報を取得
-git fetch [リモート名]
-git merge [リモート名]/[マージ元ブランチ]
-
-git pull [リモート名] [ブランチ名]
-→ fetchとmergeを1発で実施する
+→ 現在作業中のブランチにMergeする。
 	</pre>
 	<pre>
 ■ 
