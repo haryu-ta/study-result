@@ -49,12 +49,19 @@
 <details class="accordion-003">
 	<summary>commitのやり直し</summary>
 	<pre>
-		■ commitのやり直し（追加コミット）
+		■ commitのやり直し（直前１回のみ）
 		git commit --ammend
-		→直前の１回の取り消し
 		
-		→直前のコミットに追加でコミット内容を追加
+		<b>→直前の１回のやり直し</b>
+		<b>　　→直前のコミットに追加でコミット内容を追加</b>
+		<b>　　	→コミットメッセージの内容を修正</b>
 		※pushした後に--amendすることは厳禁
+
+		■ commitのやり直し（直前複数回）
+		git rebase -i HEAD~5
+		→直前５回の取り消し（５回の中でどれとどれみたいな選択可能）
+
+		git rebase -i [commit番号]
 	</pre>
 </details>
 <details class="accordion-003">
@@ -62,9 +69,9 @@
 	<pre>
 		git fetch
 		git merge [リモート名]/[取込ブランチ]
-		→現在いるブランチに取込ブランチをMerge
+		→現在いるブランチ（HEAD）に指定ブランチを取り込む
 						
-		git pull [リモート名] [ブランチ名]
+		git pull [リモート名] [取込ブランチ名]
 		→ fetchとmergeを1発で実施する
 	</pre>
 </details>
@@ -72,11 +79,9 @@
 	<summary>履歴を整えた形で統合(rebase)</summary>
 	<pre>
 		■ 履歴を整えた形で統合
-		git rebase [親ブランチ名]
+		git rebase [親にするブランチ名]
+		<b>→現在のブランチ（HEAD）を指定したブランチの子ブランチにする</b>
 		<b>→pushしたコミットをリベースは絶対にNG</b>
-
-		git rebase -i HEAD~5
-		→直前５回の取り消し（５回の中でどれとどれみたいな選択可能）
 
 		<img src="./git_rebase.jpg" title="git rebase" width="1000px;" height="400px;">
 	</pre>
@@ -107,6 +112,31 @@
 <details class="accordion-003">
 	<summary>cherry-pick</summary>
 	<pre>
+	</pre>
+</details>
+<details class="accordion-003">
+	<summary>タグ打ち</summary>
+	<pre>
+		# 現状のブランチ状態にタグをうつ
+		git tag [タグ名]
+
+		# 後からタグを打つ
+		git tag [タグ名] [コミット名]
+
+		# タグをサーバーに送信
+		git push origin --tags
+		
+	</pre>
+</details>
+<details class="accordion-003">
+	<summary>pushの取り消し</summary>
+	<pre>
+		# 直前のpushを取り消し
+		git revert HEAD
+
+		# 特定のコミットを取り消し
+		git revert [コミットID]
+		
 	</pre>
 </details>
 <details class="accordion-003">
