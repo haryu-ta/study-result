@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Copilotコマンド</title>
+	<style type="text/css">
+		table { width : 90%; }
+		.header {background:yellow;}
+		.image th:nth-of-type(1) { width : 20%; }
+		.image th:nth-of-type(2) { width : 30%; }
+		.image th:nth-of-type(3) { width : 40%; }
+		.container th:nth-of-type(1) { width : 20%; }
+		.container th:nth-of-type(2) { width : 30%; }
+		.container th:nth-of-type(3) { width : 40%; }
+		.controll th:nth-of-type(1) { width : 20%; }
+		.controll th:nth-of-type(2) { width : 70%; }
+		tr th { font-weight:bold;}
+		.note { font-weight:bold; margin-left : 50px; }
+	</style>
+</head>
+<body>
+<h1>Copilot エージェント / スラッシュコマンド</h1>
+<table border="1" align="center">
+    <tr class="header image">
+      <th>変数</th>
+      <th>概要</th>
+      <th>使い方</th>
+    </tr>
+    <tr>
+      <td>@workspace</td>
+      <td>ワークスペース内のコードやファイルに関連する質問</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>/doc</td>
+      <td>ドキュメントを追加</td>
+      <td>@workspace /doc</td>
+    </tr>
+    <tr>
+      <td>/explain</td>
+      <td>指定した範囲のコードが実行される際の動作を説明</td>
+      <td>@workspace /explain</td>
+    </tr>
+    <tr>
+      <td>/fix</td>
+      <td>選択した範囲の問題点、修正点の提案</td>
+      <td>@workspace /fix</td>
+    </tr>
+    <tr>
+      <td>/generate</td>
+      <td>プロンプトに沿ったコードの提案</td>
+      <td>@workspace /generate</td>
+    </tr>
+    <tr>
+      <td>/optimize</td>
+      <td>選択したコードのパフォーマンスを改善</td>
+      <td>@workspace /optimize</td>
+    </tr>
+    <tr>
+      <td>/test</td>
+      <td>コードの単体テストを作成</td>
+      <td>@workspace /test</td>
+    </tr>
+    <tr>
+      <td>/new</td>
+      <td>入力した自然言語に基づいて新規のワークスペースを作成</td>
+      <td>@workspace /new</td>
+    </tr>
+    <tr>
+        <td>@vscode</td>
+        <td>Visual Studio Codeに関連する質問</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>/search</td>
+        <td>ワークスペース内のファイル検索</td>
+        <td>@vscode /search</td>
+    </tr>
+    <tr>
+      <td>@terminal</td>
+      <td>統合ターミナすに関連する質問</td>
+      <td></td>
+    </tr>
+    <tr>
+        <td>/explain</td>
+        <td>ターミナルで実行された処理の説明</td>
+        <td>@terminal /explain</td>
+    </tr>
+</table>
+<h1>Copilotコンテキスト変数</h1>
+<table border="1" align="center">
+    <tr class="header image">
+      <th>変数</th>
+      <th>概要</th>
+      <th>使い方</th>
+    </tr>
+    <tr>
+      <td>#codebase</td>
+      <td>現在のコードワークスペースの内容の全て</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>#editor</td>
+      <td>現在の選択されているエディターで表示されているソースコード</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>#file:{filename}</td>
+      <td>ワークスペース内の指定したファイル</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>#selection</td>
+      <td>アクティブなエディターで選択しているソースコード</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>#terminalLastCommand</td>
+      <td>アクティブなターミナルで最後に実行したコマンド</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>#terminalSelection</td>
+      <td>アクティブなターミナルで選択された内容</td>
+      <td></td>
+    </tr>
+</table>
+<hr>
+<a href="index.html">TOP</a>
+</body>
+</html>
