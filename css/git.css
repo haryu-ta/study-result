@@ -46,5 +46,6 @@
 .accordion-003[open] pre {
     transform: none;
     opacity: 1;
-    font-size:25px;
+    font-size:15px;
+    color: blue;
 }
