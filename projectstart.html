@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel=stylesheet type="text/css" href="css/git.css">
+<title>プロジェクト開始コマンド</title>
+</head>
+<body>
+	<h1>コマンド</h1>
+
+<details class="accordion-003">
+	<summary>Expressテンプレート</summary>
+	<pre>
+cd backend-api
+# nodeのセットアップ
+npm init -y
+# Typescriptの導入
+npm install -D typescript @types/node
+# Typescriptのセットアップ
+npx tsc --init
+# Expressセットアップ
+npm install express
+npm install -D @types/express
+# server.ts作成
+```js
+import express from "express";
+
+const app: express.Express = express();
+const port = 8000;
+
+app.get("/", (req: express.Request, res: express.Response) => {
+  res.send("Hello, world!");
+});
+
+app.listen(port, () => {
+  console.log(`port ${port} でサーバー起動中`);
+});
+```
+# tsnodeのセットアップ
+npm install -D ts-node
+npx ts-node server.ts
+# nodemonのセットアップ
+npm install -D nodemon
+npx nodemon server.ts
+# package.jsonのscriptsに追加
+"scripts": {
+	"start": "ts-node server.ts",
+	"dev": "nodemon server.ts"
+},
+# 起動コマンド
+npm run start
+	</pre>
+</details>
+<details class="accordion-003">
+	<summary>テンプレ</summary>
+	<pre>
+	</pre>
+</details>
+
+<a href="index.html">TOP</a>
+</body>
+</html>
