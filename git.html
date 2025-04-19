@@ -11,77 +11,76 @@
 <details class="accordion-003">
 	<summary>変更ファイルの取り消し(add前ファイルの取消)</summary>
 	<pre>
-		git checkout HEAD -- [ファイル名]
-		→ファイル変更が消える
-		
-		git checkout HEAD -- [ディレクトリ名]
-		→ディレクトリ単位で取り消し
-		
-		git checkout -- .
-		→全変更の取り消し
+git checkout HEAD -- [ファイル名]
+→ファイル変更が消える
+
+git checkout HEAD -- [ディレクトリ名]
+→ディレクトリ単位で取り消し
+
+git checkout -- .
+→全変更の取り消し
 	</pre>
 </details>
 <details class="accordion-003">
 	<summary>変更ファイルの取り消し(addの取消)</summary>
 	<pre>
-		git reset HEAD [ファイル名]
-		git reset HEAD [ディレクトリ名]
-		git reset HEAD .
-		
-		→ファイル変更は残る
+git reset HEAD [ファイル名]
+git reset HEAD [ディレクトリ名]
+git reset HEAD .
+
+→ファイル変更は残る
 	</pre>
 </details>
 <details class="accordion-003">
 	<summary>commitの取消</summary>
 	<pre>
-		■ commitの取消（直前のコミットのみ取消。addも取消）
-		git reset --mixed HEAD^
-		
-		■ commitの取消（直前のコミットのみ取消。addされた状態）
-		git reset --soft HEAD^
-		
-		■ commitの取消（直前のコミットのみ取消。ファイル変更もなし）
-		git reset --hard HEAD^
-		
+■ commitの取消（直前のコミットのみ取消。addも取消）
+git reset --mixed HEAD^
+
+■ commitの取消（直前のコミットのみ取消。addされた状態）
+git reset --soft HEAD^
+
+■ commitの取消（直前のコミットのみ取消。ファイル変更もなし）
+git reset --hard HEAD^
+
 		<img src="./resetコマンド説明.png" title="git reset" width="1000px;" height="400px;">
 	</pre>
 </details>
 <details class="accordion-003">
 	<summary>commitのやり直し</summary>
 	<pre>
-		■ commitのやり直し（直前１回のみ）
-		git commit --ammend
-		
-		<b>→直前の１回のやり直し</b>
-		<b>　　→直前のコミットに追加でコミット内容を追加</b>
-		<b>　　	→コミットメッセージの内容を修正</b>
-		※pushした後に--amendすることは厳禁
+■ commitのやり直し（直前１回のみ）
+git commit --ammend
 
-		■ commitのやり直し（直前複数回）
-		git rebase -i HEAD~5
-		→直前５回の取り消し（５回の中でどれとどれみたいな選択可能）
+<b>→直前の１回のやり直し</b>
+<b>　　→直前のコミットに追加でコミット内容を追加</b>
+<b>　　	→コミットメッセージの内容を修正</b>
+※pushした後に--amendすることは厳禁
 
-		git rebase -i [commit番号]
+■ commitのやり直し（直前複数回）
+git rebase -i HEAD~5
+→直前５回の取り消し（５回の中でどれとどれみたいな選択可能）
+git rebase -i [commit番号]
 	</pre>
 </details>
 <details class="accordion-003">
 	<summary>リモートから情報を取得</summary>
 	<pre>
-		git fetch
-		git merge [リモート名]/[取込ブランチ]
-		→現在いるブランチ（HEAD）に指定ブランチを取り込む
-						
-		git pull [リモート名] [取込ブランチ名]
-		→ fetchとmergeを1発で実施する
+git fetch
+git merge [リモート名]/[取込ブランチ]
+→現在いるブランチ（HEAD）に指定ブランチを取り込む
+				
+git pull [リモート名] [取込ブランチ名]
+→ fetchとmergeを1発で実施する
 	</pre>
 </details>
 <details class="accordion-003">
 	<summary>履歴を整えた形で統合(rebase)</summary>
 	<pre>
-		■ 履歴を整えた形で統合
-		git rebase [親にするブランチ名]
-		<b>→現在のブランチ（HEAD）を指定したブランチの子ブランチにする</b>
-		<b>→pushしたコミットをリベースは絶対にNG</b>
+■ 履歴を整えた形で統合
+git rebase [親にするブランチ名]
+<b>→現在のブランチ（HEAD）を指定したブランチの子ブランチにする</b>
+<b>→pushしたコミットをリベースは絶対にNG</b>
 
 		<img src="./git_rebase.jpg" title="git rebase" width="1000px;" height="400px;">
 	</pre>
@@ -89,80 +88,79 @@
 <details class="accordion-003">
 	<summary>作業退避(stash)</summary>
 	<pre>
-		■ 作業を一時退避
-		git stash
-		
-		■ 退避データを確認
-		git stash list
-		
-		■ 退避データを復元
-		# 直前の作業を復元
-		git stash apply
-		git stash apply --index
-		→ indexオプションを付加するとステージング状態（git addしたもの）のものも復元
-		
-		# 特定の作業を復元
-		git stash apply [スタッシュ名]
-		git stash apply stash@{1}
-		
-		# 退避データの削除
-		git stash drop [スタッシュ名]
+■ 作業を一時退避
+git stash
+
+■ 退避データを確認
+git stash list
+
+■ 退避データを復元
+# 直前の作業を復元
+git stash apply
+git stash apply --index
+→ indexオプションを付加するとステージング状態（git addしたもの）のものも復元
+
+# 特定の作業を復元
+git stash apply [スタッシュ名]
+git stash apply stash@{1}
+
+# 退避データの削除
+git stash drop [スタッシュ名]
 	</pre>
 </details>
 <details class="accordion-003">
 	<summary>cherry-pick</summary>
 	<pre>
-		■ 特定コミットだけ取り込む
-		git cherry-pick [コミット番号]
-		<b>取込元にいる状態で取込先のコミット番号を指定</b>
+■ 特定コミットだけ取り込む
+git cherry-pick [コミット番号]
+<b>取込元にいる状態で取込先のコミット番号を指定</b>
 
-		■ 複数コミット指定
-		git cherry-pick [コミット番号1] [コミット番号2]
-		git cherry-pick [コミット番号1]..[コミット番号n]
+■ 複数コミット指定
+git cherry-pick [コミット番号1] [コミット番号2]
+git cherry-pick [コミット番号1]..[コミット番号n]
 	</pre>
 </details>
 <details class="accordion-003">
 	<summary>タグ打ち</summary>
 	<pre>
-		# 現状のブランチ状態にタグをうつ
-		git tag [タグ名]
+# 現状のブランチ状態にタグをうつ
+git tag [タグ名]
 
-		# 後からタグを打つ
-		git tag [タグ名] [コミット名]
+# 後からタグを打つ
+git tag [タグ名] [コミット名]
 
-		# タグをサーバーに送信
-		git push origin --tags
-		
+# タグをサーバーに送信
+git push origin --tags
+
 	</pre>
 </details>
 <details class="accordion-003">
 	<summary>pushの取り消し</summary>
 	<pre>
-		# 直前のpushを取り消し
-		git revert HEAD
+# 直前のpushを取り消し
+git revert HEAD
 
-		# 特定のコミットを取り消し
-		git revert [コミットID]
-		
+# 特定のコミットを取り消し
+git revert [コミットID]	
 	</pre>
 </details>
 <details class="accordion-003">
 	<summary>その他</summary>
 	<pre>
-		■ ローカルのリモートURL変更
-		git remote set-url origin [URL]
+■ ローカルのリモートURL変更
+git remote set-url origin [URL]
 		
-		■ 親リポジトリのマージ
-		cd [マージしたいリポジトリ]
-		git remote add parent [親のリポジトリURL]
-		git remote -v
-		git checkout master
-		git checkout -b merge_branch
-		git fetch parent
-		git merge parent/[マージ元ブランチ名]
-		git push origin merge_branch
+■ 親リポジトリのマージ
+cd [マージしたいリポジトリ]
+git remote add parent [親のリポジトリURL]
+git remote -v
+git checkout master
+git checkout -b merge_branch
+git fetch parent
+git merge parent/[マージ元ブランチ名]
+git push origin merge_branch
 		
-		→ 現在作業中のブランチにMergeする。
+→ 現在作業中のブランチにMergeする。
 	</pre>
 </details>
 <details class="accordion-003">
