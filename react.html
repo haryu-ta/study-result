@@ -2,6 +2,7 @@
     <head>
         <link rel=stylesheet type="text/css" href="css/common.css">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel=stylesheet type="text/css" href="css/git.css">
         <title>React</title>
     </head>
     <body>
@@ -47,6 +48,49 @@
             </h1>
           </li>
         </ul>
+        <details class="accordion-003">
+          <summary>??演算子</summary>
+          <pre>
+<code>
+data ?? value
+</code>
+→　dataが <b>null</b> または <b>undefined</b> の場合にvalueを返す
+   それ以外はdataを返す
+          </pre>
+        </details>
+        <details class="accordion-003">
+          <summary>||演算子</summary>
+          <pre>
+<code>
+data || value
+</code>
+→　dataが <b>null</b> または <b>undefined</b> または <b>空文字</b> または <b>0</b> または <b>false</b> の場合にvalueを返す
+   それ以外はdataを返す
+          </pre>
+        </details>
+        <details class="accordion-003">
+          <summary>インデックスシグネチャ（動的なオブジェクトの作成）</summary>
+          <pre>
+interface UserType {
+  name : string;
+  age : number;
+  [ key : string ] : string
+}
+
+const user : UserType = {
+  name : "太郎",
+  age : 20,
+  address : "東京都"  // 定義していない型を動的に追加可能
+  hoddy : "サッカー"　// 定義していない型を動的に追加可能
+};
+          </pre>
+        </details>
+        <!-- <details class="accordion-003">
+          <summary>題名</summary>
+          <pre>
+本文
+          </pre>
+        </details> -->
         <br>
         <hr>
         <a href="index.html">TOP</a>

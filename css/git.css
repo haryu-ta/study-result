@@ -49,3 +49,10 @@
     font-size:15px;
     color: blue;
 }
+
+.accordion-003[open] code {
+    transform: none;
+    opacity: 1;
+    font-size:20px;
+    color: rgb(214, 51, 33);
+}
