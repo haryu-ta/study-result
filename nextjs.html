@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" type="text/css" href="css/git.css" />
+    <title>NextJsコマンド</title>
+  </head>
+  <body>
+    <h1>コマンド</h1>
+    <details class="accordion-003">
+      <summary>URL定義（Webサーバ編）</summary>
+      <pre>
+■　URL
+src/appフォルダ以下に切るディレクトリ名がURLになる
+
+例：src/app/about/page.tsx
+→　http://localhost:3000/about
+
+■ 特殊ルール
+1.()で囲むとパラメータになる
+例：src/app/user/(id)/page.tsx
+→　http://localhost:3000/user/1
+
+2._で始まるディレクトリはURLに含まれない
+例：src/app/user/_component/page.tsx
+→　http://localhost:3000/user
+
+3.各フォルダに配置されたlayout.tsxは共通レイアウトとなり
+配下の全フォルダで参照される
+      </pre>
+    </details>
+
+    <details class="accordion-003">
+      <summary>特殊ページ</summary>
+      <pre>
+■　src/appフォルダ以下に配置するファイル名で特殊な動きとなる。
+
+1. not-found.tsx
+→　404ページ
+
+2. loading.tsx
+→　ローディング画面
+
+3. error.tsx
+→　エラー画面(ファイルの頭に　'use client'　をつけること)
+
+      </pre>
+    </details>
+
+    <details class="accordion-003">
+      <summary>URL定義（APIサーバ編）</summary>
+      <pre>
+■　URL
+src/app/apiフォルダ以下に切るディレクトリ名がエンドポイントになる
+
+例：src/app/api/user/route.ts
+→　http://localhost:3000/api/user
+
+関数名は慣習的にGET,POST,PUT,DELETE,PATCHを使う
+
+実装例:
+import { NextResponse } from "next/server";
+export const GET = async () => {
+    return NextResponse.json({ name: "John Doe" });
+}
+      </pre>
+    </details>
+
+    <details class="accordion-003">
+      <summary>ミドルウェア</summary>
+      <pre>
+■　src直下にmiddleware.tsを配置する
+
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server"; 
+
+export const middleware = (request: NextRequest) => {
+    console.log("middleware is called");
+    return NextResponse.next();
+}
+
+export const config = {
+    matcher: ["/about/:path*"], // 特定のパスにのみ適用
+}
+      </pre>
+    </details>
+
+    <details class="accordion-003">
+      <summary>Nextjsにおけるデータ操作</summary>
+      <table border="1" align="center" style="width:90%;">
+        <caption>
+          Nextjsにおけるデータ操作
+        </caption>
+        <thead>
+          <tr style="background:yellow;">
+            <th style="width:10%;"></th>
+            <th style="width:20%;">RCC(クライアントコンポーネント)<br />API通信</th>
+            <th style="width:20%;">APIルーティング機能<br />RouteHandlers</th>
+            <th style="width:20%;">RSC(サーバコンポーネント)<br />情報取得</th>
+            <th style="width:20%;">RSC(サーバコンポーネント)<br />ServerActions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>実装場所</th>
+            <td>RCC 'use client'</td>
+            <td>app/apiフォルダ</td>
+            <td>RSC</td>
+            <td>'use server'</td>
+          </tr>
+          <tr>
+            <th>主な用途</th>
+            <td>インタラクティブなUI<br />リアルタイム更新<br />動的データフェッチ</td>
+            <td>APIエンドポイント<br />外部API統合<br />複雑な処理<br />認証認可</td>
+            <td>データ取得<br />静的コンテンツ<br />大規模データフェッチ</td>
+            <td>ユーザアクション<br />フォーム送信<br />データ更新<br />状態管理</td>
+          </tr>
+          <tr>
+            <th>キャッシュ</th>
+            <td>SWR<br />TanStackQuery(useQuery)</td>
+            <td>手動設定</td>
+            <td>デフォルトで設定</td>
+            <td>キャッシュ制御可能</td>
+          </tr>
+          <tr>
+            <th>データ更新</th>
+            <td>リアルタイム更新</td>
+            <td>エンドポイント依存</td>
+            <td>再検証必要</td>
+            <td>リアルタイム更新</td>
+          </tr>
+          <tr>
+            <th>ライブラリ</th>
+            <td>useQuery<br />useSWR<br />axios<br />fetch API</td>
+            <td>Next.js標準</td>
+            <td>fetch(Nextjs拡張)<br />PrismaなどのORM<br />直接DB接続可能</td>
+            <td>FormData<br />Zod<br />React Hook Form</td>
+          </tr>
+          <tr>
+            <th>メリット</th>
+            <td>リアルタイム更新<br />細かい制御可能<br />豊富なライブラリ<br />UI反応が早い</td>
+            <td>RESTful API<br />ミドルウェア使用可能</td>
+            <td>ビルド時生成<br />型安全<br />セキュア<br />キャッシュ制御楽</td>
+            <td>バリデーション容易<br />フォーム処理に最適<br />JS不要</td>
+          </tr>
+          <tr>
+            <th>デメリット</th>
+            <td>初期表示遅延<br />JS必須<br />クライアントリソース消費</td>
+            <td>セットアップ工数</td>
+            <td>動的更新が複雑<br />GET限定<br />クライアント状態は非反映</td>
+            <td>GET以外のリクエスト限定<br />エラーハンドリングが複雑</td>
+          </tr>
+          <tr>
+            <th>ユースケース</th>
+            <td>ダッシュボード<br />リアルタイム機能<br />動的UI</td>
+            <td>認証処理<br />複雑なバックエンド</td>
+            <td>商品一覧<br />静的なページ<br />大規模データ表示</td>
+            <td>フォーム送信<br />ユーザ操作<br />状態変更</td>
+          </tr>
+        </tbody>
+      </table>
+      <br />
+    </details>
+
+    <details class="accordion-003">
+      <summary>サンプル</summary>
+      <pre>
+サンプルパカパカ
+      </pre>
+    </details>
+
+    <a href="index.html">TOP</a>
+  </body>
+</html>

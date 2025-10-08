@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" type="text/css" href="css/common.css" />
+    <link rel="stylesheet" type="text/css" href="css/git.css" />
+    <title>Go言語</title>
+  </head>
+  <body>
+    <details class="accordion-003">
+      <summary>データ型</summary>
+      <table border="1">
+        <tr>
+          <th>型</th>
+          <th>宣言</th>
+          <th>備考</th>
+        </tr>
+        <tr>
+          <td>int（整数型）</td>
+          <td>var count int = 1<br />var count2 int32 = 10</td>
+          <td>
+            int8/int16/int32/int64がそれぞれ別型として存在する。<br />暗黙の定義の場合は環境依存になる。
+          </td>
+        </tr>
+        <tr>
+          <td>float(浮動小数点型)</td>
+          <td>var floatCnt float64 = 1.1</td>
+          <td>
+            float64/float32がそれぞれ別型として存在する。<br />暗黙の定義の場合はfloat64になる。(floatNum
+            := 3.14)
+          </td>
+        </tr>
+        <tr>
+          <td>unit(正の整数)</td>
+          <td>var u unit = 1</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>complex(複素数型)</td>
+          <td>var c complex128 = 1 + 2i</td>
+          <td>
+            complex128/complex64がそれぞれ別型として存在する。<br />暗黙の定義の場合はcomplex128になる。(complexNum
+            := 3 + 4i)
+          </td>
+        </tr>
+        <tr>
+          <td>bool(真偽値型)</td>
+          <td>var isTrue bool = true</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>string(文字列型)</td>
+          <td>var str string = "Hello, World!"</td>
+          <td>文字列への変換はstring(s[0])</td>
+        </tr>
+        <tr>
+          <td>byte(unit8型)</td>
+          <td>
+            var byteA byte = 71<br />var byteB []byte = []byte{72,73,74,75}<br />fmt.Println(byteB[0:2])
+            → [72,73]
+          </td>
+          <td>バイト型はアスキーコードとして格納される。</td>
+        </tr>
+        <tr>
+          <td>配列</td>
+          <td>var arr [5]int = [5]int{1, 2, 3, 4, 5}</td>
+          <td>
+            配列は固定長で、要素の型を指定する必要があり、要素の追加は不可
+          </td>
+        </tr>
+        <tr>
+          <td>スライス</td>
+          <td>var slice []int = []int{1, 2, 3, 4, 5}<br />slice = append(slice, 6) // 要素の追加</td>
+          <td>
+            スライスは可変長で、要素の型を指定する必要があり、要素の追加が可能
+          </td>
+        </tr>
+        <tr>
+          <td>map(辞書型)</td>
+          <td>var m map[string]int = map[string]int{"a": 1, "b": 2}</td>
+          <td>
+            mapはキーと値のペアでデータを保持する。キーはユニークである必要があり、値は任意の型を持つことができる。
+          </td>
+        </tr>
+        <tr>
+          <td>interface型</td>
+          <td>var i interface{} = 1</td>
+          <td>
+            interface型は任意（どの型のデータでも）保持できる。ただし、各型特有の計算や演算はできない。初期値はnil
+          </td>
+        </tr>
+      </table>
+      <br />
+      <br />
+    </details>
+    <details class="accordion-003">
+        <summary>変数型の確認</summary>
+        <pre>
+fmt.Printf("%T\n", 1)  => int
+        </pre>
+    </details>
+    <details class="accordion-003">
+      <summary>型を変換する</summary>
+      <pre>
+// 型の変換
+var num100 int = 100
+stri,_ := strconv.Itoa(num100)  // 使わない変数は宣言しない or _ で宣言
+fmt.Printf("%T\n", stri)  => string
+
+// 変換できない場合
+var str20a string = "20a"
+num20, err := strconv.Atoi(str20a)
+if err != nil {
+    fmt.Println(err) => strconv.Atoi: parsing "20a": invalid syntax
+}
+        </pre
+      >
+    </details>
+    <details class="accordion-003">
+      <summary>定数</summary>
+      <pre>
+const Pi = 3.14 => 他のパッケージでも使える定数
+const pi = 3.14 => このパッケージ内でのみ使える定数
+      </pre>
+    </details>
+    <details class="accordion-003">
+      <summary>クロージャ①　カプセル化された状態を持つ関数を作成</summary>
+      <pre>
+
+クロージャ（closure）」とは、
+関数の中で定義された関数（無名関数など）が、外側のスコープの変数を参照できる機能のことです。
+クロージャは、外部の変数の値を保持し続けることができます。
+
+func makeCounter() func() int {
+  var count int = 0
+  return func() int {
+    count++
+    return count
+  }
+}
+
+func main() {
+  var fn func() int = makeCounter()
+  fmt.Println(fn()) => 1
+  fmt.Println(fn()) => 2
+}
+      </pre>
+    </details>
+    <details class="accordion-003">
+      <summary>クロージャ②　関数を動的に作りたい</summary>
+      <pre>
+
+func makeAdd(num int ) func(int) int {
+    return func(num2 int) int {
+        return num + num2
+    }
+}
+
+func main() {
+  var fn func(int) int = makeAdd(1)
+  fmt.Println(fn(1)) => 2
+  fmt.Println(fn(3)) => 4
+    var fn2 func(int) int = makeAdd(10)
+  fmt.Println(fn2(1)) => 11
+  fmt.Println(fn2(3)) => 13
+}
+      </pre>
+    </details>
+    <details class="accordion-003">
+      <summary>クロージャ③　関数に追加処理を加えたい</summary>
+      <pre>
+func withLogging(fn func()) func() {
+  return func() {
+    fmt.Println("Calling function...")
+    fn()
+    fmt.Println("Function call completed.")
+  }
+}
+
+func startLogging() {
+  fmt.Println(time.Now())
+}
+
+func main() {
+  var logging func() = withLogging(startLogging)
+  logging()  => Calling function... >> (時刻) >> Function call completed.
+}
+      </pre>
+    </details>
+    <details class="accordion-003">
+      <summary>クロージャ④　即時実行関数として副作用を限定した</summary>
+      <pre>
+func main() {
+  result := func(x, y int) int {
+    return x + y
+  }(1, 2)
+  fmt.Println(result) => 3
+}
+      </pre>
+    </details>
+    <details class="accordion-003">
+      <summary>for</summary>
+      <pre>
+for {
+    i++
+    if i > 10 {
+        break
+    }
+    fmt.Println(i)
+}
+
+i := 0
+for i < 10 {
+    i++
+    fmt.Println(i)
+}
+
+# 配列
+var arr []int = []int{1, 2, 3}
+for index, value := range arr {
+    fmt.Println(index, value)   // => 0 1 -> 1 2 - > 2 3
+}
+
+# マップ
+var m map[string]int = map[string]int{"a": 1, "b": 2}
+for key, value := range m {
+    fmt.Println(key, value)  // => a 1 -> b 2
+}
+
+      </pre>
+    </details>
+    <details class="accordion-003">
+      <summary>switch</summary>
+      <pre>
+n := 1
+switch n {
+case 1:
+  fmt.Println("1")
+case 2,3:
+  fmt.Println("2 or 3")
+default:
+  fmt.Println("default case")
+}
+      </pre>
+    </details>
+    <details class="accordion-003">
+      <summary>switch型スイッチ</summary>
+      <pre>
+var x interface{} = true
+switch v := x.(type) {
+case int:
+    fmt.Println(v,"int")
+case string:
+    fmt.Println(v,"string")
+default:
+    fmt.Println("unknown")
+}
+      </pre>
+    </details>
+    <details class="accordion-003">
+      <summary>defer①　関数の終了時に「片づけ処理を行いたいとき」や「リソース解放を安全に行いたいとき」</summary>
+      <pre>
+// 関数の終了時に「片づけ処理を行いたいとき」や「リソース解放を安全に行いたいとき」
+file, err := os.Open("file.txt")
+if err != nil {
+    log.Fatal(err)
+}
+defer file.Close()
+file.Write([]byte("Hello, World!"))
+
+
+// 同一関数内で複数のdeferを使うとLIFOで実行される
+func testDefer() {
+    defer fmt.Println("defer 1")
+    defer fmt.Println("defer 2")
+    fmt.Println("start")
+    defer fmt.Println("defer 3")
+}
+
+func main () {
+    testDefer()  // => start -> defer 3 -> defer 2 -> defer 1
+}
+      </pre>
+    </details>
+    <details class="accordion-003">
+      <summary>defer②　トランザクションのロールバックやコミット</summary>
+      <pre>
+tx, _ := db.Begin()
+defer func() {
+    if err!= nil {
+        tx.Rollback()  // エラーが発生した場合はロールバック
+    } else {
+        tx.Commit()    // エラーがなければコミット
+    }
+}()
+      </pre>
+    </details>
+    <details class="accordion-003">
+      <summary>defer③　関数の実行時間の測定</summary>
+      <pre>
+start := time.Now()
+defer func() {
+    fmt.Println("Execution time:", time.Since(start))
+}()
+      </pre>
+    </details>
+    <details class="accordion-003">
+      <summary>並列処理</summary>
+      <pre>
+// 並列処理1
+func thread1() {
+    for {
+        fmt.Println("Thread 1 is running")
+    time.Sleep(1000 * time.Millisecond)
+  }
+}
+
+// 並列処理2
+func thread2() {
+  for {
+    fmt.Println("Thread 2 is running")
+    time.Sleep(5000 * time.Millisecond)
+  }
+}
+
+func main() {
+  go thread1()
+  go thread2()
+
+  for {
+      fmt.Println("Main thread is running")
+      time.Sleep(3000 * time.Millisecond)
+  }
+}
+      </pre>
+    </details>
+    <details class="accordion-003">
+      <summary>可変長引数</summary>
+      <pre>
+func sum(arr ...int) int {
+  var cnt int = 0
+  for _, v := range arr {
+    cnt += v
+  }
+  return cnt
+}
+
+func main() {
+  var arr []int = []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+  fmt.Println(sum(arr...))  // => 55
+}
+      </pre>
+    </details>
+    <details class="accordion-003">
+      <summary>チャネル①　並列処理による分配と結果の収集</summary>
+      <pre>
+jobs := make(chan int, 100)
+results := make(chan int, 100)
+for w := 1; w <= 3; w++ {
+  // ワーカーを3つ起動
+  go func(id int) {
+    fmt.Printf("Worker %d started\n", id)
+    for j := range jobs {
+      switch id {
+      case 1:
+        time.Sleep(1 * time.Second)
+      case 3:
+        time.Sleep(1 * time.Second)
+      }
+      fmt.Printf("Worker %d processing job %d\n", id, j)
+      results <- j * 2
+    }
+  }(w)
+}
+// チャネルに値を送信
+for j := 1; j <= 100; j++ {
+  jobs <- j
+}
+close(jobs)
+// 結果を収集
+for a := 1; a <= 100; a++ {
+  fmt.Println(<-results)
+}
+      </pre>
+    </details>
+    <details class="accordion-003">
+      <summary>チャネル②　ゴールチーンの終了をチャネルで受け取る</summary>
+      <pre>
+done := make(chan struct{}, 3)
+for i := 1; i <= 3; i++ {
+  go func(id int) {
+    switch id {
+    case 1:
+      fmt.Println("sleeping for 1 second")
+      time.Sleep(1 * time.Second)
+    case 2:
+      fmt.Println("sleeping for 3 second")
+      time.Sleep(3 * time.Second)
+    case 3:
+      fmt.Println("sleeping for 5 second")
+      time.Sleep(5 * time.Second)
+    }
+    done <- struct{}{}
+  }(i)
+}
+<-done
+<-done
+<-done
+      </pre>
+    </details>
+    <details class="accordion-003">
+      <summary>チャネル③　タイムアウト処理</summary>
+      <pre>
+done := make(chan struct{})
+
+go func() {
+  time.Sleep(5 * time.Second)
+  done <- struct{}{}
+}()
+
+select {
+case res := <-done:
+  fmt.Println("Received:", res)
+case <-time.After(2 * time.Second):
+  fmt.Println("Timeout after 2 seconds")
+}
+      </pre>
+    </details>
+    <details class="accordion-003">
+      <summary>構造体</summary>
+      <pre>
+// 構造体の定義
+type Player struct {
+  name       string
+  age        int
+  team       string
+  birthPlace string
+}
+
+// コンストラクタの定義
+func NewPlayer(name string, age int, team string, birthPlace string) *Player {
+  return &Player{
+    name:       name,
+    age:        age,
+    team:       team,
+    birthPlace: birthPlace,
+  }
+}
+
+// 構造体のメソッドを定義
+func (p Player) GetName() string {
+  return p.name
+}
+
+// 更新系はポインタを設定しておくのが一般的
+func (p *Player) SetAge(age int) {
+  p.age = age + 1
+}
+
+func main() {
+  var player Player = Player{"瑞原 明奈", 36, "UNEXT Pirates", "長崎"}
+  player.GetName() // => "瑞原 明奈"
+  player.SetAge(player.age) // 37に更新
+
+  // コンストラクタの定義
+  player2 := NewPlayer("小林 剛", 48, "UNEXT Pirates", "埼玉")
+  fmt.Println(*player2)  // => {小林 剛 48 UNEXT Pirates 埼玉}
+}
+      </pre>
+    </details>
+    <details class="accordion-003">
+      <summary>ポインタ</summary>
+      <pre>
+// ポインター型の宣言
+var p *int
+var i int = 42
+
+// 変数のアドレスを代入
+p = &i
+fmt.Println(p)  // => 0x14000112050
+fmt.Println(&i) // => 0x14000112050
+fmt.Println(*p) // => 42
+fmt.Println(i)  // => 42
+
+// 構造体ポインタ
+// 構造体は値渡しになるため中身の値を変更する場合はポインタを使う
+player2 := &Player{"小林 剛", 48, "UNEXT Pirates", "埼玉"}
+
+fmt.Println(player2)  // => &{小林 剛 48 UNEXT Pirates 埼玉}
+fmt.Println(*player2) // => {小林 剛 48 UNEXT Pirates 埼玉}
+      </pre>
+    </details>
+    <details class="accordion-003">
+      <summary>interface</summary>
+      <pre>
+// 異なる性質を持つ型を統一的に扱う
+type Stringfy interface {
+  ToString() string
+}
+
+type MLPlayer struct {
+  Name string
+  Age  int
+}
+
+func (p MLPlayer) ToString() string {
+  return fmt.Sprintf("Name: %s, Age: %d", p.Name, p.Age)
+}
+
+type JLPlayer struct {
+  Name string
+  Age  int
+}
+
+func (p JLPlayer) ToString() string {
+  return fmt.Sprintf("Name: %s, Age: %d", p.Name, p.Age)
+}
+
+func main() {
+
+  vs := []Stringfy{
+    &MLPlayer{Name: "瑞原明奈", Age: 36},
+    &JLPlayer{Name: "三浦知良", Age: 52},
+  }
+  for _, v := range vs {
+    fmt.Println(v.ToString())
+  }
+}
+      </pre>
+    </details>
+    <details class="accordion-003">
+      <summary>interface カスタムエラー</summary>
+      <pre>
+/*
+エラー型はErrorメソッド（戻りがstring）を持つものの集合
+type error interface {
+  Error() string
+}
+*/
+
+type MyError struct {
+  Message   string
+  ErrorCode string
+}
+
+func (e *MyError) Error() string {
+  return e.Message
+}
+
+func RaiseError() error {
+  return &MyError{
+    Message:   "An error occurred",
+    ErrorCode: "1234",
+  }
+}
+
+func main() {
+  err := RaiseError()
+  e, ok := err.(*MyError)
+  if !ok {
+    fmt.Println("No error raised")
+  }
+  fmt.Println(e.Message, e.ErrorCode)
+}
+      </pre>
+    </details>
+    <details class="accordion-003">
+      <summary>テスト</summary>
+      <pre>
+import (
+	"testing"
+)
+
+func TestAdd(t *testing.T) {     // メソッド名 => Test + テスト対象の関数名
+	if got := add(2, 3); got != 5 {
+		t.Errorf("add(2, 3) = %d; want 5", got)
+	}
+}
+      </pre>
+    </details>
+    <details class="accordion-003">
+      <summary>URL(net/url)</summary>
+      <pre>
+import (
+  "net/url"
+)
+
+func main () {
+  u , _ := url.Parse("https://example.com/path?query=1#fragment")
+  fmt.Println(u.RawQuery)       // => query=1&query=2
+  fmt.Println(u.Fragment)       // => fragment
+  fmt.Println(u.Query())        // => map[query:[1 2]]
+  
+  url := &url.URL{}
+  url.Scheme = "https"
+  url.Host = "localhost:8080"
+  url.Path = "/login"
+  q := url.Query()
+  q.Set("username", "user001")
+  url.RawQuery = q.Encode()
+  fmt.Println(url)     // => https://localhost:8080/login?username=%E6%9D%BF%E6%9D%91
+}
+      </pre>
+    </details>
+    <details class="accordion-003">
+      <summary>http (http client)</summary>
+      <pre>
+import (
+  "net/http"
+  "io/ioutil"
+)
+
+func main() {
+  // Getリクエストを送信
+  res , _ = http.Get("http://locahost:8080/login")
+  res.StatusCode
+  defer res.Body.Close()
+  body, _ := ioutil.ReadAll(res.Body)
+  fmt.Println(string(body))
+  
+  // postリクエストを送信  
+  vs := url.Values{}
+  vs.Add("username", "user001")
+  vs.Add("password", "pass001")
+  res, err = http.PostForm("http://localhost:8080/login", vs)
+  if err != nil {
+    log.Fatal(err)
+  }
+  defer res.Body.Close()
+  body, _ := ioutil.ReadAll(res.Body)
+}
+      </pre>
+    </details>
+    <details class="accordion-003">
+      <summary>http server</summary>
+      <pre>
+
+      </pre>
+    </details>
+    <details class="accordion-003">
+      <summary>テンプレ</summary>
+      <pre></pre>
+    </details>
+    <a href="index.html">TOP</a>
+  </body>
+</html>
