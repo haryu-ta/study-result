@@ -86,6 +86,69 @@ export const config = {
     </details>
 
     <details class="accordion-003">
+      <summary>Nextjsにおけるレンダリング</summary>
+      <table border="1" align="center" style="width:90%;">
+        <caption>
+          Nextjsにおけるレンダリング
+        </caption>
+        <thead>
+          <tr style="background:yellow;">
+            <th style="width:10%;"></th>
+            <th style="width:20%;">CSR<br />クライアントサイド描画</th>
+            <th style="width:20%;">SSG<br />静的サイト生成</th>
+            <th style="width:20%;">ISR<br />増分 静的 更新</th>
+            <th style="width:20%;">SSR<br />サーバサイド描画</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>特徴</th>
+            <td>クライアントサイドでJSでHTMLを生成</td>
+            <td>ビルド時に静的なHTMLを生成</td>
+            <td>SSGとCSRの中間<br />ビルド時にHTMLを作成しキャッシュ<br />必要時のみ動的に更新</td>
+            <td>サーバー側でHTMLを動的に作成</td>
+          </tr>
+          <tr>
+            <th>メリット</th>
+            <td>動的にページを更新可能</td>
+            <td>高速なページ表示</td>
+            <td>高速なページ表示<br />リアルタイム更新</td>
+            <td>迅速な初期表示</td>
+          </tr>
+          <tr>
+            <th>デメリット</th>
+            <td>初期ロードが遅い</td>
+            <td>動的コンテンツは不可</td>
+            <td>サーバー負荷</td>
+            <td>サーバー負荷</td>
+          </tr>
+          <tr>
+            <th>fetchでデータ取得</th>
+            <td></td>
+            <td>fetch(URL,{cache: 'force-cache'})</td>
+            <td>fetch(URL,{revalidate: 10})</td>
+            <td>fetch(URL,{cache: 'no-store'})</td>
+          </tr>
+          <tr>
+            <th>fetch以外でデータ取得</th>
+            <td></td>
+            <td>デフォルト</td>
+            <td>export const revalidate = 10<br />revalidatePath()</td>
+            <td>export const dynamic = 'force-dynamic'</td>
+          </tr>
+          <tr>
+            <th>ユースケース</th>
+            <td>インタラクティブなUI<br />リアルタイムな箇所</td>
+            <td>ビルド時にデータ取得</td>
+            <td>最新でなくてもいいが適度にデータ更新</td>
+            <td>常に最新のデータが必要なページ</td>
+          </tr>
+        </tbody>
+      </table>
+      <br />
+    </details>
+
+    <details class="accordion-003">
       <summary>Nextjsにおけるデータ操作</summary>
       <table border="1" align="center" style="width:90%;">
         <caption>
