@@ -632,9 +632,51 @@ func main() {
       </pre>
     </details>
     <details class="accordion-003">
-      <summary>http server</summary>
+      <summary>結合テスト</summary>
       <pre>
+// POSTする中身を構造体で定義
+userInput = UserInput{
+  Email: email,
+  Password: password,
+}
 
+// ルーターの初期化
+router := controllers.NewController(testdb)
+
+reqBody, _ := json.Marshal(userInput)
+loginReq ,_ := http.NewRequest("POST","/api/auth/login", bytes.NewBuffer(reqBody))
+loginRes := httptest.NewRecord()
+router.ServeHTTP(loginRes, loginReq)
+
+// httpステータスコード
+console.log(loginRes.Code);
+
+// レスポンス項目
+var loginResBody map[string]interface{}
+json.Unmarshal(loginRes.Body.Bytes(), &loginResBody)
+console.log(loginResBody["message"])
+
+      </pre>
+    </details>
+    <details class="accordion-003">
+      <summary>パラメータマイズテスト</summary>
+      <pre>
+func Test(t *testing.T) {
+  cases := []struct {
+    name     string
+    input    int
+    expected int
+  }{
+    {"case1", 1, 2},
+    {"case2", 2, 3},
+    {"case3", 3, 4},
+  }
+  for _,tc := range cases {
+    t.Run(tc.name, func(t *testing.T) {
+      // テスト内容
+    })
+  }
+}
       </pre>
     </details>
     <details class="accordion-003">
