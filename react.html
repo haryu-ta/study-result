@@ -85,6 +85,262 @@ const user : UserType = {
 };
           </pre>
         </details>
+        <details class="accordion-003">
+          <summary>React Form Hook</summary>
+          <pre>
+'use client'
+import React, { useEffect } from 'react'
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { schema, UserFormData } from '@/validation/users';
+
+const UserFormPage = () => {
+    const {
+        register,           // ✅ フィールド登録
+        handleSubmit,       // ✅ 送信処理
+        watch,              // 値の監視
+        getValues,          // 現在値取得
+        setValue,           // 値の設定
+        reset,              // フォームリセット
+        trigger,            // 手動バリデーション
+        clearErrors,        // エラークリア
+        setError,           // エラー設定
+        setFocus,           // フォーカス設定
+        formState: {
+            errors,         // ✅ バリデーションエラー
+            isSubmitting,   // ✅ 送信中フラグ
+            isSubmitted,    // 送信済みフラグ
+            isValid,        // 有効性フラグ
+            isDirty,        // 変更フラグ
+            dirtyFields,    // 変更されたフィールド
+            touchedFields,  // タッチされたフィールド
+        },
+    } = useForm<UserFormData>({
+        resolver: zodResolver(schema),
+        defaultValues: {
+            name: '',
+            email: '',
+            gender: undefined,
+        }
+    });
+
+    // 値の監視例
+    const watchedName = watch('name');
+    const watchedEmail = watch('email');
+
+    // フォーム送信
+    const onSubmit = (data: UserFormData) => {
+        console.log('送信データ:', data);
+    };
+
+    // エラー時の処理
+    const onError = (errors: any) => {
+        console.log('エラー:', errors);
+    };
+
+    // プログラムで値を設定
+    const fillSampleData = () => {
+        setValue('name', 'サンプル太郎');
+        setValue('email', 'sample@example.com');
+        setValue('gender', 'male');
+    };
+
+    // フォームをリセット
+    const resetForm = () => {
+        reset();
+    };
+
+    // 手動バリデーション
+    const validateName = async () => {
+        const result = await trigger('name');
+        console.log('nameフィールドの検証結果:', result);
+    };
+
+    // 現在の値を取得
+    const getCurrentValues = () => {
+        const values = getValues();
+        console.log('現在の値:', values);
+    };
+
+    // エラーをクリア
+    const clearAllErrors = () => {
+        clearErrors();
+    };
+
+    // 手動でエラーを設定
+    const setCustomError = () => {
+        setError('name', {
+            type: 'manual',
+            message: 'カスタムエラーメッセージ'
+        });
+    };
+
+    useEffect(() => {
+        console.log('フォームの状態:');
+        console.log('- 変更済み:', isDirty);
+        console.log('- 有効:', isValid);
+        console.log('- 送信済み:', isSubmitted);
+        console.log('- 送信中:', isSubmitting);
+        console.log('- 変更されたフィールド:', dirtyFields);
+        console.log('- タッチされたフィールド:', touchedFields);
+    }, [isDirty, isValid, isSubmitted, isSubmitting, dirtyFields, touchedFields]);
+
+    return (
+        <div className="max-w-2xl mx-auto p-6">
+            {/* デバッグ情報 */}
+            <div className="mb-4 p-4 bg-gray-100 rounded">
+                <h3 className="font-bold mb-2">フォーム状態（デバッグ用）</h3>
+                <p>監視中の名前: {watchedName}</p>
+                <p>監視中のメール: {watchedEmail}</p>
+                <p>フォーム変更済み: {isDirty ? 'はい' : 'いいえ'}</p>
+                <p>フォーム有効: {isValid ? 'はい' : 'いいえ'}</p>
+                <p>送信中: {isSubmitting ? 'はい' : 'いいえ'}</p>
+            </div>
+
+            {/* 操作ボタン */}
+            <div className="mb-4 space-x-2">
+                <button 
+                    onClick={fillSampleData}
+                    className="px-3 py-1 bg-green-500 text-white rounded"
+                >
+                    サンプルデータ入力
+                </button>
+                <button 
+                    onClick={resetForm}
+                    className="px-3 py-1 bg-yellow-500 text-white rounded"
+                >
+                    リセット
+                </button>
+                <button 
+                    onClick={validateName}
+                    className="px-3 py-1 bg-purple-500 text-white rounded"
+                >
+                    名前を検証
+                </button>
+                <button 
+                    onClick={getCurrentValues}
+                    className="px-3 py-1 bg-blue-500 text-white rounded"
+                >
+                    現在値を取得
+                </button>
+                <button 
+                    onClick={clearAllErrors}
+                    className="px-3 py-1 bg-gray-500 text-white rounded"
+                >
+                    エラークリア
+                </button>
+                <button 
+                    onClick={setCustomError}
+                    className="px-3 py-1 bg-red-500 text-white rounded"
+                >
+                    カスタムエラー設定
+                </button>
+            </div>
+
+            <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-6">
+                {/* 名前 */}
+                <div>
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                        名前 *
+                    </label>
+                    <input
+                        {...register('name')}
+                        type="text"
+                        id="name"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    {errors.name && (
+                        <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+                    )}
+                </div>
+
+                {/* 生年月日 */}
+                <div>
+                    <label htmlFor="birthDate" className="block text-sm font-medium text-gray-700 mb-2">
+                        生年月日 *
+                    </label>
+                    <input
+                        {...register('birthDate', { valueAsDate: true })}
+                        type="date"
+                        id="birthDate"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    {errors.birthDate && (
+                        <p className="text-red-500 text-sm mt-1">{errors.birthDate.message}</p>
+                    )}
+                </div>
+
+                {/* 性別 */}
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                        性別 *
+                    </label>
+                    <div className="space-y-2">
+                        <div className="flex items-center">
+                            <input
+                                {...register('gender')}
+                                type="radio"
+                                id="male"
+                                value="male"
+                                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                            />
+                            <label htmlFor="male" className="ml-2 block text-sm text-gray-700">
+                                男性
+                            </label>
+                        </div>
+                        <div className="flex items-center">
+                            <input
+                                {...register('gender')}
+                                type="radio"
+                                id="female"
+                                value="female"
+                                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                            />
+                            <label htmlFor="female" className="ml-2 block text-sm text-gray-700">
+                                女性
+                            </label>
+                        </div>
+                    </div>
+                    {errors.gender && (
+                        <p className="text-red-500 text-sm mt-1">{errors.gender.message}</p>
+                    )}
+                </div>
+
+                {/* メールアドレス */}
+                <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                        メールアドレス *
+                    </label>
+                    <input
+                        {...register('email')}
+                        type="email"
+                        id="email"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="example@example.com"
+                    />
+                    {errors.email && (
+                        <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+                    )}
+                </div>
+
+                {/* 送信ボタン */}
+                <div className="flex gap-4">
+                    <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        {isSubmitting ? '送信中...' : '登録'}
+                    </button>
+                </div>
+            </form>
+        </div>
+    )
+}
+
+export default UserFormPage
+          </pre>
+        </details>
         <!-- <details class="accordion-003">
           <summary>題名</summary>
           <pre>
